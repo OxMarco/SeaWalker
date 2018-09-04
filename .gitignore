@@ -11,6 +11,9 @@ sr
 *.log
 logs/
 
+# Documentation
+Docs/
+
 # Other
 *.vim
 *.tags

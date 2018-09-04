@@ -1,17 +1,15 @@
-/****************************************************************************************
+/**
+ * @file   SysClock.cpp
+ * @version 1.0.0
+ * @author SailingRobots team
+ * @date   2017
+ * @brief  SysClock class implementation
  *
- * File:
- * 		SysClock.h
+ * @detail Purpose:
+ *        Provides a number of time keeping functions. Can use the GPS to ensure a accurate
+ *        time. The Sysclock will use the system time if a GPS time has not been provided.
  *
- * Purpose:
- *		Provides a number of time keeping functions. Can use the GPS to ensure a accurate
- *		time. The Sysclock will use the system time if a GPS time has not been provided.
- *
- * Developer Notes:
- *
- *
- ***************************************************************************************/
-
+ */
 #include "SysClock.h"
 #include <stdio.h>
 #include <ctime>
