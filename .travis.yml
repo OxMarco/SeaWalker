@@ -2,11 +2,12 @@ language: cpp
 sudo: required
 dist: trusty
 compiler:
-- clang
+- g++
 os:
 - linux
 before_install:
 - sudo apt update -y
+- sudo apt install --only-upgrade g++
 - sudo apt install libsqlite3-dev -y
 - sudo apt install libboost-all-dev -y
 - sudo apt install libcurl4-openssl-dev -y
