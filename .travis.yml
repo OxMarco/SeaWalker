@@ -14,7 +14,7 @@ addons:
       - gcc-5
       - g++-5
       - libsqlite3-dev
-      - libboost1.50-all
+      - libboost-all-dev
       - libcurl4-openssl-dev
       - libgps-dev
       - libncurses5-dev

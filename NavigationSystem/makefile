@@ -31,7 +31,7 @@ export USE_LNM = 0
 # Tools
 ###############################################################################
 
-export CPPFLAGS             = -g -Wall -pedantic -Werror -std=c++14 -DBOOST_LOG_DYN_LINK -Wno-psabi
+export CPPFLAGS             = -g -Wall -pedantic -Werror -std=gnu++14 -DBOOST_LOG_DYN_LINK -Wno-psabi
 export LIBS                 = -lsqlite3 -lgps -lrt -lcurl -lwiringPi -lncurses \
                               -lboost_log -lboost_thread -lboost_system -lboost_filesystem -lpthread 
                               # keep -lpthread after the boost libs, it can fail otherwise 
