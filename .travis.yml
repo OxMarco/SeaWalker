@@ -18,7 +18,8 @@ before_install:
 - git pull origin
 - ./build
 script:
-- pwd
+- cd ..
+- cd sailingrobots
 - cd NavigationSystem
 - make ASPire
 after_success:
