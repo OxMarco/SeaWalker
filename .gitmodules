@@ -1,0 +1,6 @@
+[submodule "sailing_simulator"]
+	path = sailing_simulator
+	url = https://github.com/AlandSailingRobots/sailing_simulator.git
+[submodule "NavigationSystem/Hardwares/CAN_Services/CanBusCommon"]
+    path = NavigationSystem/Hardwares/CAN_Services/CanBusCommon
+    url = https://github.com/AlandSailingRobots/CanBusCommon.git
