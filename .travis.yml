@@ -2,17 +2,25 @@ language: cpp
 sudo: required
 dist: trusty
 compiler:
-- g++
+- gcc
 os:
 - linux
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - build-essential
+      - gcc-4.9
+      - g++-4.9
+      - libsqlite3-dev
+      - libboost-all-dev
+      - libcurl4-openssl-dev
+      - libgps-dev
+      - libncurses5-dev
+
 before_install:
 - sudo apt update -y
-- sudo apt install --only-upgrade g++
-- sudo apt install libsqlite3-dev -y
-- sudo apt install libboost-all-dev -y
-- sudo apt install libcurl4-openssl-dev -y
-- sudo apt install libgps-dev -y
-- sudo apt install libncurses5-dev libncursesw5-dev
 - cd ~
 - git clone git://git.drogon.net/wiringPi
 - cd wiringPi/
