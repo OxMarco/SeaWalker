@@ -42,5 +42,11 @@ Ideally in case of failure the boat should be able to navigate with just one of 
 Travis-Ci Russian roulette says:
 [![Build Status](https://travis-ci.org/grcasanova/SeaWalker.svg?branch=master)](https://travis-ci.org/grcasanova/SeaWalker)
 
+Coverity scan result
+<a href="https://scan.coverity.com/projects/grcasanova-seawalker">
+  <img alt="Coverity Scan Build Status"
+       src="https://scan.coverity.com/projects/16664/badge.svg"/>
+</a>
+
 ### Foot note ###
 Fun fact: this design should be COLREG compliant due to the several anti-collision features and some small details such as the navigation light or the manoeuvre normaliser (to make the boat steer in a human-understandable way).
