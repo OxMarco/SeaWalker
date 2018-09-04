@@ -12,7 +12,6 @@ before_install:
 - sudo apt install libcurl4-openssl-dev -y
 - sudo apt install libgps-dev -y
 - sudo apt install libncurses5-dev libncursesw5-dev
-- sudo apt-get purge wiringpi
 - cd ~
 - git clone git://git.drogon.net/wiringPi
 - cd wiringPi/
