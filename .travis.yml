@@ -2,7 +2,7 @@ language: cpp
 sudo: required
 dist: trusty
 compiler:
-- gcc
+- g++
 os:
 - linux
 addons:
@@ -11,8 +11,8 @@ addons:
       - ubuntu-toolchain-r-test
     packages:
       - build-essential
-      - gcc-4.9
-      - g++-4.9
+      - gcc-5
+      - g++-5
       - libsqlite3-dev
       - libboost-all-dev
       - libcurl4-openssl-dev
@@ -26,6 +26,7 @@ before_install:
 - cd wiringPi/
 - git pull origin
 - ./build
+install: export CXX="g++-5"
 script:
 - cd $TRAVIS_BUILD_DIR/NavigationSystem
 - make ASPire
