@@ -42,7 +42,7 @@ ifeq ($(TOOLCHAIN),1)
     export SIZE             = arm-linux-gnueabihf-size
 else
     export CC               = gcc
-    export CXX				= g++
+    export CXX				= g++-5
     export SIZE             = size
 endif
 
