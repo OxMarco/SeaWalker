@@ -18,9 +18,7 @@ before_install:
 - git pull origin
 - ./build
 script:
-- cd ..
-- cd sailingrobots
-- cd NavigationSystem
+- cd $TRAVIS_BUILD_DIR/NavigationSystem
 - make ASPire
 after_success:
 - ./sr
