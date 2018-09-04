@@ -18,7 +18,6 @@ before_install:
 - git pull origin
 - ./build
 script:
-- cd NavigationSystem
 - make ASPire
 after_success:
 - ./sr
