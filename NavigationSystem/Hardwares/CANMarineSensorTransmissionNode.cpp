@@ -2,8 +2,8 @@
 
 #include "CANMarineSensorTransmissionNode.h"
 
-#include "../MessageBus/NodeIDs.h"
-#include "../MessageBus/MessageTypes.h"
+#include "../MessageBus/NodeIDs.hpp"
+#include "../MessageBus/MessageTypes.hpp"
 #include "../Messages/DataCollectionStartMsg.h"
 #include "../SystemServices/Timer.hpp"
 #include "CAN_Services/CanBusCommon/CanMessageHandler.h"

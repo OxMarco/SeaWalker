@@ -1,20 +1,12 @@
-/****************************************************************************************
+/**
+ * @file    MessageDeserialiser.cpp
  *
- * File:
- * 		MessageDeserialiser.cpp
+ * @brief   Deserialises a message into a block of bytes
  *
- * Purpose:
- *		Deserialises a message into a block of bytes.
- *
- * Developer Notes:
- *
- *
- ***************************************************************************************/
+ */
 
-
-#include "../MessageBus/MessageDeserialiser.h"
+#include "MessageDeserialiser.hpp"
 #include <cstring>
-
 
 MessageDeserialiser::MessageDeserialiser(uint8_t* data, uint8_t size)
 	:m_data(data), m_index(0), m_size(size)

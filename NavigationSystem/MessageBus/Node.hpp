@@ -10,9 +10,9 @@
 
 class MessageBus;
 
-#include "Message.h"
+#include "Message.hpp"
 #include "MessageBus.hpp"
-#include "NodeIDs.h"
+#include "NodeIDs.hpp"
 
 class Node {
    public:

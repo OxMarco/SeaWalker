@@ -1,20 +1,12 @@
-/****************************************************************************************
+/**
+ * @file    MessageSerialiser.cpp
  *
- * File:
- * 		MessageSerialiser.cpp
+ * @brief   Serialises a message into a block of bytes
  *
- * Purpose:
- *		Serialises a message into a block of bytes.
- *
- * Developer Notes:
- *
- *
- ***************************************************************************************/
+ */
 
-
-#include "../MessageBus/MessageSerialiser.h"
+#include "../MessageBus/MessageSerialiser.hpp"
 #include "../SystemServices/Logger.hpp"
-
 
 void MessageSerialiser::serialise(uint8_t data)
 {

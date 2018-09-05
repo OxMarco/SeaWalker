@@ -13,7 +13,7 @@
 #ifndef MESSAGEBUS_HPP
 #define MESSAGEBUS_HPP
 
-#include "Message.h"
+#include "Message.hpp"
 #include "Node.hpp"
 #include <atomic>
 #include <fstream>

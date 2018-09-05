@@ -1,22 +1,17 @@
-/****************************************************************************************
+/**
+ * @file    MessageSerialiser.hpp
  *
- * File:
- * 		MessageSerialiser.h
+ * @brief   Serialises a message into a block of bytes
  *
- * Purpose:
- *		Serialises a message into a block of bytes.
- *
- * Developer Notes:
- *
- *
- ***************************************************************************************/
+ */
 
-#pragma once
+#ifndef MESSAGESERIALISER.HPP
+#define MESSAGESERIALISER.HPP
 
+#include "MessageTypes.hpp"
+#include "NodeIDs.hpp"
 #include <stdint.h>
 #include <string>
-#include "../MessageBus/MessageTypes.h"
-#include "../MessageBus/NodeIDs.h"
 
 #define MAX_MESSAGE_SIZE 256
 
@@ -52,3 +47,6 @@ class MessageSerialiser {
     uint8_t m_data[MAX_MESSAGE_SIZE];
     uint8_t m_ptr;
 };
+
+#endif /* MESSAGESERIALISER.HPP */
+

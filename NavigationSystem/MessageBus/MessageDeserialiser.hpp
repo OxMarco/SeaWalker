@@ -1,21 +1,16 @@
-/****************************************************************************************
+/**
+ * @file    MessageDeserialiser.hpp
  *
- * File:
- * 		MessageDeserialiser.h
+ * @brief   Deserialises a message into a block of bytes
  *
- * Purpose:
- *		Deserialises a message from a block of bytes.
- *
- * Developer Notes:
- *
- *
- ***************************************************************************************/
+ */
 
-#pragma once
+#ifndef MESSAGEDESERIALISER.HPP
+#define MESSAGEDESERIALISER.HPP
 
+#include "MessageTypes.hpp"
+#include "NodeIDs.hpp"
 #include <stdint.h>
-#include "../MessageBus/MessageTypes.h"
-#include "../MessageBus/NodeIDs.h"
 
 class MessageDeserialiser {
    public:
@@ -41,3 +36,5 @@ class MessageDeserialiser {
     uint8_t m_index;
     uint8_t m_size;
 };
+
+#endif /* MESSAGEDESERIALISER.HPP */

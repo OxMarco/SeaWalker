@@ -11,7 +11,7 @@
 #include "DBLogger.hpp"
 #include "../MessageBus/ActiveNode.hpp"
 #include "../MessageBus/MessageBus.hpp"
-#include "../MessageBus/MessageTypes.h"
+#include "../MessageBus/MessageTypes.hpp"
 
 #include <iostream>
 #include <mutex>

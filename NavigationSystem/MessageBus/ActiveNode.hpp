@@ -16,7 +16,7 @@ class ActiveNode : public Node {
     ActiveNode(NodeID id, MessageBus& msgBus) : Node(id, msgBus) {}
 
     ///----------------------------------------------------------------------------------
-    /// This function should be used to start the active nodes thread.
+    /// @brief This function should be used to start the active nodes thread.
     ///
     ///----------------------------------------------------------------------------------
     virtual void start() = 0;

@@ -11,7 +11,7 @@
 
 #include "Database/DBHandler.hpp"
 #include "Database/DBLoggerNode.hpp"
-#include "HTTPSync/HTTPSyncNode.h"
+#include "HTTPSync/HTTPSyncNode.hpp"
 #include "MessageBus/MessageBus.hpp"
 #include "Messages/DataRequestMsg.h"
 #include "SystemServices/Logger.hpp"

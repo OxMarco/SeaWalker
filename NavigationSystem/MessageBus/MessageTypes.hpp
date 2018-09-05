@@ -1,19 +1,16 @@
-/****************************************************************************************
+/**
+ * @file    MessageTypes.hpp
  *
- * File:
- * 		MessageTypes.h
+ * @brief   Message types expressed as numberic ID and string
  *
- * Purpose:
- *		Provides a enum containing all the message types. Used in the base message class
- *		so that when a message pointer is passed around you know what type of message to
- *		cast it to.
+ * @details     Provides a enum containing all the message types. Used in the base message class
+ *              so that when a message pointer is passed around you know what type of message to
+ *              cast it to.
  *
- * Developer Notes:
- *
- *
- ***************************************************************************************/
+ */
 
-#pragma once
+#ifndef MESSAGETYPES_HPP
+#define MESSAGETYPES_HPP
 
 #include <string>
 
@@ -110,3 +107,5 @@ inline std::string msgToString(MessageType msgType) {
     }
     return "";
 }
+
+#endif /* MESSAGETYPES_HPP */

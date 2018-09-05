@@ -1,27 +1,21 @@
-/****************************************************************************************
+/**
+ * @file    Message.hpp
  *
- * File:
- * 		Message.h
+ * @brief   Provides the base message class
  *
- * Purpose:
- *		Provides the base message class
- *
- * Developer Notes:
- *
- *
- ***************************************************************************************/
+ */
 
-#pragma once
+#ifndef MESSAGE_HPP
+#define MESSAGE_HPP
 
-#include "../MessageBus/MessageDeserialiser.h"
-#include "../MessageBus/MessageSerialiser.h"
-#include "../MessageBus/MessageTypes.h"
-#include "../MessageBus/NodeIDs.h"
+#include "MessageDeserialiser.hpp"
+#include "MessageSerialiser.hpp"
+#include "MessageTypes.hpp"
+#include "NodeIDs.hpp"
 
 #define LOG_MESSAGES
-
 #ifdef LOG_MESSAGES
-#include "../SystemServices/SysClock.hpp"
+    #include "../SystemServices/SysClock.hpp"
 #endif
 
 class Message {
@@ -110,3 +104,6 @@ class Message {
     NodeID m_SourceID;          // Which node generated the message
     NodeID m_DestinationID;     // The desintation of the message
 };
+
+#endif /* MESSAGE_HPP */
+
