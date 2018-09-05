@@ -52,7 +52,7 @@ enum class NodeImportance {
 	NOT_CRITICAL
 };
 
-std::map<Node*,std::string> nodeList; // store each node and whether was correctly initialised or not
+//std::map<Node*,std::string> nodeList; // store each node and whether was correctly initialised or not
 
 ///----------------------------------------------------------------------------------
 /// Initialises a node and shutsdown the program if a critical node fails.
@@ -69,7 +69,7 @@ void initialiseNode(Node& node, const char* nodeName, NodeImportance importance)
 	if(node.init())
 	{
 		Logger::info("Node: %s - init\t[OK]", nodeName);
-        nodeList.insert(std::pair<Node*,std::string>(node, nodeName));
+        //nodeList.insert(std::pair<Node*,std::string>(node, nodeName));
 	}
 	else
 	{
@@ -78,7 +78,6 @@ void initialiseNode(Node& node, const char* nodeName, NodeImportance importance)
 		if(importance == NodeImportance::CRITICAL)
 		{
 			Logger::error("Critical node failed to initialise, shutting down");
-			//Logger::shutdown();
 			exit(1);
 		}
 	}
@@ -151,7 +150,6 @@ int main(int argc, char *argv[])
 	else
 	{
 		Logger::error("Database Handler init\t\t[FAILED]");
-		//Logger::shutdown();
 		exit(-1);
 	}
 
@@ -289,13 +287,11 @@ int main(int argc, char *argv[])
     //-------------------------------------------------------------------------------
     std::cout<<std::endl<<"...Exiting..."<<std::endl;
 
-    for (std::map<Node*,std::string>::iterator it=nodeList.begin(); it!=nodeList.end(); ++it)
+    /*for (std::map<Node*,std::string>::iterator it=nodeList.begin(); it!=nodeList.end(); ++it)
     {
         it->first.stopThread();
         Logger::info("Node: %s - stopped\t[OK]", it->second);
-    }
-        
-	Logger::shutdown();
-    
+    }*/
+            
     return 0;
 }

@@ -18,7 +18,8 @@ addons:
       - libcurl4-openssl-dev
       - libgps-dev
       - libncurses5-dev
-
+notifications:
+  email: false
 before_install:
 - sudo apt update -y
 - cd ~
