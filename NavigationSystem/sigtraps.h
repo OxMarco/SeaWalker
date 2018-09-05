@@ -12,13 +12,12 @@
 #ifndef SIGTRAPS_H
 #define SIGTRAPS_H
 
+#include <csignal>
 #include "../SystemServices/Logger.h"
 
 /** @todo implement proper handling */
 extern "C" void default_handler(int signal)
-{
-    int i = 0;
-    
+{    
     /*
      // Save system status
      do

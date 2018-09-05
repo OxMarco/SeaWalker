@@ -52,7 +52,7 @@ enum class NodeImportance {
 	NOT_CRITICAL
 };
 
-std::map<Node&,std::string> nodeList; // store each node and whether was correctly initialised or not
+std::map<Node*,std::string> nodeList; // store each node and whether was correctly initialised or not
 
 ///----------------------------------------------------------------------------------
 /// Initialises a node and shutsdown the program if a critical node fails.
@@ -69,7 +69,7 @@ void initialiseNode(Node& node, const char* nodeName, NodeImportance importance)
 	if(node.init())
 	{
 		Logger::info("Node: %s - init\t[OK]", nodeName);
-        nodeList.insert(std::pair<Node&,std::string>(node, nodeName));
+        nodeList.insert(std::pair<Node*,std::string>(node, nodeName));
 	}
 	else
 	{
@@ -110,8 +110,6 @@ int main(int argc, char *argv[])
     
     // Install custom signal handlers
     install_sig_traps();
-    // Set main thread name for debug reasons
-    pthread_setname_np("main");
     // This is for eclipse development so the output is constantly pumped out.
     setbuf(stdout, NULL);
     
@@ -291,7 +289,7 @@ int main(int argc, char *argv[])
     //-------------------------------------------------------------------------------
     std::cout<<std::endl<<"...Exiting..."<<std::endl;
 
-    for (std::map<char,int>::iterator it=nodeList.begin(); it!=nodeList.end(); ++it)
+    for (std::map<Node*,std::string>::iterator it=nodeList.begin(); it!=nodeList.end(); ++it)
     {
         it->first.stopThread();
         Logger::info("Node: %s - stopped\t[OK]", it->second);
