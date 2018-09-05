@@ -16,7 +16,7 @@
 #include "SystemServices/Logger.hpp"
 
 #include "WorldState/StateEstimationNode.h"
-#include "WorldState/WindStateNode.h"
+#include "WorldState/WindStateNode.hpp"
 #include "WorldState/CollidableMgr/CollidableMgr.h"
 
 #include "LowLevelControllers/WingSailControlNode.hpp"
@@ -182,7 +182,7 @@ int main(int argc, char *argv[])
 	// Declare nodes
 	//-------------------------------------------------------------------------------
 
-	int dbLoggerQueueSize = 5; 			// how many messages to log to the databse at a time
+	int dbLoggerQueueSize = 5; // how many messages to log to the database at a time
 	DBLoggerNode dbLoggerNode(messageBus, dbHandler, dbLoggerQueueSize);
 	HTTPSyncNode httpsync(messageBus, &dbHandler);
 	StateEstimationNode stateEstimationNode(messageBus, dbHandler);
@@ -236,11 +236,9 @@ int main(int argc, char *argv[])
 
 	initialiseNode(httpsync, "Httpsync", NodeImportance::NOT_CRITICAL); // This node is not critical during the developement phase.
 	initialiseNode(dbLoggerNode, "DBLogger", NodeImportance::CRITICAL);
-
 	initialiseNode(stateEstimationNode,"StateEstimation",NodeImportance::CRITICAL);
 	initialiseNode(windStateNode,"WindState",NodeImportance::CRITICAL);
 	initialiseNode(waypoint, "Waypoint", NodeImportance::CRITICAL);
-
  	initialiseNode(wingSailControlNode, "Wing Sail Controller", NodeImportance::CRITICAL);
  	initialiseNode(courseRegulatorNode, "Course Regulator", NodeImportance::CRITICAL);
 

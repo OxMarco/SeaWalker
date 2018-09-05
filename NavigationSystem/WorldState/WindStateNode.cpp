@@ -1,21 +1,17 @@
-/****************************************************************************************
-*
-* File:
-*       WindStateNode.cpp
-*
-* Purpose:
-*   Each time a vessel state message is received :
-*   - Calculates the instantaneous true wind (speed and direction) from wind sensor and Vessel State
-*     datas.
-*   - Returns a WindStateMsg corresponding to the true and apparent wind state (speed and direction).
-*   The wind direction corresponds to the direction where the wind comes from.
-*
-* Developer Notes:
-*
-*
-***************************************************************************************/
+/**
+ * @file    WindStateNode.cpp
+ *
+ * @brief   Handles wind messages to calculate true and apparent wind speed.
+ 
+ * @details Each time a vessel state message is received:
+ *          - Calculates the instantaneous true wind (speed and direction) from wind sensor and Vessel
+ *              State datas.
+ *          - Returns a WindStateMsg corresponding to the true and apparent wind state (speed and
+ *              direction). The wind direction corresponds to the direction where the wind comes from.
+ *
+ */
 
-#include "WindStateNode.h"
+#include "WindStateNode.hpp"
 
 #define DATA_OUT_OF_RANGE -2000
 
