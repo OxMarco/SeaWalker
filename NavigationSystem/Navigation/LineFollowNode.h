@@ -26,16 +26,16 @@
 #include <chrono>
 #include <cmath>
 
-#include "../Database/DBHandler.h"
-#include "../Math/CourseMath.h"
-#include "../Math/Utility.h"
+#include "../Database/DBHandler.hpp"
+#include "../Math/CourseMath.hpp"
+#include "../Math/Utility.hpp"
 #include "../MessageBus/ActiveNode.h"
 #include "../Messages/ExternalControlMsg.h"
 #include "../Messages/LocalNavigationMsg.h"
 #include "../Messages/StateMessage.h"
 #include "../Messages/WaypointDataMsg.h"
 #include "../Messages/WindStateMsg.h"
-#include "../SystemServices/Timer.h"
+#include "../SystemServices/Timer.hpp"
 
 class LineFollowNode : public ActiveNode {
    public:

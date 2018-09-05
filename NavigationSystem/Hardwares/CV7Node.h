@@ -14,7 +14,7 @@
 #pragma once
 
 #include <map>
-#include "../Database/DBHandler.h"
+#include "../Database/DBHandler.hpp"
 #include "../MessageBus/ActiveNode.h"
 
 class CV7Node : public ActiveNode {

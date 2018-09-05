@@ -12,7 +12,7 @@
 #ifndef SIGTRAPS_H
 #define SIGTRAPS_H
 
-#include "../SystemServices/Logger.h"
+#include "../SystemServices/Logger.hpp"
 #include <cstdlib>
 #include <csignal>
 

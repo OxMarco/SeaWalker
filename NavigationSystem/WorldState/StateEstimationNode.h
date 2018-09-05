@@ -25,15 +25,15 @@
 #include "../Messages/GPSDataMsg.h"
 #include "../Messages/StateMessage.h"
 #include "../Messages/WaypointDataMsg.h"
-#include "../SystemServices/Logger.h"
-#include "../SystemServices/Timer.h"
+#include "../SystemServices/Logger.hpp"
+#include "../SystemServices/Timer.hpp"
 
 #include <stdint.h>
 #include <atomic>
 #include <mutex>
-#include "../Database/DBHandler.h"
-#include "../Math/CourseMath.h"
-#include "../Math/Utility.h"
+#include "../Database/DBHandler.hpp"
+#include "../Math/CourseMath.hpp"
+#include "../Math/Utility.hpp"
 
 class StateEstimationNode : public ActiveNode {
    public:

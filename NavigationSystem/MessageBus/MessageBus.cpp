@@ -10,9 +10,9 @@
  ***************************************************************************************/
 
 #include "../MessageBus/MessageBus.h"
-#include "../SystemServices/Logger.h"
+#include "../SystemServices/Logger.hpp"
 #include <sys/time.h>
-#include "../SystemServices/SysClock.h"
+#include "../SystemServices/SysClock.hpp"
 
 // For std::this_thread
 #include <chrono>

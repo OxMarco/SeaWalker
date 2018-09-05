@@ -1,23 +1,19 @@
- /****************************************************************************************
+/**
+ * @file   Logger.cpp
+ * @version 1.0.0
+ * @author SailingRobots team
+ * @date   2017
+ * @brief  Provides functions for logging data to file and console. Features automatic startup and shutdown.
  *
- * File:
- * 		Logger.cpp
- *
- * Purpose:
- *		Provides functions for logging data to file and console.
- *
- *
- * Developer Notes:
- *      Useful links:
- *        Boost library documentation: https://www.boost.org/
- *        Stack Overflow topic:
- *          https://stackoverflow.com/questions/20086754/how-to-use-boost-log-from-multiple-files-with-gloa/22068278#22068278
+ * @details     Useful links:
+ *              Boost library documentation: https://www.boost.org/
+ *              Stack Overflow topic:
+ *              https://stackoverflow.com/questions/20086754/how-to-use-boost-log-from-multiple-files-with-gloa/22068278#22068278
  *          https://stackoverflow.com/questions/29785243/c-how-to-set-a-severity-filter-on-a-boost-global-logger
- *      
  *
- ***************************************************************************************/
+ */
 
-#include "Logger.h"
+#include "Logger.hpp"
 
 namespace logging  = boost::log;
 namespace src      = boost::log::sources;

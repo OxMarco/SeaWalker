@@ -1,4 +1,11 @@
-#include "DBLoggerNode.h"
+/**
+ * @file    DBLoggerNode.cpp
+ *
+ * @brief   Saves logs to the database.
+ *
+ */
+
+#include "DBLoggerNode.hpp"
 
 #include "../Messages/CompassDataMsg.h"
 #include "../Messages/GPSDataMsg.h"
@@ -12,8 +19,8 @@
 #include "../Messages/MarineSensorDataMsg.h"
 #include "../Messages/CourseDataMsg.h"
 #include "../Messages/CurrentSensorDataMsg.h"
-#include "../SystemServices/Timer.h"
-#include "../SystemServices/SysClock.h"
+#include "../SystemServices/Timer.hpp"
+#include "../SystemServices/SysClock.hpp"
 
 #define STATE_INITIAL_SLEEP 100
 

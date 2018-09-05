@@ -17,9 +17,9 @@
 #include <cstring>
 
 #ifdef __linux__
-#include "../SystemServices/Logger.h"
+#include "../SystemServices/Logger.hpp"
 #elif _WIN32
-#include "..\SystemServices/Logger.h"
+#include "..\SystemServices/Logger.hpp"
 #endif
 // For std::this_thread
 #include <chrono>

@@ -14,7 +14,7 @@
 #pragma once
 
 #include <libgpsmm.h>
-#include "../Database/DBHandler.h"
+#include "../Database/DBHandler.hpp"
 #include "../MessageBus/ActiveNode.h"
 
 class GPSDNode : public ActiveNode {

@@ -21,7 +21,7 @@
 #define LOG_MESSAGES
 
 #ifdef LOG_MESSAGES
-#include "../SystemServices/SysClock.h"
+#include "../SystemServices/SysClock.hpp"
 #endif
 
 class Message {

@@ -15,7 +15,7 @@
  ***************************************************************************************/
 #pragma once
 
-#include "../Database/DBHandler.h"
+#include "../Database/DBHandler.hpp"
 #include "../Hardwares/CAN_Services/CANFrameReceiver.h"
 #include "../Hardwares/CAN_Services/CANService.h"
 #include "../Hardwares/CAN_Services/N2kMsg.h"
@@ -23,7 +23,7 @@
 #include "../MessageBus/Message.h"
 #include "../MessageBus/MessageBus.h"
 #include "../Messages/StateMessage.h"
-#include "../SystemServices/Timer.h"
+#include "../SystemServices/Timer.hpp"
 
 #include <time.h>
 #include <cstring>

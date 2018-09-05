@@ -14,8 +14,8 @@
 
 #include "ArduinoNode.h"
 #include "../Messages/ArduinoDataMsg.h"
-#include "../SystemServices/Logger.h"
-#include "../SystemServices/Timer.h"
+#include "../SystemServices/Logger.hpp"
+#include "../SystemServices/Timer.hpp"
 
 
 // For std::this_thread

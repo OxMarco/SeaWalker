@@ -12,10 +12,10 @@
  ***************************************************************************************/
 
 #include "CV7Node.h"
-#include "../SystemServices/Logger.h"
-#include "../Database/DBHandler.h"
+#include "../SystemServices/Logger.hpp"
+#include "../Database/DBHandler.hpp"
 #include "../Messages/WindDataMsg.h"
-#include "../Math/Utility.h"
+#include "../Math/Utility.hpp"
 #include <cstring>
 
 #include <stdio.h>

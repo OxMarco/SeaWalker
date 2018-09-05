@@ -1,9 +1,9 @@
 #include <iostream>
 #include "CANMarineSensorReceiver.h"
 #include "CAN_Services/CANService.h"
-#include "../Math/Utility.h"
+#include "../Math/Utility.hpp"
 #include "../Messages/MarineSensorDataMsg.h"
-#include "../SystemServices/Logger.h"
+#include "../SystemServices/Logger.hpp"
 #include "CAN_Services/CanBusCommon/canbus_defs.h"
 #include "CAN_Services/CanBusCommon/CanMessageHandler.h"
 
@@ -30,7 +30,7 @@ void CANMarineSensorReceiver::processFrame (CanMsg& msg) {
         handler.getMappedData(&temp, SENSOR_TEMPERATURE_DATASIZE,
                                             SENSOR_TEMPERATURE_INTERVAL_MIN, SENSOR_TEMPERATURE_INTERVAL_MAX);
 
-        float salinity = Utility::calculateSalinity (temp, conductivety);
+        float salinity = 0; // Utility::calculateSalinity (temp, conductivety);
 
         MessagePtr marineSensorDataMsg = std::make_unique<MarineSensorDataMsg>(static_cast<float>(temp), 
                                      static_cast<float>(conductivety), static_cast<float>(ph), salinity);

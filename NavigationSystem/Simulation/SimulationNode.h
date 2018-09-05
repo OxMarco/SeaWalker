@@ -30,8 +30,8 @@
 #include <memory>
 #include <thread>
 
-#include "../Math/CourseMath.h"
-#include "../Math/Utility.h"
+#include "../Math/CourseMath.hpp"
+#include "../Math/Utility.hpp"
 #include "../MessageBus/ActiveNode.h"
 #include "../Messages/CompassDataMsg.h"
 #include "../Messages/GPSDataMsg.h"
@@ -42,8 +42,8 @@
 #include "../Messages/WindDataMsg.h"
 #include "../Messages/WingSailCommandMsg.h"
 #include "../Network/TCPServer.h"
-#include "../SystemServices/Logger.h"
-#include "../SystemServices/SysClock.h"
+#include "../SystemServices/Logger.hpp"
+#include "../SystemServices/SysClock.hpp"
 #include "../WorldState/CollidableMgr/CollidableMgr.h"
 
 enum SimulatorPacket : unsigned char {

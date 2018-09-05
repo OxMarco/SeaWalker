@@ -1,20 +1,11 @@
-/****************************************************************************************
+/**
+ * @file    DBLogger.cpp
  *
- * File:
- * 		DBLogger.cpp
+ * @brief   Logs dataLogs to the database in a efficient manor and offloads the work to a worker thread.
  *
- * Purpose:
- *		Logs dataLogs to the database in a efficient manor and offloads the work to a
- *		worker thread.
- *
- * Developer Notes:
- *
- *
- ***************************************************************************************/
+ */
 
-
-#include "DBLogger.h"
-
+#include "DBLogger.hpp"
 
 DBLogger::DBLogger(unsigned int logBufferSize, DBHandler& dbHandler)
 	:m_dbHandler(dbHandler), m_bufferSize(logBufferSize)

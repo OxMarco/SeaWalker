@@ -15,7 +15,7 @@
 #pragma once
 
 #include <vector>
-#include "../Database/DBHandler.h"
+#include "../Database/DBHandler.hpp"
 #include "../MessageBus/ActiveNode.h"
 #include "ASRArbiter.h"
 #include "ASRVoter.h"

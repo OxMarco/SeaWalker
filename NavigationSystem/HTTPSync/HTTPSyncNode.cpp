@@ -1,24 +1,17 @@
-
-/****************************************************************************************
+/**
+ * @file    HTTPSyncNode.cpp
  *
- * File:
- * 		HTTPSyncNode.cpp
+ * @brief   Handles retrieval and sending of logs, waypoints and configs between database and server.
+ *          Also notifies messagebus when new serverdata arrives.
  *
- * Purpose:
- *		Handles retrieval and sending of logs, waypoints and configs between database and server.
- *      Also notifies messagebus when new serverdata arrives.
- *
- * Developer Notes:
- *
- *
- ***************************************************************************************/
-
-#include "HTTPSyncNode.h"
+ */
+ 
+#include "HTTPSyncNode.hpp"
 #include "../Messages/LocalConfigChangeMsg.h"
 #include "../Messages/LocalWaypointChangeMsg.h"
 #include "../Messages/ServerConfigsReceivedMsg.h"
 #include "../Messages/ServerWaypointsReceivedMsg.h"
-#include "../SystemServices/Timer.h"
+#include "../SystemServices/Timer.hpp"
 #include "../SystemServices/Wrapper.h"
 
 #include <atomic>

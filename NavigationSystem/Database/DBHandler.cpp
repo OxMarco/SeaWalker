@@ -1,10 +1,17 @@
-#include "DBHandler.h"
+/**
+ * @file    DBHandler.cpp
+ *
+ * @brief   Interfacing functions with the database.
+ *
+ */
+
+#include "DBHandler.hpp"
 #include <cstdio>
 #include <cstdlib>
 #include <iomanip>
 #include <string>
 #include <thread>
-#include "../SystemServices/Timer.h"
+#include "../SystemServices/Timer.hpp"
 #include "../SystemServices/Wrapper.h"
 
 std::mutex DBHandler::m_databaseLock;

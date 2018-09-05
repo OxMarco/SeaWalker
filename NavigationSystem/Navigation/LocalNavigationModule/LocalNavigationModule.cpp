@@ -19,10 +19,10 @@
 #include "../Messages/WindStateMsg.h"
 #include "../Messages/WaypointDataMsg.h"
 #include "../Messages/RequestCourseMsg.h"
-#include "../SystemServices/Logger.h"
-#include "../SystemServices/Timer.h"
-#include "../Math/CourseMath.h"
-#include "../Math/Utility.h"
+#include "../SystemServices/Logger.hpp"
+#include "../SystemServices/Timer.hpp"
+#include "../Math/CourseMath.hpp"
+#include "../Math/Utility.hpp"
 
 #include <cstdio>
 

@@ -13,7 +13,7 @@
 
 
 #include "../MessageBus/MessageSerialiser.h"
-#include "../SystemServices/Logger.h"
+#include "../SystemServices/Logger.hpp"
 
 
 void MessageSerialiser::serialise(uint8_t data)

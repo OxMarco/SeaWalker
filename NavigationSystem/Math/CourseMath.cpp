@@ -1,7 +1,15 @@
-#include "CourseMath.h"
-#include <cmath>
-#include "../Math/Utility.h"
+/**
+ * @file   CourseMath.cpp
+ * @version 1.0.0
+ * @author SailingRobots team
+ * @date   2017
+ * @brief  Course calculation helpers
+ *
+ */
 
+#include "CourseMath.hpp"
+#include "Utility.hpp"
+#include <cmath>
 
 int16_t CourseMath::calculateBTW(double gpsLon, double gpsLat, double waypointLon, double waypointLat)
 {

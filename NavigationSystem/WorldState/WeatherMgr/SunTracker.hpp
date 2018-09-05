@@ -1,10 +1,11 @@
-//
-//  SunTracker.hpp
-//  SeaWalker
-//
-//  Created by Giammarco René Casanova on 05/09/2018.
-//  Copyright © 2018 seawalker. All rights reserved.
-//
+/**
+ * @file        SunTracker.hpp
+ * @version     1.0.0
+ * @author      BlueRobotics
+ * @date        September, 2017
+ * @brief       Class to calculate sun position using IMU and GPS data
+ *
+ */
 
 #ifndef SUNTRACKER_HPP
 #define SUNTRACKER_HPP

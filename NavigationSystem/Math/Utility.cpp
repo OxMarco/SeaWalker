@@ -1,8 +1,16 @@
-#include "Utility.h"
+/**
+ * @file   Utility.cpp
+ * @version 1.0.0
+ * @author SailingRobots team
+ * @date   2017
+ * @brief  A few utility functions
+ *
+ */
+
+#include "Utility.hpp"
 #include <algorithm>
 #include <cmath>
 #include <stdlib.h>
-
 
 int Utility::combineBytes(uint8_t MSB, uint8_t LSB)
 {
@@ -319,7 +327,7 @@ uint16_t Utility::wrapAngle( int16_t angle)
     return angle;
 }
 
-// Add the (magnetic ? or Earth?)declination of the heading
+/** @todo Add the declination of the heading */
 // TODO : explain +0.5 interest ???
 
 int Utility::addDeclinationToHeading(int heading, int declination) {
@@ -423,9 +431,9 @@ double Utility::calculateWaypointsOrthogonalLine(const double nextLon, const dou
     return orthogonalLine;
 }
 
-/*
- * uses formula for calculating true Wind Direction
- * https://en.wikipedia.org/wiki/Apparent_wind
+/**
+ * @brief uses formula for calculating true Wind Direction
+ * @link https://en.wikipedia.org/wiki/Apparent_wind
  */
  // NOTE - Maël: confusion between heading and course.
 double Utility::calculateTrueWindDirection(const int windsensorDir, const int windsensorSpeed, const double gpsSpeed, const double heading){
@@ -461,7 +469,6 @@ double Utility::calculateTrueWindDirection(const int windsensorDir, const int wi
 	return twd;
 }
 
- // NOTE - Maël: pbs de frame ?
 double Utility::calculateTrueWindSpeed(int windsensorDir, int windsensorSpeed, double gpsSpeed, double heading)
 {
 	//double knots = 1.94384;
@@ -514,9 +521,6 @@ double Utility::getTrueWindDirection(int windsensorDir, int windsensorSpeed, dou
 
 	return meanOfAngles(twdBuffer);
 }
-
-//------------------------------------------------------------
-// NOTE - Maël: the getApparentWindSpeed and getApparentWindDirection functions are useless.
 
 void Utility::calculateApparentWind(const int windsensorDir, const int windsensorSpeed, const double gpsSpeed, const double heading,
 	           const double trueWindDirection,double &apparentWindSpeed, double &apparentWindDirection)
@@ -574,8 +578,6 @@ void Utility::addValueToBuffer(float value, std::vector<float> &buffer, unsigned
 
 void Utility::sphericalCoordinateSystem( const double lat, const double lon, double& x, double& y)
 {
-	// Note Maël : One output coordinate seems to be missing - z= sin(latR) * EARTH_RADIUS;
-
 	static const double EARTH_RADIUS = 6371.0;
 
 	double latR = lat * M_PI / 180;
@@ -589,21 +591,4 @@ void Utility::calculateVelocity( const uint16_t course, const double speed, doub
 {
 	vX = speed * cos(course * (M_PI / 180));
 	vY = speed * sin(course * (M_PI / 180));
-}
-
-float Utility::calculateSalinity (const float temperature, const  float conductivety){
-	const float Cs = conductivety;
-	const float t = temperature;
-
-	const float CKcl = -0.0267243*pow(t,3) + 4.6636947*pow(t,2) + 861.3027640*t + 29035.1640851;
-
-	const float Rt = Cs/CKcl;
-
-	const float a0 = 0.0080, a1 = -0.1692, a2 = 25.3851, a3 = 14.0941, a4 = -7.0261, a5 = 2.7081;
-	const float b0 = 0.0005, b1 = -0.0056, b2 = -0.0066, b3 = -0.0375, b4 = 0.0636, b5 = -0.0144;
-
-	float salinity = a0 + a1*sqrt(Rt) + a2*Rt + a3*sqrt (pow(Rt, 3)) + a4*pow(Rt,2) + a5*sqrt(pow(Rt,5)) +
-										(((t-15)/(1+0.0162*(t-15)))*(b0 + b1*sqrt(Rt) + b2*Rt + b3*sqrt(pow(Rt, 3)) + b4*pow(Rt,2) + b5*sqrt(pow(Rt,5))));
-
-	return salinity;
 }

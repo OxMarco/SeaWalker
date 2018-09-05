@@ -1,7 +1,15 @@
-#include "CourseCalculation.h"
-#include <math.h>
-#include "../Math/Utility.h"
+/**
+ * @file   CourseCalculation.cpp
+ * @version 1.0.0
+ * @author SailingRobots team
+ * @date   2017
+ * @brief  Course calculation functions
+ *
+ */
 
+#include "CourseCalculation.hpp"
+#include "Utility.hpp"
+#include <math.h>
 
 CourseCalculation::CourseCalculation() :
 	m_tack(false),

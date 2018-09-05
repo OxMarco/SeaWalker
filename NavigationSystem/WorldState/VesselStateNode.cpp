@@ -19,9 +19,9 @@
 #include <thread>
 
 #include "../Messages/VesselStateMsg.h"
-#include "../Math/CourseMath.h"
-#include "../SystemServices/Logger.h"
-#include "../SystemServices/Timer.h"
+#include "../Math/CourseMath.hpp"
+#include "../SystemServices/Logger.hpp"
+#include "../SystemServices/Timer.hpp"
 
 // REFACTOR
 VesselStateNode::VesselStateNode(MessageBus& msgBus, DBHandler& dbhandler, double loopTime)

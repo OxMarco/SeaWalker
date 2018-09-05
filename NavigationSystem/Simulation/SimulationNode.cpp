@@ -177,7 +177,7 @@ void SimulationNode::createMarineSensorMessage(WaypointDataMsg* msg) {
     float conductivity = 1 + IdlastDigitsAsDecimal;
     float ph = 7 + IdlastDigitsAsDecimal;
 
-    float salinity = Utility::calculateSalinity(temperature, conductivity);
+    float salinity = 0; // Utility::calculateSalinity(temperature, conductivity);
 
     MessagePtr marineSensorData = std::make_unique<MarineSensorDataMsg>(
         MarineSensorDataMsg(temperature, conductivity, ph, salinity));

@@ -21,9 +21,9 @@
  ***************************************************************************************/
 
 #include "CollidableMgr.h"
-#include "../SystemServices/SysClock.h"
-#include "../SystemServices/Logger.h"
-#include "../Math/Utility.h"
+#include "../SystemServices/SysClock.hpp"
+#include "../SystemServices/Logger.hpp"
+#include "../Math/Utility.hpp"
 #include <chrono>
 
 

@@ -3,21 +3,17 @@
  * @version 1.0.0
  * @author SailingRobots team
  * @date   2017
- * @brief  SysClock class implementation
- *
- * @detail Purpose:
- *        Provides a number of time keeping functions. Can use the GPS to ensure a accurate
- *        time. The Sysclock will use the system time if a GPS time has not been provided.
+ * @brief  Provides a number of time keeping functions. Can use the GPS to ensure a accurate
+ *         time. The Sysclock will use the system time if a GPS time has not been provided.
  *
  */
-#include "SysClock.h"
+
+#include "SysClock.hpp"
 #include <stdio.h>
 #include <ctime>
 #include <sys/time.h>
 
-
 #define GET_UNIX_TIME() static_cast<long int>(std::time(nullptr))
-
 
 unsigned long	SysClock::m_LastUpdated = NEVER_UPDATED;
 unsigned long 	SysClock::m_LastTimeStamp = 0;

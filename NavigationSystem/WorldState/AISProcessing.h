@@ -14,14 +14,14 @@
 
 #pragma once
 
-#include "../Database/DBHandler.h"
-#include "../Math/CourseMath.h"
+#include "../Database/DBHandler.hpp"
+#include "../Math/CourseMath.hpp"
 #include "../MessageBus/ActiveNode.h"
 #include "../MessageBus/Message.h"
 #include "../Messages/AISDataMsg.h"
 #include "../Messages/StateMessage.h"
-#include "../SystemServices/Logger.h"
-#include "../SystemServices/Timer.h"
+#include "../SystemServices/Logger.hpp"
+#include "../SystemServices/Timer.hpp"
 #include "../WorldState/CollidableMgr/CollidableMgr.h"
 
 #include <chrono>

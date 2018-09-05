@@ -3,13 +3,11 @@
  * @version 1.0.0
  * @author SailingRobots team
  * @date   2017
- * @brief  Timer class
- *
- * @details Definition of Time class members
+ * @brief  Keep track of time passing
  */
 
 #include <thread>
-#include "Timer.h"
+#include "Timer.hpp"
 
 ///////////////////// Class Functions Definition /////////////////////
 

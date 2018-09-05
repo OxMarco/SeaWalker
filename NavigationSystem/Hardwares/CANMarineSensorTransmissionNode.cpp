@@ -5,7 +5,7 @@
 #include "../MessageBus/NodeIDs.h"
 #include "../MessageBus/MessageTypes.h"
 #include "../Messages/DataCollectionStartMsg.h"
-#include "../SystemServices/Timer.h"
+#include "../SystemServices/Timer.hpp"
 #include "CAN_Services/CanBusCommon/CanMessageHandler.h"
 #include "CAN_Services/CanBusCommon/canbus_defs.h"
 

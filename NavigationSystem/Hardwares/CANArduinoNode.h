@@ -18,16 +18,16 @@
 #include <thread>
 #include <vector>
 
-#include "../Database/DBHandler.h"
+#include "../Database/DBHandler.hpp"
 #include "../Hardwares/CAN_Services/CANFrameReceiver.h"
 #include "../Hardwares/CAN_Services/CANService.h"
 #include "../Hardwares/CAN_Services/N2kMsg.h"
-#include "../Math/Utility.h"
+#include "../Math/Utility.hpp"
 #include "../MessageBus/ActiveNode.h"
 #include "../MessageBus/Message.h"
 #include "../MessageBus/MessageBus.h"
 #include "../Messages/ASPireActuatorFeedbackMsg.h"
-#include "../SystemServices/Timer.h"
+#include "../SystemServices/Timer.hpp"
 
 class CANArduinoNode : public ActiveNode, public CANFrameReceiver {
    public:

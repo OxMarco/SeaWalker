@@ -3,12 +3,12 @@
  * @version     1.0.0
  * @author      BlueRobotics
  * @date        September, 2017
- * @brief       Definition of WaveMotion class methods
+ * @brief       Class to calculate waves height and speed using IMU and GPS data
  *
  */
 
 #include "WaveMotion.hpp"
-#include "../../SystemServices/SysClock.h"
+#include "../../SystemServices/SysClock.hpp"
 #include <math.h>
 
 ///////////////////// Class Functions Definition /////////////////////

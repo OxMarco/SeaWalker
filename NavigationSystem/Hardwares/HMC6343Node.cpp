@@ -20,10 +20,10 @@
 
 #include "HMC6343Node.h"
 #include "../Messages/CompassDataMsg.h"
-#include "../SystemServices/Logger.h"
+#include "../SystemServices/Logger.hpp"
 #include "wiringPi.h"
-#include "../Math/Utility.h"
-#include "../SystemServices/Timer.h"
+#include "../Math/Utility.hpp"
+#include "../SystemServices/Timer.hpp"
 
 
 // For std::this_thread

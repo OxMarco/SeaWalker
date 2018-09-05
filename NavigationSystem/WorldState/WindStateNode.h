@@ -20,8 +20,8 @@
 #include <mutex>
 #include <vector>
 
-#include "../Database/DBHandler.h"
-#include "../Math/Utility.h"
+#include "../Database/DBHandler.hpp"
+#include "../Math/Utility.hpp"
 #include "../MessageBus/MessageBus.h"
 #include "../MessageBus/MessageTypes.h"
 #include "../Messages/StateMessage.h"
