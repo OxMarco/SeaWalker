@@ -1,28 +1,23 @@
-/****************************************************************************************
- *
- * File:
- * 		SailControlNode.cpp
- *
- * Purpose:
- *      Calculates the desired sail angle.
- *      It sends a SailComandMsg corresponding to the command angle of the sail.
- *
- * Developer Notes:
- *      Two functions have been developed to calculate the desired sail angle :
+/**
+ * @file   SailControlNode.hpp
+ * @version 1.0.0
+ * @author SailingRobots team
+ * @date   2017
+ * @brief  Calculates the desired sail angle.
+ *         It sends a SailComandMsg corresponding to the command angle of the sail.
+ * @details Two functions have been developed to calculate the desired sail angle :
  *          - calculateSailAngleLinear(),
  *          - calculateSailAngleCardioid().
- *      You can choose the one you want to use by commenting/uncommenting lines
- *      in SailControlNodeThreadFunc().
+ *          The developer can choose the one you want to use by commenting/uncommenting lines
+ *          in SailControlNodeThreadFunc().
  *
- ***************************************************************************************/
+ */
 
-#include "SailControlNode.h"
-
+#include "SailControlNode.hpp"
 
 #define DATA_OUT_OF_RANGE -2000
 const int INITIAL_SLEEP = 2000; // milliseconds
 const float NO_COMMAND = -1000;
-
 
 ///----------------------------------------------------------------------------------
 SailControlNode::SailControlNode(MessageBus& msgBus, DBHandler& dbhandler)

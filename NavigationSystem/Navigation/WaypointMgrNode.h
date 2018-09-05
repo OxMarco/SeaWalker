@@ -19,7 +19,7 @@
 #include "../Database/DBHandler.hpp"
 #include "../Math/CourseMath.hpp"
 #include "../Math/Utility.hpp"
-#include "../MessageBus/Node.h"
+#include "../MessageBus/Node.hpp"
 #include "../Messages/CourseDataMsg.h"
 #include "../Messages/ServerWaypointsReceivedMsg.h"
 #include "../Messages/StateMessage.h"

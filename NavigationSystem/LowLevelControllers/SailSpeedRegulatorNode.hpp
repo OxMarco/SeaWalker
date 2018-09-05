@@ -1,19 +1,26 @@
-/****************************************************************************************
+/**
+ * @file    SailSpeedRegulatorNode.hpp
+ * @version 1.0.0
+ * @author  SailingRobots team
+ * @date    2017
+ * @brief   Calculates the desired sail angle.
+ *          It sends a SailComandMsg corresponding to the command angle of the sail.
+ * @details This node has not been tested and will probably not work in reality because the speed
+ *          regulator is base on the simulator behaviour which is a rough representation of the reality.
  *
- * File:
- *      SailSpeedRegulatorNode.h
- *
- * Purpose:
- *      Calculates the desired sail angle in order to regulate the speed.
- *      It sends a SailComandMsg corresponding to the command angle of the sail.
- *
- * Developer Notes:
- *      This node has not been tested and will probably not work in reality because the speed
- *      regulator is base on the simulator behaviour which is a rough representation of the reality.
- *
- ***************************************************************************************/
-#pragma once
+ */
 
+#ifndef SAILSPEEDREGULATORNODE_HPP
+#define SAILSPEEDREGULATORNODE_HPP
+
+#include "../Database/DBHandler.hpp"
+#include "../Math/Utility.hpp"
+#include "../SystemServices/Timer.hpp"
+#include "../MessageBus/ActiveNode.hpp"
+#include "../MessageBus/MessageBus.hpp"
+#include "../Messages/SailCommandMsg.h"
+#include "../Messages/StateMessage.h"
+#include "../Messages/WindDataMsg.h"
 #include <math.h>
 #include <stdint.h>
 #include <atomic>
@@ -21,15 +28,6 @@
 #include <mutex>
 #include <thread>
 #include <vector>
-
-#include "../Database/DBHandler.hpp"
-#include "../Math/Utility.hpp"
-#include "../MessageBus/ActiveNode.hpp"
-#include "../MessageBus/MessageBus.hpp"
-#include "../Messages/SailCommandMsg.h"
-#include "../Messages/StateMessage.h"
-#include "../Messages/WindDataMsg.h"
-#include "../SystemServices/Timer.hpp"
 
 class SailSpeedRegulatorNode : public ActiveNode {
    public:
@@ -93,3 +91,5 @@ class SailSpeedRegulatorNode : public ActiveNode {
     float m_old_diff_v;  // m/s
     float m_int_diff_v;
 };
+
+#endif /* SAILSPEEDREGULATORNODE_HPP */

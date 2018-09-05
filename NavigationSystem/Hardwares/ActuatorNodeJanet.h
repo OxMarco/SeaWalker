@@ -14,7 +14,7 @@
 #pragma once
 
 #include "../Database/DBHandler.hpp"
-#include "../MessageBus/Node.h"
+#include "../MessageBus/Node.hpp"
 
 class ActuatorNodeJanet : public Node {
    public:
