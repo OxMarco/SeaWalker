@@ -257,7 +257,7 @@ bool HTTPSyncNode::performCURLCall(std::string data, std::string call, std::stri
         curl_easy_cleanup(curl);
 
         // Check for errors
-        // std::cout << "/* Reponse serveur : " << response << "\n*/" << "\n\n\n\n";
+        // std::cout << "/* Reponse server : " << response << "\n*/" << "\n\n\n\n";
         if (m_res == CURLE_OK) {
             if (m_reportedConnectError) {
                 m_reportedConnectError = false;

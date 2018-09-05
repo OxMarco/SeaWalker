@@ -16,11 +16,12 @@
 
 #pragma once
 
+#include "Collidable.h"
+#include "CollidableList.h"
 #include <stdint.h>
 #include <mutex>
 #include <thread>
-#include "Collidable.h"
-#include "CollidableList.h"
+#include <atomic>
 
 class CollidableMgr {
    public:
