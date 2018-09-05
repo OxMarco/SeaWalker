@@ -36,7 +36,7 @@ public:
     ///////////////////// Getter Functions /////////////////////
     
     /// Get the logger status (enabled or disabled)
-    bool getLoggingStatus();
+    static bool getLoggingStatus();
     
     ///////////////////// Other Methods /////////////////////
     
