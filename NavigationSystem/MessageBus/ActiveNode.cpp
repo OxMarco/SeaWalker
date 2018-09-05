@@ -16,7 +16,7 @@
 #include <iostream>
 void ActiveNode::runThread(void(*func)(ActiveNode*))
 {
-    m_Thread.reset(std::thread(func, this));
+    m_Thread.reset(new std::thread(func, this));
     if(m_Thread == nullptr)
         throw std::runtime_error("impossible to start the node main thread");
 }
