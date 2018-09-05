@@ -231,7 +231,7 @@ bool HTTPSyncNode::performCURLCall(std::string data, std::string call, std::stri
     std::string serverCall = "";
 
     // std::cout << "/* Request : " << call << " */" << '\n';
-    if (!data.is_empty()) {
+    if (!data.empty()) {
         serverCall = "serv=" + call + "&id=" + m_shipID + "&pwd=" + m_shipPWD +
                      "&data=" + data;
     } else {
