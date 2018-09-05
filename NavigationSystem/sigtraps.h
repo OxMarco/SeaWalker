@@ -56,11 +56,6 @@ extern "C" void default_handler(int signal)
     }
 }
 
-void atexit_handler()
-{
-    
-}
-
 void install_sig_traps()
 {
     /**
@@ -72,11 +67,6 @@ void install_sig_traps()
     std::signal(SIGILL, default_handler);
     std::signal(SIGABRT, default_handler);
     std::signal(SIGFPE, default_handler);
-    
-    /**
-     *  @link https://en.cppreference.com/w/cpp/utility/program/atexit
-     */
-    std::atexit(atexit_handler);
 }
 
 #endif /* SIGTRAPS_H */

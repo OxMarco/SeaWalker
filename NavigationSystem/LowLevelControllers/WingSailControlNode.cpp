@@ -1,5 +1,5 @@
 /**
- * @file    WingsailControlNode.cpp
+ * @file    WingSailControlNode.cpp
  *
  * @brief   Calculates the desired tail wing angle of the wingsail.
  *          It sends a WingSailComandMsg corresponding to the command angle of the tail wing.
@@ -8,10 +8,10 @@
  *          - calculateTailAngle(),
  *          - simpleCalculateTailAngle().
  *          You can choose the one you want to use by commenting/uncommenting lines
- *          in WingsailControlNodeThreadFunc().
+ *          in WingSailControlNodeThreadFunc().
  */
 
-#include "WingsailControlNode.hpp"
+#include "WingSailControlNode.hpp"
 
 #define DATA_OUT_OF_RANGE -2000
 const int INITIAL_SLEEP = 2000; // milliseconds
@@ -23,8 +23,8 @@ const double  DRAGS[53] = {-3.6222976277233707, -3.3490177771111052, -3.08645478
 
 
 ///----------------------------------------------------------------------------------
-WingsailControlNode::WingsailControlNode(MessageBus& msgBus, DBHandler& dbhandler):
-    ActiveNode(NodeID::WingsailControlNode,msgBus), m_db(dbhandler), m_LoopTime(0.5), m_MaxCommandAngle(13),
+WingSailControlNode::WingSailControlNode(MessageBus& msgBus, DBHandler& dbhandler):
+    ActiveNode(NodeID::WingSailControlNode,msgBus), m_db(dbhandler), m_LoopTime(0.5), m_MaxCommandAngle(13),
     m_ApparentWindDir(DATA_OUT_OF_RANGE), m_TargetCourse(DATA_OUT_OF_RANGE), m_TargetTackStarboard(0)
     
 {
@@ -34,22 +34,22 @@ WingsailControlNode::WingsailControlNode(MessageBus& msgBus, DBHandler& dbhandle
 }
 
 ///----------------------------------------------------------------------------------
-WingsailControlNode::~WingsailControlNode(){}
+WingSailControlNode::~WingSailControlNode(){}
 
 ///----------------------------------------------------------------------------------
-bool WingsailControlNode::init(){
+bool WingSailControlNode::init(){
     updateConfigsFromDB();
     return true;
 }
 
 ///----------------------------------------------------------------------------------
-void WingsailControlNode::start()
+void WingSailControlNode::start()
 {
-    runThread(WingsailControlNodeThreadFunc);
+    runThread(WingSailControlNodeThreadFunc);
 }
 
 ///----------------------------------------------------------------------------------
-void WingsailControlNode::processMessage( const Message* msg)
+void WingSailControlNode::processMessage( const Message* msg)
 {
     switch( msg->messageType() )
     {
@@ -68,14 +68,14 @@ void WingsailControlNode::processMessage( const Message* msg)
 }
 
 ///----------------------------------------------------------------------------------
-void WingsailControlNode::updateConfigsFromDB()
+void WingSailControlNode::updateConfigsFromDB()
 {
     m_LoopTime = m_db.retrieveCellAsDouble("config_wingsail_control","1","loop_time");
     m_MaxCommandAngle = m_db.retrieveCellAsDouble("config_wingsail_control","1","max_cmd_angle");
 }
 
 ///----------------------------------------------------------------------------------
-void WingsailControlNode::processWindStateMessage(const WindStateMsg* msg)
+void WingSailControlNode::processWindStateMessage(const WindStateMsg* msg)
 {
     std::lock_guard<std::mutex> lock_guard(m_lock);
 
@@ -83,7 +83,7 @@ void WingsailControlNode::processWindStateMessage(const WindStateMsg* msg)
 }
 
 ///----------------------------------------------------------------------------------
-void WingsailControlNode::processLocalNavigationMessage(const LocalNavigationMsg* msg)
+void WingSailControlNode::processLocalNavigationMessage(const LocalNavigationMsg* msg)
 {
     std::lock_guard<std::mutex> lock_guard(m_lock);
 
@@ -92,7 +92,7 @@ void WingsailControlNode::processLocalNavigationMessage(const LocalNavigationMsg
 }
 
 ///----------------------------------------------------------------------------------
-double WingsailControlNode::restrictWingsail(double val)
+double WingSailControlNode::restrictWingsail(double val)
 {
     if( val > m_MaxCommandAngle)        { return m_MaxCommandAngle; }
     else if ( val < -m_MaxCommandAngle) { return -m_MaxCommandAngle; }
@@ -100,7 +100,7 @@ double WingsailControlNode::restrictWingsail(double val)
 }
 
 ///------------------------------------------------------------------------------------
-float WingsailControlNode::calculateTailAngle()
+float WingSailControlNode::calculateTailAngle()
 {
     std::lock_guard<std::mutex> lock_guard(m_lock);
 
@@ -137,7 +137,7 @@ float WingsailControlNode::calculateTailAngle()
 }
 
 ///----------------------------------------------------------------------------------
-float WingsailControlNode::simpleCalculateTailAngle()
+float WingSailControlNode::simpleCalculateTailAngle()
 {
     std::lock_guard<std::mutex> lock_guard(m_lock);
 
@@ -159,9 +159,9 @@ float WingsailControlNode::simpleCalculateTailAngle()
 }
 
 ///----------------------------------------------------------------------------------
-void WingsailControlNode::WingsailControlNodeThreadFunc(ActiveNode* nodePtr)
+void WingSailControlNode::WingSailControlNodeThreadFunc(ActiveNode* nodePtr)
 {
-    WingsailControlNode* node = dynamic_cast<WingsailControlNode*> (nodePtr);
+    WingSailControlNode* node = dynamic_cast<WingSailControlNode*> (nodePtr);
 
     // An initial sleep, its purpose is to ensure that most if not all the sensor data arrives
     // at the start before we send out the state message.

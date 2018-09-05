@@ -1,5 +1,5 @@
 /**
- * @file    WingsailControlNode.hpp
+ * @file    WingSailControlNode.hpp
  * 
  * @brief   Calculates the desired tail wing angle of the wingsail.
  *          It sends a WingSailComandMsg corresponding to the command angle of the tail wing.
@@ -8,7 +8,7 @@
  *          - calculateTailAngle(),
  *          - simpleCalculateTailAngle().
  *          You can choose the one you want to use by commenting/uncommenting lines
- *          in WingsailControlNodeThreadFunc().
+ *          in WingSailControlNodeThreadFunc().
  */
 
 #ifndef WINGSAILCONTROLNODE_HPP
@@ -30,10 +30,10 @@
 #include <thread>
 #include <vector>
 
-class WingsailControlNode : public ActiveNode {
+class WingSailControlNode : public ActiveNode {
    public:
-    WingsailControlNode(MessageBus& msgBus, DBHandler& dbhandler);
-    ~WingsailControlNode();
+    WingSailControlNode(MessageBus& msgBus, DBHandler& dbhandler);
+    ~WingSailControlNode();
 
     bool init();
     void start();
@@ -74,9 +74,9 @@ class WingsailControlNode : public ActiveNode {
     float simpleCalculateTailAngle();
 
     ///----------------------------------------------------------------------------------
-    /// @brief Starts the WingsailControlNode's thread that pumps out WingSailCommandMsg.
+    /// @brief Starts the WingSailControlNode's thread that pumps out WingSailCommandMsg.
     ///----------------------------------------------------------------------------------
-    static void WingsailControlNodeThreadFunc(ActiveNode* nodePtr);
+    static void WingSailControlNodeThreadFunc(ActiveNode* nodePtr);
 
     DBHandler& m_db;
     std::mutex m_lock;

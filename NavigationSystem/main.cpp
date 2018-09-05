@@ -93,6 +93,19 @@ void initialiseNode(Node& node, const char* nodeName, NodeImportance importance)
 	}
 }
 
+void atexit_handler()
+{
+    // Shutdown
+    //-------------------------------------------------------------------------------
+    std::cout<<std::endl<<"...Exiting..."<<std::endl;
+    
+    /*for (std::map<Node*,std::string>::iterator it=nodeList.begin(); it!=nodeList.end(); ++it)
+     {
+     it->first.stopThread();
+     Logger::info("Node: %s - stopped\t[OK]", it->second);
+     }*/
+}
+
 ///----------------------------------------------------------------------------------
 /// Entry point, can accept one argument containing a relative path to the database.
 ///
@@ -109,7 +122,7 @@ int main(int argc, char *argv[])
     std::cout<<"|    #     # #      #    # #  #  # #    # #      #   #  #      #   #    |"<<std::endl;
     std::cout<<"|     #####  ###### #    #  ## ##  #    # ###### #    # ###### #    #   |"<<std::endl;
     std::cout<<"|                                                                       |"<<std::endl;
-    std::cout<<"|                            -- V1.0 --                                 |"<<std::endl;
+    std::cout<<"|                            -- V2.0 --                                 |"<<std::endl;
     std::cout<<"|_______________________________________________________________________|"<<std::endl;
 
     /*
@@ -121,6 +134,10 @@ int main(int argc, char *argv[])
     install_sig_traps();
     // This is for eclipse development so the output is constantly pumped out.
     setbuf(stdout, NULL);
+    /**
+     *  @link https://en.cppreference.com/w/cpp/utility/program/atexit
+     */
+    std::atexit(atexit_handler);
     
 	/*
      *  Starting main system services
@@ -174,7 +191,7 @@ int main(int argc, char *argv[])
 	WindStateNode windStateNode(messageBus);
 	WaypointMgrNode waypoint(messageBus, dbHandler);
 	CollidableMgr collidableMgr;
-	WingsailControlNode wingSailControlNode(messageBus, dbHandler);
+	WingSailControlNode wingSailControlNode(messageBus, dbHandler);
 	CourseRegulatorNode courseRegulatorNode(messageBus, dbHandler);
 
   	#if LOCAL_NAVIGATION_MODULE == 1
@@ -293,15 +310,5 @@ int main(int argc, char *argv[])
     //-------------------------------------------------------------------------------
     std::cout<<std::endl<<"...Running..."<<std::endl<<std::endl;
 
-    // Shutdown
-    //-------------------------------------------------------------------------------
-    std::cout<<std::endl<<"...Exiting..."<<std::endl;
-
-    /*for (std::map<Node*,std::string>::iterator it=nodeList.begin(); it!=nodeList.end(); ++it)
-    {
-        it->first.stopThread();
-        Logger::info("Node: %s - stopped\t[OK]", it->second);
-    }*/
-    
     return 0;
 }
