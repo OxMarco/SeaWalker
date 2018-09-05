@@ -715,7 +715,7 @@ void DBHandler::closeDatabase(sqlite3* connection) {
         m_databaseLock.unlock();
     } else {
         m_databaseLock.unlock();
-        throw std::runtime_error{ "DBHandler::closeDatabase() : connection is already null" };
+        //throw std::runtime_error{ "DBHandler::closeDatabase() : connection is already null" };
     }
 }
 

@@ -4,7 +4,10 @@
  * @brief   The entry point for the control system
  *
  */
+
+#ifdef __APPLE__
 #define SIMULATION 1
+#endif
 
 #include "Database/DBHandler.hpp"
 #include "Database/DBLoggerNode.hpp"
@@ -98,7 +101,7 @@ void atexit_handler()
 {
     // Shutdown
     //-------------------------------------------------------------------------------
-    std::cout<<std::endl<<"...Exiting..."<<std::endl;
+    std::cout<<"...Exiting..."<<std::endl;
     
     /*for (std::map<Node*,std::string>::iterator it=nodeList.begin(); it!=nodeList.end(); ++it)
      {
@@ -141,7 +144,7 @@ int main(int argc, char *argv[])
 	/*
      *  Starting main system services
      */
-    std::cout<<"1. Setting up main services.........";
+    std::cout<<"1. Setting up main services........."<<std::endl;
     
     //Database Path
 	std::string db_path;
@@ -153,7 +156,6 @@ int main(int argc, char *argv[])
 	{
 		db_path = std::string(argv[1]);
 	}
-    std::cout<<"1. Setting up main services.........";
 
 	// Declare DBHandler and MessageBus
 	DBHandler dbHandler(db_path);
@@ -294,7 +296,7 @@ int main(int argc, char *argv[])
 
 	// Begins running the message bus
 	//-------------------------------------------------------------------------------
-    std::cout<<"3. Starting MessageBus.........";
+    std::cout<<"3. Starting MessageBus........."<<std::endl;
     try {
         messageBus.run();
         std::cout<<"OK"<<std::endl;

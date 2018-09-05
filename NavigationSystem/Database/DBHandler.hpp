@@ -13,7 +13,6 @@
 #include "../SystemServices/Logger.hpp"
 #include "../Libs/json/include/nlohmann/json.hpp"
 #include <sqlite3.h>
-#include <iostream>
 #include <mutex>
 #include <sstream>
 #include <string>
