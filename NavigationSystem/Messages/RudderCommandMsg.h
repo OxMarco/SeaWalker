@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../MessageBus/Message.h"
+#include "../MessageBus/Message.hpp"
 
 class RudderCommandMsg : public Message {
    public:

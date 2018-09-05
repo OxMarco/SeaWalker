@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "../MessageBus/Message.h"
+#include "../MessageBus/Message.hpp"
 
 class ServerWaypointsReceivedMsg : public Message {
    public:

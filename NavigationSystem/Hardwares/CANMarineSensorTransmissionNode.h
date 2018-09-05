@@ -18,7 +18,7 @@
 
 #include "../Hardwares/CAN_Services/CANService.h"
 #include "../Hardwares/CAN_Services/N2kMsg.h"
-#include "../MessageBus/Message.h"
+#include "../MessageBus/Message.hpp"
 #include "../MessageBus/MessageBus.hpp"
 #include "../MessageBus/Node.h"
 

@@ -14,7 +14,7 @@
 
 #pragma once
 
-#include "../MessageBus/Message.h"
+#include "../MessageBus/Message.hpp"
 
 enum SensedElement : uint8_t {
     BATTERY = 1,

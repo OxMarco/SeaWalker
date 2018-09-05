@@ -13,7 +13,7 @@
 
 #pragma once
 
-#include "../MessageBus/Message.h"
+#include "../MessageBus/Message.hpp"
 
 // REFACTOR
 class VesselStateMsg : public Message {

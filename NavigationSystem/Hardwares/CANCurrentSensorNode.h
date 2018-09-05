@@ -21,7 +21,7 @@
 #include "../Hardwares/CAN_Services/CANFrameReceiver.h"
 #include "../Hardwares/CAN_Services/CANService.h"
 #include "../MessageBus/ActiveNode.hpp"
-#include "../MessageBus/Message.h"
+#include "../MessageBus/Message.hpp"
 #include "../MessageBus/MessageBus.hpp"
 #include "../Messages/CurrentSensorDataMsg.h"
 #include "../SystemServices/Timer.hpp"

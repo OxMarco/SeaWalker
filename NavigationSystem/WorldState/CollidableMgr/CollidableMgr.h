@@ -27,9 +27,13 @@ class CollidableMgr {
     CollidableMgr();
 
     ///----------------------------------------------------------------------------------
-    /// Starts the garbage collector that cleans up old contacts.
+    /// @brief Starts the garbage collector that cleans up old contacts.
     ///----------------------------------------------------------------------------------
     void startGC();
+    ///----------------------------------------------------------------------------------
+    /// @brief Stops the garbage collector worker thread.
+    ///----------------------------------------------------------------------------------
+    void stopGC();
 
     void addAISContact(uint32_t mmsi, double lat, double lon, float speed, float course);
     void addAISContact(uint32_t mmsi, float length, float beam);
@@ -53,4 +57,5 @@ class CollidableMgr {
     std::mutex m_visualMutex;
     bool ownAISLock;
     std::thread* m_Thread;
+    std::atomic<bool> m_Running;
 };

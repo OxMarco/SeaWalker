@@ -20,7 +20,7 @@
 #include "../Hardwares/CAN_Services/CANService.h"
 #include "../Hardwares/CAN_Services/N2kMsg.h"
 #include "../MessageBus/ActiveNode.hpp"
-#include "../MessageBus/Message.h"
+#include "../MessageBus/Message.hpp"
 #include "../MessageBus/MessageBus.hpp"
 #include "../Messages/StateMessage.h"
 #include "../SystemServices/Timer.hpp"

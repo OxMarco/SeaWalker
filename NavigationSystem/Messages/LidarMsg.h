@@ -12,7 +12,7 @@
 
 #pragma once
 
-#include "../MessageBus/Message.h"
+#include "../MessageBus/Message.hpp"
 
 class LidarMsg : public Message {
    public:
