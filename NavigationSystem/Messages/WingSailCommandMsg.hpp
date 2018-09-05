@@ -1,4 +1,12 @@
-#pragma once
+/**
+ * @file   WingSailCommandMsg.hpp
+ *
+ * @brief  Sends the tail angle to set the linear actuator
+ *
+ */
+
+#ifndef WINGSAILCOMMANDMSG_HPP
+#define WINGSAILCOMMANDMSG_HPP
 
 #include "../MessageBus/Message.hpp"
 
@@ -26,5 +34,7 @@ class WingSailCommandMsg : public Message {
     }
 
    private:
-    float m_TailAngle;  // degree [-26, +26[ in wing sail reference frame (clockwise from top view)
+    float m_TailAngle;  ///< tail angle degree [-26, +26) in wing sail reference frame (clockwise from top view)
 };
+
+#endif /* WINGSAILCOMMANDMSG_HPP */

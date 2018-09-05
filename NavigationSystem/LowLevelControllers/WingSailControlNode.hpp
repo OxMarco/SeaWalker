@@ -22,7 +22,7 @@
 #include "../Messages/LocalNavigationMsg.h"
 #include "../Messages/StateMessage.h"
 #include "../Messages/WindStateMsg.h"
-#include "../Messages/WingSailCommandMsg.h"
+#include "../Messages/WingSailCommandMsg.hpp"
 #include <math.h>
 #include <stdint.h>
 #include <chrono>

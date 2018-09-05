@@ -19,7 +19,7 @@
 #include "../MessageBus/MessageBus.hpp"
 #include "../MessageBus/MessageTypes.hpp"
 #include "../Messages/RudderCommandMsg.h"
-#include "../Messages/WingSailCommandMsg.h"
+#include "../Messages/WingSailCommandMsg.hpp"
 
 class ActuatorNodeASPire : public Node {
    public:

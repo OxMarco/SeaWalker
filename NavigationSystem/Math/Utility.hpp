@@ -125,7 +125,7 @@ class Utility {
                                   double& vX,
                                   double& vY);
     
-    static int safe_stoi(const std::string& str, std::size_t* pos = 0, int base = 10);
+    static int safe_stoi(const std::string& str);
 };
 
 #endif /* UTILITY_HPP */

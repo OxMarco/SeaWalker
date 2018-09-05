@@ -40,7 +40,7 @@
 #include "../Messages/SailCommandMsg.h"
 #include "../Messages/WaypointDataMsg.h"
 #include "../Messages/WindDataMsg.h"
-#include "../Messages/WingSailCommandMsg.h"
+#include "../Messages/WingSailCommandMsg.hpp"
 #include "../Network/TCPServer.h"
 #include "../SystemServices/Logger.hpp"
 #include "../SystemServices/SysClock.hpp"

@@ -592,11 +592,11 @@ void Utility::calculateVelocity( const uint16_t course, const double speed, doub
 	vY = speed * sin(course * (M_PI / 180));
 }
 
-int Utility::safe_stoi(const std::string& str, std::size_t* pos = 0, int base = 10)
+int Utility::safe_stoi(const std::string& str)
 {
     int retvalue = 0;
     try {
-        retvalue = std::stoi(str, pos, base);
+        retvalue = std::stoi(str);
     } catch (std::invalid_argument& e) {
         Logger::error("%s stoi(): invalid argument (%s)", __PRETTY_FUNCTION__, str.c_str());
     } catch (std::out_of_range& e) {
