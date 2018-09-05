@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 
 # Python script to update/add waypoints to the database with data from a json
-# Can run without argument or with a filename as argument
 
 import json
 import sqlite3
@@ -11,14 +10,16 @@ from collections import OrderedDict
 if len(sys.argv) > 1:
     filepath = str(sys.argv[1])
 else:
-    filepath = 'Mission/Eckero_To_Grisslehamn.json'
+    sys.exit('Please enter as argument a filepath in the folder Mission')
 
-conn = sqlite3.connect('asr.db')
-db = conn.cursor()
+print(filename)
 try:
     waypoints = json.load(open(filepath), object_pairs_hook=OrderedDict)
 except FileNotFoundError:
-    sys.exit('Error to open the file.\nPlease enter in argument a filepath in the folder Mission')
+    sys.exit('Error to open the file.\nPlease enter as argument a filepath in the folder Mission')
+
+conn = sqlite3.connect('boat.db')
+db = conn.cursor()
 
 db.execute('DELETE FROM currentMission')
 for wp in waypoints:
@@ -33,4 +34,4 @@ for wp in waypoints:
 conn.commit()
 db.close()
 
-print('Successful insertion of the mission : ' + filepath)
+print('Successful load of new waypoints from the file: ' + filepath)

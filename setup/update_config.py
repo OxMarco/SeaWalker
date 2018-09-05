@@ -1,32 +1,23 @@
 #!/usr/bin/python3
 
 # Updates the configuration in the json to the database
-# Can run without argument for using standard file
-# Or specify the file by passing it as a argument
 
 import json
 import sqlite3
 import sys
 
 if len(sys.argv) > 1:
-    if str(sys.argv[1]) == 'ASPire':
-        filename = 'config_ASPire.json'
-    elif str(sys.argv[1]) == 'Janet':
-        filename = 'config_Janet.json'
-    else :
-        filename = str(sys.argv[1])
+    filepath = str(sys.argv[1])
 else:
-    filename = 'config_ASPire.json'
-
-
+    sys.exit('Please enter as argument a filepath in the folder Mission')
 
 print(filename)
 try:
     cfg = json.load(open(filename))
 except FileNotFoundError:
-    sys.exit('Error to open the file.\nPlease enter in argument either \'ASPire\', \'Janet\' or the filepath.')
+    sys.exit('Error to open the file.\nPlease enter as argument a filepath.')
 
-conn = sqlite3.connect('asr.db')
+conn = sqlite3.connect('boat.db')
 db = conn.cursor()
 
 for table in cfg:
@@ -60,3 +51,6 @@ for table in cfg:
                    setstr + ' WHERE ID = 1;')
 conn.commit()
 db.close()
+
+print('Successful load of new configurations from the file: ' + filepath)
+

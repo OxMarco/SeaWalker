@@ -12,9 +12,9 @@
 #ifndef SIGTRAPS_H
 #define SIGTRAPS_H
 
+#include "../SystemServices/Logger.h"
 #include <cstdlib>
 #include <csignal>
-#include "../SystemServices/Logger.h"
 
 /** @todo implement proper handling */
 extern "C" void default_handler(int signal)

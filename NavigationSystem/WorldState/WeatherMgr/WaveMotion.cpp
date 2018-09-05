@@ -13,6 +13,8 @@
 
 ///////////////////// Class Functions Definition /////////////////////
 
+/** @todo check algorithm */
+
 /**
  *   @brief  Returns the average waves height
  *

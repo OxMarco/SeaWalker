@@ -94,7 +94,7 @@ class SysClock {
     /// the unsigned int can hold indicates that it has never been updated, you can use
     /// NEVER_UPDATED to check for this.
     ///----------------------------------------------------------------------------------
-    static unsigned int lastUpdated();
+    static unsigned long lastUpdated();
 
    private:
     static unsigned long m_LastUpdated;

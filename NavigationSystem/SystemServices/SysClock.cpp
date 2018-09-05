@@ -34,8 +34,13 @@ void SysClock::setTime(unsigned long unixTime)
     tv.tv_sec = unixTime; //seconds since 1 jan 1970;
     tv.tv_usec = 0; /* microseconds */
     
-    if(settimeofday(&tv, NULL) != 0)
+    settimeofday(&tv, NULL);
+    
+    /**
+     @todo  check
+     if(settimeofday(&tv, NULL) != 0)
         throw std::runtime_error{"failed to update system clock"};
+     */
 }
 
 // NOTE: Review time!
@@ -56,8 +61,14 @@ unsigned int SysClock::millis()
 {
 	// Get Milliseconds
     timeval curTime;
+    
+    gettimeofday(&curTime, NULL);
+    
+    /**
+     *  @todo check
     if(gettimeofday(&curTime, NULL) != 0)
         throw std::runtime_error{"failed to get system time"};
+     */
     
 	return curTime.tv_usec / 1000;
 }
@@ -134,7 +145,7 @@ int SysClock::year()
 	return 1900 + time->tm_year;		
 }
 
- unsigned int SysClock::lastUpdated()
+ unsigned long SysClock::lastUpdated()
  {
 	 return unixTime() - m_LastUpdated;
  }
