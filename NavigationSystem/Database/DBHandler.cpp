@@ -26,7 +26,7 @@ DBHandler::~DBHandler(void) {
 
 bool DBHandler::initialise() {
     sqlite3* connection = openDatabase();
-
+    
     if (connection != 0) {
         closeDatabase(connection);
         return true;
@@ -46,32 +46,32 @@ void DBHandler::getDataAsJson(std::string select,
     std::vector<std::string> values;
     std::vector<std::string> columnNames;
     std::vector<std::string> results;
-
+    
     try {
         if (id == "")
             results = retrieveFromTable("SELECT " + select + " FROM " + table + ";", rows, columns);
         else
             results = retrieveFromTable(
-                "SELECT " + select + " FROM " + table + " WHERE ID = " + id + ";", rows, columns);
+                                        "SELECT " + select + " FROM " + table + " WHERE ID = " + id + ";", rows, columns);
     } catch (const char* error) {
         Logger::error("%s, %s table: %s Error: %s", __PRETTY_FUNCTION__, select.c_str(),
                       table.c_str(), error);
     }
-
+    
     for (int i = 0; i < columns * (rows + 1); ++i) {
         if (i < columns)
             columnNames.push_back(results[i]);
         else
             values.push_back(results[i]);
     }
-
+    
     Json jsonEntry;
     for (int i = 0; i < rows; i++) {
         for (unsigned int j = 0; j < columnNames.size(); j++) {
             int index = j + (columns * i);
             jsonEntry[columnNames.at(j)] = values.at(index);
         }
-
+        
         if (useArray) {
             if (!js[key].is_array()) {
                 js[key] = Json::array({});
@@ -81,7 +81,7 @@ void DBHandler::getDataAsJson(std::string select,
             js[key] = jsonEntry;
         }
     }
-
+    
     values.clear();
     columnNames.clear();
 }
@@ -111,20 +111,20 @@ void DBHandler::insertDataLogs(std::vector<LogItem>& logs) {
     int windsensorId = 0;
     int logNumber = 0;
     std::string tableId;
-
+    
     sqlite3* db = openDatabase();
-
+    
     if (db == NULL) {
         Logger::error("%s Database is null!", __PRETTY_FUNCTION__);
         closeDatabase(db);
         return;
     }
-
+    
     if (logs.size() > 0) {
         Logger::info("Writing in the database last value: %s size logs %d",
                      logs[0].m_timestamp_str.c_str(), logs.size());
     }
-
+    
     tableId = getIdFromTable("dataLogs_actuator_feedback", true, db);
     if (tableId.size() > 0) {
         actuatorFeedbackId = (int)strtol(tableId.c_str(), NULL, 10);
@@ -166,7 +166,7 @@ void DBHandler::insertDataLogs(std::vector<LogItem>& logs) {
     if (tableId.size() > 0) {
         currentMissionId = (int)strtol(tableId.c_str(), NULL, 10);
     }
-
+    
     for (auto log : logs) {
         logNumber++;
         actuatorFeedbackValues.str("");
@@ -179,104 +179,104 @@ void DBHandler::insertDataLogs(std::vector<LogItem>& logs) {
         windStateValues.str("");
         windsensorValues.str("");
         systemValues.str("");
-
+        
         actuatorFeedbackValues << std::setprecision(10) << log.m_rudderPosition << ", "
-                               << log.m_wingsailPosition << ", " << log.m_radioControllerOn << ", "
-                               << log.m_windVaneAngle << ",'" << log.m_timestamp_str.c_str();
-
+        << log.m_wingsailPosition << ", " << log.m_radioControllerOn << ", "
+        << log.m_windVaneAngle << ",'" << log.m_timestamp_str.c_str();
+        
         ss << "INSERT INTO "
-           << "dataLogs_actuator_feedback"
-           << " VALUES(NULL, " << actuatorFeedbackValues.str() << "'); \n";
-
+        << "dataLogs_actuator_feedback"
+        << " VALUES(NULL, " << actuatorFeedbackValues.str() << "'); \n";
+        
         compassModelValues << std::setprecision(10) << log.m_compassHeading << ", "
-                           << log.m_compassPitch << ", " << log.m_compassRoll << ",'"
-                           << log.m_timestamp_str.c_str();
-
+        << log.m_compassPitch << ", " << log.m_compassRoll << ",'"
+        << log.m_timestamp_str.c_str();
+        
         ss << "INSERT INTO "
-           << "dataLogs_compass"
-           << " VALUES(NULL, " << compassModelValues.str() << "'); \n";
-
+        << "dataLogs_compass"
+        << " VALUES(NULL, " << compassModelValues.str() << "'); \n";
+        
         courseCalculationValues << std::setprecision(10) << log.m_distanceToWaypoint << ", "
-                                << log.m_bearingToWaypoint << ", " << log.m_courseToSteer << ", "
-                                << log.m_tack << ", " << log.m_goingStarboard << ",'"
-                                << log.m_timestamp_str.c_str();
-
+        << log.m_bearingToWaypoint << ", " << log.m_courseToSteer << ", "
+        << log.m_tack << ", " << log.m_goingStarboard << ",'"
+        << log.m_timestamp_str.c_str();
+        
         ss << "INSERT INTO "
-           << "dataLogs_course_calculation"
-           << " VALUES(NULL, " << courseCalculationValues.str() << "'); \n";
-
+        << "dataLogs_course_calculation"
+        << " VALUES(NULL, " << courseCalculationValues.str() << "'); \n";
+        
         
         
         marineSensorsValues << std::setprecision(10) << log.m_temperature << ", "
-                            << log.m_conductivity << ", " << log.m_ph << ", " << log.m_salinity
-                            << ",'" << log.m_timestamp_str.c_str();
-
+        << log.m_conductivity << ", " << log.m_ph << ", " << log.m_salinity
+        << ",'" << log.m_timestamp_str.c_str();
+        
         ss << "INSERT INTO "
-           << "dataLogs_marine_sensors"
-           << " VALUES(NULL, " << marineSensorsValues.str() << "'); \n";
-
+        << "dataLogs_marine_sensors"
+        << " VALUES(NULL, " << marineSensorsValues.str() << "'); \n";
+        
         vesselStateValues << std::setprecision(10) << log.m_vesselHeading << ", " << log.m_vesselLat
-                          << ", " << log.m_vesselLon << ", " << log.m_vesselSpeed << ", "
-                          << log.m_vesselCourse << ",'" << log.m_timestamp_str.c_str();
-
+        << ", " << log.m_vesselLon << ", " << log.m_vesselSpeed << ", "
+        << log.m_vesselCourse << ",'" << log.m_timestamp_str.c_str();
+        
         ss << "INSERT INTO "
-           << "dataLogs_vessel_state"
-           << " VALUES(NULL, " << vesselStateValues.str() << "'); \n";
-
+        << "dataLogs_vessel_state"
+        << " VALUES(NULL, " << vesselStateValues.str() << "'); \n";
+        
         windStateValues << std::setprecision(10) << log.m_trueWindSpeed << ", " << log.m_trueWindDir
-                        << ", " << log.m_apparentWindSpeed << ", " << log.m_apparentWindDir << ",'"
-                        << log.m_timestamp_str.c_str();
-
+        << ", " << log.m_apparentWindSpeed << ", " << log.m_apparentWindDir << ",'"
+        << log.m_timestamp_str.c_str();
+        
         ss << "INSERT INTO "
-           << "dataLogs_wind_state"
-           << " VALUES(NULL, " << windStateValues.str() << "'); \n";
-
+        << "dataLogs_wind_state"
+        << " VALUES(NULL, " << windStateValues.str() << "'); \n";
+        
         windsensorValues << std::setprecision(10) << log.m_windDir << ", " << log.m_windSpeed
-                         << ", " << log.m_windTemp << ",'" << log.m_timestamp_str.c_str();
-
+        << ", " << log.m_windTemp << ",'" << log.m_timestamp_str.c_str();
+        
         ss << "INSERT INTO "
-           << "dataLogs_windsensor"
-           << " VALUES(NULL, " << windsensorValues.str() << "'); \n";
-
+        << "dataLogs_windsensor"
+        << " VALUES(NULL, " << windsensorValues.str() << "'); \n";
+        
         systemValues << std::setprecision(10) << actuatorFeedbackId + logNumber << ", "
-                     << compassModelId + logNumber << ", " << courceCalculationId + logNumber
-                     << ", " << currentSensorsId + logNumber << ", " << gpsId + logNumber << ", "
-                     << marineSensorsId + logNumber << ", " << vesselStateId + logNumber << ", "
-                     << windStateId + logNumber << ", " << windsensorId + logNumber << ", "
-                     << currentMissionId;
-
+        << compassModelId + logNumber << ", " << courceCalculationId + logNumber
+        << ", " << currentSensorsId + logNumber << ", " << gpsId + logNumber << ", "
+        << marineSensorsId + logNumber << ", " << vesselStateId + logNumber << ", "
+        << windStateId + logNumber << ", " << windsensorId + logNumber << ", "
+        << currentMissionId;
+        
         ss << "INSERT INTO "
-           << "dataLogs_system"
-           << " VALUES(NULL, " << systemValues.str() << "); \n";
-
+        << "dataLogs_system"
+        << " VALUES(NULL, " << systemValues.str() << "); \n";
+        
         // NEW FEATURE, CAREFUL WITH THE APOSTROPHE (added in dbloggernode.h for now, maybe add it in getelementstr)
         currentSensorsValues << std::setprecision(10) << log.m_current << ", "
-                              << log.m_voltage << ", "
-                              << log.m_element << ", '" //HERE (moved to the m_element_str)
-                              << log.m_element_str.c_str() << "', '" //AND HERE (moved to the m_element_str)
-                             << log.m_timestamp_str.c_str();
-
-        ss << "INSERT INTO "
-           << "dataLogs_current_sensors"
-           << " VALUES(NULL, " << currentSensorsValues.str() << "'); \n";
-
+        << log.m_voltage << ", "
+        << log.m_element << ", '" //HERE (moved to the m_element_str)
+        << log.m_element_str.c_str() << "', '" //AND HERE (moved to the m_element_str)
+        << log.m_timestamp_str.c_str();
         
-
-        gpsValues << std::setprecision(10) << log.m_gpsHasFix << ", " << log.m_gpsOnline << ",'"
-                  << log.m_timestamp_str.c_str() << "', " << log.m_gpsLat << ", " << log.m_gpsLon
-                  << ", " << log.m_gpsSpeed << ", " << log.m_gpsCourse << ", " << log.m_gpsSatellite
-                  << ", " << log.m_routeStarted << ",'" << log.m_timestamp_str.c_str();
-
         ss << "INSERT INTO "
-           << "dataLogs_gps"
-           << " VALUES(NULL, " << gpsValues.str() << "'); \n";
-
+        << "dataLogs_current_sensors"
+        << " VALUES(NULL, " << currentSensorsValues.str() << "'); \n";
+        
+        
+        
+        gpsValues << std::setprecision(10) << log.m_gpsHasFix << ", " << log.m_gpsOnline << ",'"
+        << log.m_timestamp_str.c_str() << "', " << log.m_gpsLat << ", " << log.m_gpsLon
+        << ", " << log.m_gpsSpeed << ", " << log.m_gpsCourse << ", " << log.m_gpsSatellite
+        << ", " << log.m_routeStarted << ",'" << log.m_timestamp_str.c_str();
+        
+        ss << "INSERT INTO "
+        << "dataLogs_gps"
+        << " VALUES(NULL, " << gpsValues.str() << "'); \n";
+        
         //Logger::info("Current sensors database insert command: %s \n", ss);
         //std::cout << "Current sensors database insert command: " << currentSensorsValues.str() << std::endl;
         //std::cout << "Full insert command line: " << ss.str() << std::endl;
-
+        
     }
-
+    
     if (queryTable(ss.str(), db)) {
         tableId = getIdFromTable("dataLogs_system", true, db);
         if (tableId.size() > 0) {
@@ -289,38 +289,38 @@ void DBHandler::insertDataLogs(std::vector<LogItem>& logs) {
         Logger::error("%s Error, failed to insert log Request: %s", __PRETTY_FUNCTION__,
                       ss.str().c_str());
     }
-
+    
     closeDatabase(db);
 }
 
 bool DBHandler::updateTableJson(std::string table, std::string data) {
     std::vector<std::string> columns = getColumnInfo("name", table);
-
+    
     if (columns.size() <= 0) {
         Logger::error("%s Error: no such table %s", __PRETTY_FUNCTION__, table.c_str());
         return false;
     }
-
+    
     Json js = Json::parse(data);
-
+    
     std::stringstream ss;
-
+    
     // start at i = 1 to skip the id
     ss << "SET ";
     int fixedSize = js.size();  // Size would sometimes change, added this variable
     for (auto i = 1; i < fixedSize; i++) {
         if (fixedSize > 1) {
             ss << columns.at(i) << " = " << js[columns.at(i)]
-               << ",";  // This crashes if the local database has fewer fields than the web database
-                        // (field out of range)
+            << ",";  // This crashes if the local database has fewer fields than the web database
+            // (field out of range)
         }
     }
-
+    
     std::string values = ss.str();
     values = values.substr(0, values.size() - 1);
-
+    
     std::string id = js["id"];
-
+    
     if (not queryTable("UPDATE " + table + " " + values + " WHERE ID = " + id + ";")) {
         Logger::error("%s Error: ", __PRETTY_FUNCTION__);
         return false;
@@ -331,32 +331,32 @@ bool DBHandler::updateTableJson(std::string table, std::string data) {
 bool DBHandler::updateTableJsonObject(std::string table, Json data) {
     // m_logger.info(" updateTableJson:\n"+data);
     std::vector<std::string> columns = getColumnInfo("name", table);
-
+    
     if (columns.size() <= 0) {
         Logger::error("%s Error: no such table %s", __PRETTY_FUNCTION__, table.c_str());
         return false;
     }
-
+    
     // Json json = data;
-
+    
     std::stringstream ss;
-
+    
     // start at i = 1 to skip the id
     ss << "SET ";
     int fixedSize = data.size();  // Size would sometimes change, added this variable
     for (auto i = 1; i < fixedSize; i++) {
         if (fixedSize > 1) {
             ss << columns.at(i) << " = " << data[columns.at(i)]
-               << ",";  // This crashes if the local database has fewer fields than the web database
-                        // (field out of range)
+            << ",";  // This crashes if the local database has fewer fields than the web database
+            // (field out of range)
         }
     }
-
+    
     std::string values = ss.str();
     values = values.substr(0, values.size() - 1);
-
+    
     std::string id = data["id"];
-
+    
     if (not queryTable("UPDATE " + table + " " + values + " WHERE ID = " + id + ";")) {
         Logger::error("%s Error: ", __PRETTY_FUNCTION__);
         return false;
@@ -378,7 +378,7 @@ bool DBHandler::updateTable(std::string table,
 
 std::string DBHandler::retrieveCell(std::string table, std::string id, std::string column) {
     std::string query = "SELECT " + column + " FROM " + table + " WHERE id=" + id + ";";
-
+    
     int rows, columns;
     std::vector<std::string> results;
     try {
@@ -387,17 +387,17 @@ std::string DBHandler::retrieveCell(std::string table, std::string id, std::stri
         rows = 0;
         columns = 0;
     }
-
+    
     if (columns < 1) {
         Logger::error("%s No columns from Query: %s", __PRETTY_FUNCTION__, query.c_str());
         return "";
     }
-
+    
     if (rows < 1) {
         Logger::error("%s No rows from Query: %s", __PRETTY_FUNCTION__, query.c_str());
         return "";
     }
-
+    
     return results[1];
 }
 
@@ -407,17 +407,17 @@ void DBHandler::updateConfigs(std::string configs) {
         Logger::error("%s No JSON in \"%s\"", __PRETTY_FUNCTION__, configs);
     }
     std::vector<std::string> tables;
-
+    
     for (auto i : js.items()) {
         tables.push_back(i.key());  // For each table key
     }
-
+    
     // tables = sailing_config config_buffer etc
-
+    
     for (auto table : tables) {  // for each table in there
         if (js[table] != NULL) {
             updateTableJson(table, js[table].dump());  // eg updatetablejson("sailing_config",
-                                                       // configs['sailing_config'] as json)
+            // configs['sailing_config'] as json)
         }
     }
 }
@@ -430,23 +430,23 @@ bool DBHandler::updateWaypoints(std::string waypoints) {
     std::string DBPrinter = "";
     std::string tempValue = "";
     int valuesLimit = 11;  //"Dirty" fix for limiting the amount of values requested from server
-                           // waypoint entries (amount of fields n = valuesLimit + 1)
+    // waypoint entries (amount of fields n = valuesLimit + 1)
     int limitCounter;
-
+    
     if (not queryTable("DELETE FROM currentMission;")) {
         Logger::error("%s, Error: failed to delete waypoints", __PRETTY_FUNCTION__);
     }
-
+    
     for (auto i : js.items()) {
         // m_logger.info(i.value().dump());
-
+        
         for (auto y : i.value().items()) {
             limitCounter = valuesLimit;
             DBPrinter =
-                "INSERT INTO currentMission "
-                "(declination,harvested,id,id_mission,isCheckpoint,latitude,longitude,name,radius,"
-                "rankInMission,stay_time) VALUES (";
-
+            "INSERT INTO currentMission "
+            "(declination,harvested,id,id_mission,isCheckpoint,latitude,longitude,name,radius,"
+            "rankInMission,stay_time) VALUES (";
+            
             for (auto z : y.value().items()) {
                 // Each individual value
                 tempValue = z.value().dump();
@@ -459,7 +459,7 @@ bool DBHandler::updateWaypoints(std::string waypoints) {
                     DBPrinter = DBPrinter + tempValue + ",";
                 }
             }
-
+            
             // if (DBPrinter.size () > 0)  DBPrinter.resize (DBPrinter.size () - 1);
             // DBPrinter = DBPrinter + "0);";
             DBPrinter = DBPrinter.substr(0, DBPrinter.size() - 1) + ");";
@@ -470,12 +470,12 @@ bool DBHandler::updateWaypoints(std::string waypoints) {
             }
         }
     }
-
+    
     // Make sure waypoints before the current waypoint are harvested
     if (!m_currentWaypointId.empty()) {
         std::string updateHarvested = "UPDATE currentMission SET harvested = 1 WHERE id < ";
         updateHarvested += m_currentWaypointId + ";";
-
+        
         if (not queryTable(updateHarvested)) {
             Logger::error("%s, Error: failed to harvest waypoints", __PRETTY_FUNCTION__);
             return false;
@@ -521,13 +521,13 @@ int DBHandler::getRows(std::string table) {
 
 std::string DBHandler::getLogs(bool onlyLatest) {
     Json js;
-
+    
     // fetch all datatables starting with "dataLogs_"
     std::vector<std::string> datalogTables = getTableNames("dataLogs_%");
-
+    
     try {
         // insert all data in these tables as json array
-
+        
         for (auto table : datalogTables) {
             if (onlyLatest) {
                 // Gets the log entry with the highest id
@@ -536,7 +536,7 @@ std::string DBHandler::getLogs(bool onlyLatest) {
                 getDataAsJson("*", table, table, "", js, true);
             }
         }
-
+        
     } catch (const char* error) {
         Logger::error("%s, Error: %s", __PRETTY_FUNCTION__, error);
     }
@@ -545,7 +545,7 @@ std::string DBHandler::getLogs(bool onlyLatest) {
 
 void DBHandler::clearLogs() {
     std::vector<std::string> datalogTables = getTableNames("dataLogs_%");
-
+    
     for (auto table : datalogTables) {
         clearTable(table);
     }
@@ -602,7 +602,7 @@ std::string DBHandler::getWaypoints() {  // NOTE : Marc : change this otherwise 
     int rows = 0;
     Json js;
     std::string wp = "waypoint_";
-
+    
     rows = getRows("currentMission");
     // std::cout << "rows current mission " << rows << std::endl;
     if (rows > 0) {
@@ -635,7 +635,7 @@ std::string DBHandler::getIdFromTable(std::string table, bool max) {
         rows = 0;
         columns = 0;
     }
-
+    
     if (rows * columns < 1) {
         return "";
     }
@@ -659,7 +659,7 @@ std::string DBHandler::getIdFromTable(std::string table, bool max, sqlite3* db) 
         rows = 0;
         columns = 0;
     }
-
+    
     if (rows * columns < 1) {
         return "";
     }
@@ -678,7 +678,7 @@ sqlite3* DBHandler::openDatabase() {
     m_databaseLock.lock();
     sqlite3* connection;
     int resultcode = 0;
-
+    
     // check if file exists
     FILE* db_file = fopen(m_filePath.c_str(), "r");
     if (db_file == NULL) {
@@ -687,18 +687,18 @@ sqlite3* DBHandler::openDatabase() {
         return NULL;
     }
     fclose(db_file);
-
+    
     do {
         resultcode = sqlite3_open(m_filePath.c_str(), &connection);
     } while (resultcode == SQLITE_BUSY);
-
+    
     if (resultcode) {
         Logger::error("%s Failed to open the database Error %s", __PRETTY_FUNCTION__,
                       sqlite3_errmsg(connection));
         m_databaseLock.unlock();
         return 0;
     }
-
+    
     // set a 10 millisecond timeout
     sqlite3_busy_timeout(connection, 10);
     return connection;
@@ -724,18 +724,18 @@ int DBHandler::getTable(sqlite3* db,
                         int& columns) {
     int resultcode = -1;
     sqlite3_stmt* statement = NULL;
-
+    
     // prepare the statement sql code in byte form for query request
     if ((resultcode = sqlite3_prepare_v2(db, sql.c_str(), sql.size(), &statement, NULL)) !=
         SQLITE_OK) {  // if not OK, return error
         sqlite3_finalize(statement);
         return resultcode;
     }
-
+    
     // get the number of columns int the table called in the statement
     columns = sqlite3_column_count(statement);
     rows = 0;
-
+    
     // read column names
     for (int i = 0; i < columns; i++) {
         // if column name is NULL, return error
@@ -743,16 +743,16 @@ int DBHandler::getTable(sqlite3* db,
             sqlite3_finalize(statement);
             return SQLITE_EMPTY;
         }
-
+        
         // add to the result
         results.emplace_back(const_cast<char*>(sqlite3_column_name(statement, i)));
     }
-
+    
     // read the rest of the table
     while ((resultcode = sqlite3_step(statement)) == SQLITE_ROW) {
         for (int i = 0; i < columns; i++) {
             if (results[i] != "dflt_value")  //[es] Not a perfect solution. Needed for pragma sql
-                                             // statements as it is always null
+                // statements as it is always null
             {
                 // Get the value in the column
                 if (!sqlite3_column_text(statement, i)) {
@@ -761,18 +761,18 @@ int DBHandler::getTable(sqlite3* db,
                     columns = 0;
                     return SQLITE_EMPTY;
                 }
-
+                
                 results.emplace_back(reinterpret_cast<char*>(
-                    const_cast<unsigned char*>(sqlite3_column_text(statement, i))));
+                                                             const_cast<unsigned char*>(sqlite3_column_text(statement, i))));
             } else {
                 results.emplace_back("NULL");
             }
         }
         rows++;
     }
-
+    
     sqlite3_finalize(statement);  // destruct the statement
-
+    
     if (resultcode != SQLITE_DONE) {
         return resultcode;
     }
@@ -782,7 +782,7 @@ int DBHandler::getTable(sqlite3* db,
 int DBHandler::insertLog(std::string table, std::string values, sqlite3* db) {
     std::stringstream ss;
     ss << "INSERT INTO " << table << " VALUES(NULL, " << values << ");";
-
+    
     if (queryTable(ss.str(), db)) {
         Timer time_;
         time_.start();
@@ -796,28 +796,28 @@ int DBHandler::insertLog(std::string table, std::string values, sqlite3* db) {
         Logger::error("%s Error, failed to insert log Request: %s", __PRETTY_FUNCTION__,
                       ss.str().c_str());
     }
-
+    
     return 0;
 }
 
 bool DBHandler::queryTable(std::string sqlINSERT) {
     sqlite3* db = openDatabase();
     m_error = NULL;
-
+    
     if (db != NULL) {
         int resultcode = 0;
-
+        
         do {
             if (m_error != NULL) {
                 sqlite3_free(m_error);
                 m_error = NULL;
             }
-
+            
             resultcode = sqlite3_exec(db, sqlINSERT.c_str(), NULL, NULL, &m_error);
         } while (resultcode == SQLITE_BUSY);
         if (m_error != NULL) {
             Logger::error("%s Error: %s", __PRETTY_FUNCTION__, sqlite3_errmsg(db));
-
+            
             sqlite3_free(m_error);
             closeDatabase(db);
             return false;
@@ -833,10 +833,10 @@ bool DBHandler::queryTable(std::string sqlINSERT) {
 
 bool DBHandler::queryTable(std::string sqlINSERT, sqlite3* db) {
     m_error = NULL;
-
+    
     if (db != NULL) {
         int resultcode = 0;
-
+        
         do {
             if (m_error != NULL) {
                 sqlite3_free(m_error);
@@ -846,10 +846,10 @@ bool DBHandler::queryTable(std::string sqlINSERT, sqlite3* db) {
             resultcode = sqlite3_exec(db, sqlINSERT.c_str(), NULL, NULL, &m_error);
             sqlite3_exec(db, "END TRANSACTION", NULL, NULL, &m_error);
         } while (resultcode == SQLITE_BUSY);
-
+        
         if (m_error != NULL) {
             Logger::error("%s Error: %s", __PRETTY_FUNCTION__, sqlite3_errmsg(db));
-
+            
             sqlite3_free(m_error);
             return false;
         }
@@ -865,23 +865,23 @@ std::vector<std::string> DBHandler::retrieveFromTable(std::string sqlSELECT,
                                                       int& columns) {
     sqlite3* db = openDatabase();
     std::vector<std::string> results;
-
+    
     if (db != NULL) {
         int resultcode = 0;
-
+        
         do {
             results = std::vector<std::string>();
             // resultcode = sqlite3_get_table(db, sqlSELECT.c_str(), &results, &rows, &columns,
             // &m_error);
             resultcode = getTable(db, sqlSELECT, results, rows, columns);
         } while (resultcode == SQLITE_BUSY);
-
+        
         if (resultcode == SQLITE_EMPTY) {
             std::vector<std::string> s;
             closeDatabase(db);
             return s;
         }
-
+        
         if (resultcode != SQLITE_OK) {
             Logger::error("%s SQL statement: %s Error: %s", __PRETTY_FUNCTION__, sqlSELECT.c_str(),
                           sqlite3_errstr(resultcode));
@@ -901,22 +901,22 @@ std::vector<std::string> DBHandler::retrieveFromTable(std::string sqlSELECT,
                                                       int& columns,
                                                       sqlite3* db) {
     std::vector<std::string> results;
-
+    
     if (db != NULL) {
         int resultcode = 0;
-
+        
         do {
             results = std::vector<std::string>();
             // resultcode = sqlite3_get_table(db, sqlSELECT.c_str(), &results, &rows, &columns,
             // &m_error);
             resultcode = getTable(db, sqlSELECT, results, rows, columns);
         } while (resultcode == SQLITE_BUSY);
-
+        
         if (resultcode == SQLITE_EMPTY) {
             std::vector<std::string> s;
             return s;
         }
-
+        
         if (resultcode != SQLITE_OK) {
             Logger::error("%s SQL statement: %s Error: %s", __PRETTY_FUNCTION__, sqlSELECT.c_str(),
                           sqlite3_errstr(resultcode));
@@ -935,12 +935,12 @@ std::vector<std::string> DBHandler::getTableIds(std::string table) {
         results = retrieveFromTable("SELECT id FROM " + table + ";", rows, columns);
     } catch (const char* error) {
     }
-
+    
     std::vector<std::string> ids;
     for (int i = 1; i <= rows; i++) {
         ids.push_back(results[i]);
     }
-
+    
     return ids;
 }
 
@@ -949,11 +949,11 @@ std::vector<std::string> DBHandler::getTableNames(std::string like) {
     std::vector<std::string> results;
     try {
         results = retrieveFromTable(
-            "SELECT name FROM sqlite_master WHERE type='table' AND name LIKE '" + like + "';", rows,
-            columns);
+                                    "SELECT name FROM sqlite_master WHERE type='table' AND name LIKE '" + like + "';", rows,
+                                    columns);
     } catch (const char* error) {
     }
-
+    
     std::vector<std::string> tableNames;
     for (unsigned int i = 1; i < results.size(); i++) {
         tableNames.push_back(results[i]);
@@ -964,14 +964,14 @@ std::vector<std::string> DBHandler::getTableNames(std::string like) {
 std::vector<std::string> DBHandler::getColumnInfo(std::string info, std::string table) {
     int rows = 0, columns = 0;
     std::vector<std::string> results;
-
+    
     std::string pragmaQuery = "PRAGMA table_info(" + table + ");";
-
+    
     try {
         results = retrieveFromTable(pragmaQuery, rows, columns);
     } catch (const char* error) {
     }
-
+    
     std::vector<std::string> types;
     int infoIndex = 0;
     for (int i = 0; i < columns; i++) {
@@ -979,7 +979,7 @@ std::vector<std::string> DBHandler::getColumnInfo(std::string info, std::string 
             infoIndex = i;
         }
     }
-
+    
     for (int i = 1; i < rows + 1; i++) {
         types.push_back(results[i * columns + infoIndex]);
     }
@@ -1012,7 +1012,7 @@ bool DBHandler::getWaypointValues(int& nextId,
         Logger::error("%s Error: %s", __PRETTY_FUNCTION__, error);
         return false;
     }
-
+    
     if (rows * columns < 1 || results[1] == "\0") {
         return false;
     }
@@ -1022,43 +1022,43 @@ bool DBHandler::getWaypointValues(int& nextId,
         Logger::info("No previously harvested waypoint found, values set as 0");
         foundPrev = false;
     }
-
+    
     // Set values to next waypoint
     nextId = Utility::safe_stoi(results[1]);
-
+    
     nextLongitude = atof(retrieveCell("currentMission", results[1], "longitude").c_str());
     nextLatitude = atof(retrieveCell("currentMission", results[1], "latitude").c_str());
     nextDeclination = retrieveCellAsInt("currentMission", results[1], "declination");
     nextRadius = retrieveCellAsInt("currentMission", results[1], "radius");
     nextStayTime = retrieveCellAsInt("currentMission", results[1], "stay_time");
     isCheckpoint = retrieveCellAsInt("currentMission", results[1], "isCheckpoint");
-
+    
     if (foundPrev)  // Set values to next waypoint if harvested waypoint found
     {
         prevId = Utility::safe_stoi(results2[1]);
-
+        
         prevLongitude = atof(retrieveCell("currentMission", results2[1], "longitude").c_str());
         prevLatitude = atof(retrieveCell("currentMission", results2[1], "latitude").c_str());
         prevDeclination = retrieveCellAsInt("currentMission", results2[1], "declination");
         prevRadius = retrieveCellAsInt("currentMission", results2[1], "radius");
     }
-
+    
     return true;
 }
 
 std::string DBHandler::getConfigs() {
     Json js;
-
+    
     // Fetch all table names ending with "_config"
     std::vector<std::string> configTables =
-        getTableNames("config_%");  // NOTE : Marc : Modify this point
-
+    getTableNames("config_%");  // NOTE : Marc : Modify this point
+    
     // Query config tables and select all from config tables with id "1"
     // This json structure does not use arrays
     for (auto table : configTables) {
         getDataAsJson("*", table, table, "1", js, false);
     }
-
+    
     return js.dump();
 }
 

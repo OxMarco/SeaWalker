@@ -1,24 +1,21 @@
-/****************************************************************************************
+/**
+ * @file    LineFollowNode.hpp
  *
- * File:
- * 		LineFollowNode.h
+ * @brief   This class computes the actuator positions of the boat in order to follow the
+ *          line given by the waypoints.
  *
- * Purpose:
- *		This class computes the actuator positions of the boat in order to follow the
- *    line given by the waypoints.
+ * @details Algorithm inspired and modified from:
+ *          - Luc Jaulin and Fabrice Le Bars "An Experimental Validation of a Robust Controller with
+ *              the VAIMOS Autonomous Sailboat" [1];
+ *          - Jon Melin, Kjell Dahl and Matia Waller "Modeling and Control for an Autonomous Sailboat:
+ *              A Case Study" [2].
  *
- * Developer Notes:
- *	 Algorithm inspired and modified from:
- *	 - Luc Jaulin and Fabrice Le Bars "An Experimental Validation of a Robust Controller with
- *		the VAIMOS Autonomous Sailboat" [1];
- *	 - Jon Melin, Kjell Dahl and Matia Waller "Modeling and Control for an Autonomous Sailboat:
- *   	A Case Study" [2].
+ * @link    Info about Tacking and Beating : https://en.wikipedia.org/wiki/Tacking_(sailing)
  *
- *	 Info about Tacking and Beating : https://en.wikipedia.org/wiki/Tacking_(sailing)
- *
- ***************************************************************************************/
+ */
 
-#pragma once
+#ifndef LINEFOLLOWNODE_HPP
+#define LINEFOLLOWNODE_HPP
 
 #include <math.h>
 #include <algorithm>
@@ -139,3 +136,6 @@ class LineFollowNode : public ActiveNode {
     // Output variables
     bool m_BeatingMode;  // True if the vessel is in beating motion (zig-zag motion).
 };
+
+#endif /* LINEFOLLOWNODE_HPP */
+

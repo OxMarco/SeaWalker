@@ -126,15 +126,8 @@ class Utility {
                                   const double speed,
                                   double& vX,
                                   double& vY);
-
-    /*
-     * Use formula to calculate salinity from marine sensor data
-     * http://www.chemiasoft.com/chemd/salinity_calculator
-     */
-    static float calculateSalinity(const float temperature, const float conductivety);
     
-    static int safe_stoi(const std::string& str, std::size_t* pos, int base);
-
+    static int safe_stoi(const std::string& str, std::size_t* pos = 0, int base = 10);
 };
 
 #endif /* UTILITY_HPP */

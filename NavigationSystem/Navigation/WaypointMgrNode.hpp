@@ -1,31 +1,25 @@
-/****************************************************************************************
+/**
+ * @file    WaypointMgrNode.hpp
  *
- * File:
- * 		WaypointNode.h
+ * @brief   The WaypointNode sends information about the waypoints to the sailing logic
  *
- * Purpose:
- *		The WaypointNode sends information about the waypoints to the sailing logic
- *
- * Developer Notes:
- *
- *
- ***************************************************************************************/
+ */
 
-#pragma once
-
-#include <string>
-#include <vector>
+#ifndef WAYPOINTMGRNODE_HPP
+#define WAYPOINTMGRNODE_HPP
 
 #include "../Database/DBHandler.hpp"
 #include "../Math/CourseMath.hpp"
 #include "../Math/Utility.hpp"
+#include "../SystemServices/Logger.hpp"
+#include "../SystemServices/Timer.hpp"
 #include "../MessageBus/Node.hpp"
 #include "../Messages/CourseDataMsg.h"
 #include "../Messages/ServerWaypointsReceivedMsg.h"
 #include "../Messages/StateMessage.h"
 #include "../Messages/WaypointDataMsg.h"
-#include "../SystemServices/Logger.hpp"
-#include "../SystemServices/Timer.hpp"
+#include <string>
+#include <vector>
 
 class WaypointMgrNode : public Node {
    public:
@@ -72,3 +66,6 @@ class WaypointMgrNode : public Node {
     Timer m_routeTime;      // units : seconds
     double m_totalTime;     // units : seconds
 };
+
+#endif /* WAYPOINTMGRNODE_HPP */
+

@@ -1,10 +1,9 @@
 /**
  * @file    SailSpeedRegulatorNode.cpp
- * @version 1.0.0
- * @author  SailingRobots team
- * @date    2017
+ *
  * @brief   Calculates the desired sail angle.
  *          It sends a SailComandMsg corresponding to the command angle of the sail.
+ *
  * @details This node has not been tested and will probably not work in reality because the speed
  *          regulator is base on the simulator behaviour which is a rough representation of the reality.
  *

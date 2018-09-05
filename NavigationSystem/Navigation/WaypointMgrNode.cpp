@@ -1,18 +1,11 @@
-/****************************************************************************************
+/**
+ * @file    WaypointMgrNode.cpp
  *
- * File:
- * 		WaypointNode.cpp
+ * @brief   The WaypointNode sends information about the waypoints to the sailing logic
  *
- * Purpose:
- *		The WaypointNode sends information about the waypoints to the sailing logic
- *
- * Developer Notes:
- *
- *
- ***************************************************************************************/
+ */
 
-#include "WaypointMgrNode.h"
-
+#include "WaypointMgrNode.hpp"
 
 WaypointMgrNode::WaypointMgrNode(MessageBus& msgBus, DBHandler& db)
 : Node(NodeID::Waypoint, msgBus), m_db(db),

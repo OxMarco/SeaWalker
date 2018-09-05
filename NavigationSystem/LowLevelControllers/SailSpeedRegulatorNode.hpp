@@ -1,10 +1,9 @@
 /**
  * @file    SailSpeedRegulatorNode.hpp
- * @version 1.0.0
- * @author  SailingRobots team
- * @date    2017
+ * 
  * @brief   Calculates the desired sail angle.
  *          It sends a SailComandMsg corresponding to the command angle of the sail.
+ *
  * @details This node has not been tested and will probably not work in reality because the speed
  *          regulator is base on the simulator behaviour which is a rough representation of the reality.
  *
@@ -41,39 +40,39 @@ class SailSpeedRegulatorNode : public ActiveNode {
 
    private:
     ///----------------------------------------------------------------------------------
-    /// Updates the values of the parameters from the database.
+    /// @brief Updates the values of the parameters from the database.
     ///----------------------------------------------------------------------------------
     void updateConfigsFromDB();
 
     ///----------------------------------------------------------------------------------
-    /// Stores apparent wind direction from a WindStateMsg.
+    /// @brief Stores apparent wind direction from a WindStateMsg.
     ///----------------------------------------------------------------------------------
     void processWindStateMessage(const WindStateMsg* msg);
 
     ///----------------------------------------------------------------------------------
-    /// Stores vessel speed and course datas from a StateMessage.
+    /// @brief Stores vessel speed and course datas from a StateMessage.
     ///----------------------------------------------------------------------------------
     void processStateMessage(const StateMessage* msg);
 
     ///----------------------------------------------------------------------------------
-    /// Limits the command sail angle between m_MaxSailAngle and m_MinSailAngle.
+    /// @brief Limits the command sail angle between m_MaxSailAngle and m_MinSailAngle.
     ///----------------------------------------------------------------------------------
     float restrictSailAngle(float val);
 
     float speedRegulator(float val);
 
     ///----------------------------------------------------------------------------------
-    /// Calculate the sail angle according to a linear relation to the apparent wind direction.
+    /// @brief Calculate the sail angle according to a linear relation to the apparent wind direction.
     ///----------------------------------------------------------------------------------
     float calculateSailAngleLinear();
 
     ///----------------------------------------------------------------------------------
-    /// Calculate the sail angle according to a cardioid relation to the apparent wind direction.
+    /// @brief Calculate the sail angle according to a cardioid relation to the apparent wind direction.
     ///----------------------------------------------------------------------------------
     float calculateSailAngleCardioid();
 
     ///----------------------------------------------------------------------------------
-    /// Starts the SailSpeedRegulatorNode's thread that pumps out SailCommandMsg.
+    /// @brief Starts the SailSpeedRegulatorNode's thread that pumps out SailCommandMsg.
     ///----------------------------------------------------------------------------------
     static void SailSpeedRegulatorNodeThreadFunc(ActiveNode* nodePtr);
 

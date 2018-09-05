@@ -1,10 +1,9 @@
 /**
  * @file   SailControlNode.hpp
- * @version 1.0.0
- * @author SailingRobots team
- * @date   2017
+ *
  * @brief  Calculates the desired sail angle.
  *         It sends a SailComandMsg corresponding to the command angle of the sail.
+ *
  * @details Two functions have been developed to calculate the desired sail angle :
  *          - calculateSailAngleLinear(),
  *          - calculateSailAngleCardioid().

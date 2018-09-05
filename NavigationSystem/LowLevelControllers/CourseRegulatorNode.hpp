@@ -1,17 +1,22 @@
-/****************************************************************************************
+/**
+ * @file    CourseRegulatorNode.hpp
  *
- * File:
- * 		CourseRegulatorNode.h
+ * @brief   Calculates the command angle of the rudder in order to regulate the vessel course.
+ *          It sends a RudderCommandMsg corresponding to the command angle of the rudder.
  *
- * Purpose:
- *      Calculates the command angle of the rudder in order to regulate the vessel course.
- *      It sends a RudderCommandMsg corresponding to the command angle of the rudder.
- *
- * Developer Notes:
- *
- ***************************************************************************************/
-#pragma once
+ */
 
+#ifndef COURSEREGULATORNODE_HPP
+#define COURSEREGULATORNODE_HPP
+
+#include "../Database/DBHandler.hpp"
+#include "../Math/Utility.hpp"
+#include "../SystemServices/Timer.hpp"
+#include "../MessageBus/ActiveNode.hpp"
+#include "../MessageBus/MessageBus.hpp"
+#include "../Messages/LocalNavigationMsg.h"
+#include "../Messages/RudderCommandMsg.h"
+#include "../Messages/StateMessage.h"
 #include <math.h>
 #include <stdint.h>
 #include <atomic>
@@ -20,65 +25,58 @@
 #include <thread>
 #include <vector>
 
-#include "../Database/DBHandler.hpp"
-#include "../Math/Utility.hpp"
-#include "../MessageBus/ActiveNode.hpp"
-#include "../MessageBus/MessageBus.hpp"
-#include "../Messages/LocalNavigationMsg.h"
-#include "../Messages/RudderCommandMsg.h"
-#include "../Messages/StateMessage.h"
-#include "../SystemServices/Timer.hpp"
-
 class CourseRegulatorNode : public ActiveNode {
-   public:
+public:
     CourseRegulatorNode(MessageBus& msgBus, DBHandler& dbhandler);
     ~CourseRegulatorNode();
-
+    
     bool init();
     void start();
     void stop();
     void processMessage(const Message* message);
-
-   private:
+    
+private:
     ///----------------------------------------------------------------------------------
-    /// Updates the values of the parameters from the database
+    /// @brief Updates the values of the parameters from the database
     ///----------------------------------------------------------------------------------
     void updateConfigsFromDB();
-
+    
     ///----------------------------------------------------------------------------------
-    /// Stores vessel speed and course datas from a StateMessage.
+    /// @brief Stores vessel speed and course datas from a StateMessage.
     ///----------------------------------------------------------------------------------
     void processStateMessage(const StateMessage* msg);
-
+    
     ///----------------------------------------------------------------------------------
-    /// Stores target course data from a LocalNavigationMsg.
+    /// @brief Stores target course data from a LocalNavigationMsg.
     ///----------------------------------------------------------------------------------
     void processLocalNavigationMessage(const LocalNavigationMsg* msg);
-
+    
     ///----------------------------------------------------------------------------------
-    /// Calculates the command rudder angle according to the course difference.
-    /// Equation from book "Robotic Sailing 2015 ", page 141.
+    /// @brief Calculates the command rudder angle according to the course difference.
+    ///        Equation from book "Robotic Sailing 2015 ", page 141.
     ///----------------------------------------------------------------------------------
     float calculateRudderAngle();
-
+    
     ///----------------------------------------------------------------------------------
-    /// Starts the CourseRegulatorNode's thread that pumps out RudderCommandMsg.
+    /// @brief Starts the CourseRegulatorNode's thread that pumps out RudderCommandMsg.
     ///----------------------------------------------------------------------------------
     static void CourseRegulatorNodeThreadFunc(ActiveNode* nodePtr);
-
+    
     DBHandler& m_db;
     std::mutex m_lock;
     std::atomic<bool> m_Running;
-
+    
     double m_LoopTime;        // seconds
     double m_MaxRudderAngle;  // degrees
-
+    
     double m_pGain;
     double m_iGain;
     double m_dGain;
-
+    
     float m_VesselCourse;  // degree [0, 360[ in North-East reference frame (clockwise)
     float m_VesselSpeed;   // m/s
-
+    
     float m_DesiredCourse;  // degree [0, 360[ in North-East reference frame (clockwise)
 };
+
+#endif /* COURSEREGULATORNODE_HPP */

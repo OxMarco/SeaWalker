@@ -5,24 +5,24 @@
  *
  */
 
-#include <string>
-#include <iostream>
-#include <map>
-
 #include "Database/DBHandler.hpp"
 #include "Database/DBLoggerNode.hpp"
+
 #include "HTTPSync/HTTPSyncNode.hpp"
+
 #include "MessageBus/MessageBus.hpp"
 #include "Messages/DataRequestMsg.h"
+
 #include "SystemServices/Logger.hpp"
 
-#include "Navigation/WaypointMgrNode.h"
 #include "WorldState/StateEstimationNode.h"
 #include "WorldState/WindStateNode.h"
 #include "WorldState/CollidableMgr/CollidableMgr.h"
 
-#include "LowLevelControllers/WingsailControlNode.h"
-#include "LowLevelControllers/CourseRegulatorNode.h"
+#include "LowLevelControllers/WingSailControlNode.hpp"
+#include "LowLevelControllers/CourseRegulatorNode.hpp"
+
+#include "Navigation/WaypointMgrNode.hpp"
 
 #if LOCAL_NAVIGATION_MODULE == 1
   #include "Navigation/LocalNavigationModule/LocalNavigationModule.h"
@@ -32,7 +32,7 @@
   #include "Navigation/LocalNavigationModule/Voters/ProximityVoter.h"
   #include "Navigation/LocalNavigationModule/Voters/MidRangeVoter.h"
 #else
-  #include "Navigation/LineFollowNode.h"
+  #include "Navigation/LineFollowNode.hpp"
 #endif
 
 #if SIMULATION == 1
@@ -45,14 +45,17 @@
   #include "Hardwares/ActuatorNodeASPire.h"
   #include "Hardwares/CANArduinoNode.h"
 
-#include "Hardwares/CANMarineSensorReceiver.h"
-#include "Hardwares/CANMarineSensorTransmissionNode.h"
-
-#include "Hardwares/CANCurrentSensorNode.h"
+    #include "Hardwares/CANMarineSensorReceiver.h"
+    #include "Hardwares/CANMarineSensorTransmissionNode.h"
+    #include "Hardwares/CANCurrentSensorNode.h"
 
 #endif
 
 #include "sigtraps.h"
+
+#include <string>
+#include <iostream>
+#include <map>
 
 enum class NodeImportance {
 	CRITICAL,

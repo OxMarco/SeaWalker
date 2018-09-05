@@ -1,38 +1,34 @@
-/****************************************************************************************
+/**
+ * @file    WingsailControlNode.hpp
+ * 
+ * @brief   Calculates the desired tail wing angle of the wingsail.
+ *          It sends a WingSailComandMsg corresponding to the command angle of the tail wing.
  *
- * File:
- * 		WingsailControlNode.h
- *
- * Purpose:
- *      Calculates the desired tail wing angle of the wingsail.
- *      It sends a WingSailComandMsg corresponding to the command angle of the tail wing.
- *
- * Developer Notes:
- *      Two functions have been developed to calculate the desired tail angle :
+ * @details Two functions have been developed to calculate the desired tail angle :
  *          - calculateTailAngle(),
  *          - simpleCalculateTailAngle().
- *      You can choose the one you want to use by commenting/uncommenting lines
- *      in WingsailControlNodeThreadFunc().
- *
- ***************************************************************************************/
-#pragma once
+ *          You can choose the one you want to use by commenting/uncommenting lines
+ *          in WingsailControlNodeThreadFunc().
+ */
 
-#include <math.h>
-#include <stdint.h>
-#include <chrono>
-#include <mutex>
-#include <thread>
-#include <vector>
+#ifndef WINGSAILCONTROLNODE_HPP
+#define WINGSAILCONTROLNODE_HPP
 
 #include "../Database/DBHandler.hpp"
 #include "../Math/Utility.hpp"
+#include "../SystemServices/Timer.hpp"
 #include "../MessageBus/ActiveNode.hpp"
 #include "../MessageBus/MessageBus.hpp"
 #include "../Messages/LocalNavigationMsg.h"
 #include "../Messages/StateMessage.h"
 #include "../Messages/WindStateMsg.h"
 #include "../Messages/WingSailCommandMsg.h"
-#include "../SystemServices/Timer.hpp"
+#include <math.h>
+#include <stdint.h>
+#include <chrono>
+#include <mutex>
+#include <thread>
+#include <vector>
 
 class WingsailControlNode : public ActiveNode {
    public:
@@ -45,40 +41,40 @@ class WingsailControlNode : public ActiveNode {
 
    private:
     ///----------------------------------------------------------------------------------
-    /// Updates the values of the parameters from the database.
+    /// @brief Updates the values of the parameters from the database.
     ///----------------------------------------------------------------------------------
     void updateConfigsFromDB();
 
     ///----------------------------------------------------------------------------------
-    /// Stores apparent wind direction from a WindStateMsg.
+    /// @brief Stores apparent wind direction from a WindStateMsg.
     ///----------------------------------------------------------------------------------
     void processWindStateMessage(const WindStateMsg* msg);
 
     ///----------------------------------------------------------------------------------
-    /// Stores target course and tack data from a LocalNavigationMsg.
+    /// @brief Stores target course and tack data from a LocalNavigationMsg.
     ///----------------------------------------------------------------------------------
     void processLocalNavigationMessage(const LocalNavigationMsg* msg);
 
     ///----------------------------------------------------------------------------------
-    /// Limits the command tail angle to m_MaxCommandAngle.
+    /// @brief Limits the command tail angle to m_MaxCommandAngle.
     ///----------------------------------------------------------------------------------
     double restrictWingsail(double val);
 
     ///----------------------------------------------------------------------------------
-    /// Calculates the angle to give to the tail to have maximum force toward boat heading.
-    /// The parameters used by this function have been calculated by CFD simulation. It is
-    /// possible that the values of these parameters do not describe the real wing sail behaviour.
+    /// @brief Calculates the angle to give to the tail to have maximum force toward boat heading.
+    ///        The parameters used by this function have been calculated by CFD simulation. It is
+    ///        possible that the values of these parameters do not describe the real wing sail behaviour.
     ///----------------------------------------------------------------------------------
     float calculateTailAngle();
 
     ///----------------------------------------------------------------------------------
-    /// Sets the tail command angle to +/- m_MaxCommandAngle in function of the desired tack of the
-    /// vessel.
+    /// @brief Sets the tail command angle to +/- m_MaxCommandAngle in function of the desired tack of the
+    ///        vessel.
     ///----------------------------------------------------------------------------------
     float simpleCalculateTailAngle();
 
     ///----------------------------------------------------------------------------------
-    /// Starts the WingsailControlNode's thread that pumps out WingSailCommandMsg.
+    /// @brief Starts the WingsailControlNode's thread that pumps out WingSailCommandMsg.
     ///----------------------------------------------------------------------------------
     static void WingsailControlNodeThreadFunc(ActiveNode* nodePtr);
 
@@ -92,3 +88,6 @@ class WingsailControlNode : public ActiveNode {
     float m_TargetCourse;        // degree [0, 360[ in North-East reference frame (clockwise)
     bool m_TargetTackStarboard;  // True if the desired tack of the vessel is starboard.
 };
+
+#endif /* WINGSAILCONTROLNODE_HPP */
+

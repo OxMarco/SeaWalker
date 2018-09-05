@@ -1,29 +1,24 @@
-/****************************************************************************************
-*
-* File:
-*       LineFollowNode.cpp
-*
-* Purpose:
-*       This class computes the actuator positions of the boat in order to follow the
-*    line given by the waypoints.
-*
-* Developer Notes:
-*    Algorithm inspired and modified from:
-*    - Luc Jaulin and Fabrice Le Bars "An Experimental Validation of a Robust Controller with
-*       the VAIMOS Autonomous Sailboat" [1];
-*    - Jon Melin, Kjell Dahl and Matia Waller "Modeling and Control for an Autonomous Sailboat:
-*       A Case Study" [2].
-*
-*    Info about Tacking and Beating : https://en.wikipedia.org/wiki/Tacking_(sailing)
-*
-***************************************************************************************/
+/**
+ * @file    LineFollowNode.cpp
+ *
+ * @brief   This class computes the actuator positions of the boat in order to follow the
+ *          line given by the waypoints.
+ *
+ * @details Algorithm inspired and modified from:
+ *          - Luc Jaulin and Fabrice Le Bars "An Experimental Validation of a Robust Controller with
+ *              the VAIMOS Autonomous Sailboat" [1];
+ *          - Jon Melin, Kjell Dahl and Matia Waller "Modeling and Control for an Autonomous Sailboat:
+ *              A Case Study" [2].
+ *
+ * @link    Info about Tacking and Beating : https://en.wikipedia.org/wiki/Tacking_(sailing)
+ *
+ */
 
-#include "LineFollowNode.h"
+#include "LineFollowNode.hpp"
 
 #define DATA_OUT_OF_RANGE -2000
 const int INITIAL_SLEEP = 2000;  // milliseconds
 const float NO_COMMAND = -1000;
-
 
 LineFollowNode::LineFollowNode(MessageBus& msgBus, DBHandler& dbhandler): ActiveNode(NodeID::SailingLogic, msgBus),
 m_db(dbhandler), m_LoopTime(0.5), m_externalControlActive(false),

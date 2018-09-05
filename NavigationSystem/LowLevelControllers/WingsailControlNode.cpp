@@ -1,22 +1,17 @@
-/****************************************************************************************
+/**
+ * @file    WingsailControlNode.cpp
  *
- * File:
- * 		WingsailControlNode.cpp
+ * @brief   Calculates the desired tail wing angle of the wingsail.
+ *          It sends a WingSailComandMsg corresponding to the command angle of the tail wing.
  *
- * Purpose:
- *      Calculates the desired tail wing angle of the wingsail.
- *      It sends a WingSailComandMsg corresponding to the command angle of the tail wing.
- *
- * Developer Notes:
- *      Two functions have been developed to calculate the desired tail angle :
+ * @details Two functions have been developed to calculate the desired tail angle :
  *          - calculateTailAngle(),
  *          - simpleCalculateTailAngle().
- *      You can choose the one you want to use by commenting/uncommenting lines 
- *      in WingsailControlNodeThreadFunc().   
- *
- ***************************************************************************************/
+ *          You can choose the one you want to use by commenting/uncommenting lines
+ *          in WingsailControlNodeThreadFunc().
+ */
 
-#include "WingsailControlNode.h"
+#include "WingsailControlNode.hpp"
 
 #define DATA_OUT_OF_RANGE -2000
 const int INITIAL_SLEEP = 2000; // milliseconds

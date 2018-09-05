@@ -1,30 +1,22 @@
-/****************************************************************************************
+/**
+ * @file    CourseRegulatorNode.cpp
  *
- * File:
- * 		CourseRegulatorNode.cpp
+ * @brief   Calculates the command angle of the rudder in order to regulate the vessel course.
+ *          It sends a RudderCommandMsg corresponding to the command angle of the rudder.
  *
- * Purpose:
- *      Calculates the command angle of the rudder in order to regulate the vessel course.
- *      It sends a RudderCommandMsg corresponding to the command angle of the rudder.
- *
- * Developer Notes:
- *
- ***************************************************************************************/
+ */
 
-#include "CourseRegulatorNode.h"
-
+#include "CourseRegulatorNode.hpp"
 
 #define DATA_OUT_OF_RANGE -2000
 const int INITIAL_SLEEP = 2000; // milliseconds
 const float NO_COMMAND = -1000;
-
 
 ///----------------------------------------------------------------------------------
 CourseRegulatorNode::CourseRegulatorNode( MessageBus& msgBus,  DBHandler& dbhandler)
 :ActiveNode(NodeID::CourseRegulatorNode,msgBus), m_db(dbhandler), m_Running(0),
 m_LoopTime(0.5), m_MaxRudderAngle(30), m_pGain(1), m_iGain(1), m_dGain(1),
 m_VesselCourse(DATA_OUT_OF_RANGE), m_VesselSpeed(DATA_OUT_OF_RANGE), m_DesiredCourse(DATA_OUT_OF_RANGE)
-
 {
     msgBus.registerNode( *this, MessageType::StateMessage);
     msgBus.registerNode( *this, MessageType::LocalNavigation);
