@@ -22,7 +22,7 @@
 #include "../MessageBus/ActiveNode.hpp"
 #include "../MessageBus/Message.hpp"
 #include "../MessageBus/MessageBus.hpp"
-#include "../Messages/AISDataMsg.h"
+#include "../Messages/AISDataMsg.hpp"
 #include "../SystemServices/Logger.hpp"
 #include "../SystemServices/Timer.hpp"
 

@@ -1,8 +1,6 @@
 /**
  * @file   Utility.cpp
- * @version 1.0.0
- * @author SailingRobots team
- * @date   2017
+ * 
  * @brief  A few utility functions
  *
  */

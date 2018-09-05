@@ -134,9 +134,7 @@ int main(int argc, char *argv[])
     install_sig_traps();
     // This is for eclipse development so the output is constantly pumped out.
     setbuf(stdout, NULL);
-    /**
-     *  @link https://en.cppreference.com/w/cpp/utility/program/atexit
-     */
+    // Set exit terminator
     std::atexit(atexit_handler);
     
 	/*

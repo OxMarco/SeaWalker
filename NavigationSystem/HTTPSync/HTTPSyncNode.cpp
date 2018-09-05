@@ -6,7 +6,7 @@
  *
  */
  
-#include "HTTPSyncNode.h"
+#include "HTTPSyncNode.hpp"
 #include "../Messages/LocalConfigChangeMsg.h"
 #include "../Messages/LocalWaypointChangeMsg.h"
 #include "../Messages/ServerConfigsReceivedMsg.h"

@@ -1,20 +1,14 @@
-/****************************************************************************************
+/**
+ * @file   AISDataMsg.hpp
  *
- * File:
- * 		AISDataMsg.h
+ * @brief  An AISDataMsg contains the nearby vessels found by the AIS
  *
- * Purpose:
- *		An AISDataMsg contains the nearby vessels found by the AIS
- *
- * Developer Notes:
- *
- *
- ***************************************************************************************/
+ */
 
-#pragma once
+#ifndef AISDATAMSG_HPP
+#define AISDATAMSG_HPP
 
 #include "../MessageBus/Message.hpp"
-
 #include <vector>
 
 struct AISVessel {
@@ -163,3 +157,5 @@ class AISDataMsg : public Message {
     double m_PosLat;
     double m_PosLon;
 };
+
+#endif /* AISDATAMSG_HPP */

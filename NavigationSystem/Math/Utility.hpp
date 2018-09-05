@@ -1,8 +1,6 @@
 /**
  * @file   Utility.hpp
- * @version 1.0.0
- * @author SailingRobots team
- * @date   2017
+ * 
  * @brief  Utility class
  *
  */
@@ -10,7 +8,7 @@
 #ifndef UTILITY_HPP
 #define UTILITY_HPP
 
-#include <stdint.h>  // uint8_t
+#include <stdint.h>
 #include <array>
 #include <iostream>
 #include <vector>

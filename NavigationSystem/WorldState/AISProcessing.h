@@ -18,7 +18,7 @@
 #include "../Math/CourseMath.hpp"
 #include "../MessageBus/ActiveNode.hpp"
 #include "../MessageBus/Message.hpp"
-#include "../Messages/AISDataMsg.h"
+#include "../Messages/AISDataMsg.hpp"
 #include "../Messages/StateMessage.h"
 #include "../SystemServices/Logger.hpp"
 #include "../SystemServices/Timer.hpp"

@@ -1,8 +1,6 @@
 /**
  * @file   CourseMath.hpp
- * @version 1.0.0
- * @author SailingRobots team
- * @date   2017
+ * 
  * @brief  Course calculation helpers
  *
  */

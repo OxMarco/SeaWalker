@@ -51,7 +51,7 @@ class CurrentSensorDataMsg : public Message {
     virtual ~CurrentSensorDataMsg() {}
 
     ///----------------------------------------------------------------------------------
-    /// Serialises the message into a MessageSerialiser
+    /// @brief Serialises the message into a MessageSerialiser
     ///----------------------------------------------------------------------------------
     virtual void Serialise(MessageSerialiser& serialiser) const {
         Message::Serialise(serialiser);
@@ -86,7 +86,7 @@ class CurrentSensorDataMsg : public Message {
     }
 
    private:
-    float m_current;          // in mA
-    float m_voltage;          // in mV
-    SensedElement m_element;  // the element measured
+    float m_current;          ///< sensed current in mA
+    float m_voltage;          ///< sensed voltage in mV
+    SensedElement m_element;  ///< the element measured
 };
