@@ -13,7 +13,7 @@
 
 #pragma once
 
-#include <libgpsmm.h>
+//#include <libgpsmm.h>
 #include "../Database/DBHandler.hpp"
 #include "../MessageBus/ActiveNode.hpp"
 
@@ -55,7 +55,7 @@ class GPSDNode : public ActiveNode {
     static void GPSThreadFunc(ActiveNode* nodePtr);
 
     bool m_Initialised;
-    gpsmm* m_GpsConnection;
+    //gpsmm* m_GpsConnection;
 
     double m_Lat;     // North(+) or South(-) [0-90]
     double m_Lon;     // East(+) or West(-)  [0-180]

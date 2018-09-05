@@ -5,14 +5,15 @@
  *
  */
 
+#include "../SystemServices/Timer.hpp"
+#include "../Math/Utility.hpp"
 #include "DBHandler.hpp"
 #include <cstdio>
 #include <cstdlib>
 #include <iomanip>
 #include <string>
 #include <thread>
-#include "../SystemServices/Timer.hpp"
-#include "../Math/Utility.hpp"
+#include <stdexcept>
 
 std::mutex DBHandler::m_databaseLock;
 
@@ -24,7 +25,8 @@ DBHandler::~DBHandler(void) {
     m_databaseLock.unlock();
 }
 
-bool DBHandler::initialise() {
+bool DBHandler::initialise()
+{
     sqlite3* connection = openDatabase();
     
     if (connection != 0) {
@@ -404,7 +406,7 @@ std::string DBHandler::retrieveCell(std::string table, std::string id, std::stri
 void DBHandler::updateConfigs(std::string configs) {
     Json js = Json::parse(configs);
     if (js.empty()) {
-        Logger::error("%s No JSON in \"%s\"", __PRETTY_FUNCTION__, configs);
+        Logger::error("%s No JSON in '%s'", __PRETTY_FUNCTION__, configs.c_str());
     }
     std::vector<std::string> tables;
     
@@ -425,7 +427,7 @@ void DBHandler::updateConfigs(std::string configs) {
 bool DBHandler::updateWaypoints(std::string waypoints) {
     Json js = Json::parse(waypoints);
     if (js.empty()) {
-        Logger::error("%s No JSON in \"%s\"", __PRETTY_FUNCTION__, waypoints);
+        Logger::error("%s No JSON in \"%s\"", __PRETTY_FUNCTION__, waypoints.c_str());
     }
     std::string DBPrinter = "";
     std::string tempValue = "";
@@ -713,7 +715,7 @@ void DBHandler::closeDatabase(sqlite3* connection) {
         m_databaseLock.unlock();
     } else {
         m_databaseLock.unlock();
-        throw "DBHandler::closeDatabase() : connection is already null";
+        throw std::runtime_error{ "DBHandler::closeDatabase() : connection is already null" };
     }
 }
 

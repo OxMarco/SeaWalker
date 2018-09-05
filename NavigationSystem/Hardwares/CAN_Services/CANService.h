@@ -24,7 +24,7 @@
 #include <mutex>
 #include <queue>
 #include <vector>
-#include "../SystemServices/Logger.hpp"
+#include "../../SystemServices/Logger.hpp"
 #include "CANFrameReceiver.h"
 #include "CANPGNReceiver.h"
 #include "N2kMsg.h"

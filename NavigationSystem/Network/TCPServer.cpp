@@ -29,6 +29,10 @@
 #define SELECT_TIMEOUT_SEC 0
 #define SELECT_TIMEOUT_USEC 500
 
+#ifdef __APPLE__
+    #define MSG_NOSIGNAL    SO_NOSIGPIPE
+#endif
+
 ///----------------------------------------------------------------------------------
 TCPServer::TCPServer() : serverSocket(-1), highestFD(0) {
     printf("%d\n", (int)clients.size());
