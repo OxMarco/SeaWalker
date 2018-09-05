@@ -1,22 +1,20 @@
-/****************************************************************************************
+/**
+ * @file    MessageBus.hpp
  *
- * File:
- * 		MessageBus.h
+ * @brief   The message bus manages message distribution to nodes allowing nodes to
+ *          communicate with one another.
  *
- * Purpose:
- *		The message bus manages message distribution to nodes allowing nodes to
- *		communicate with one another.
+ * @details     Nodes can only be added before the run function is called currently. This is to
+ *              reduce the number of thread locks in place and because once the system has
+ *              started its very rare that a node should be registered afterwards on the fly.
  *
- * Developer Notes:
- *		Nodes can only be added before the run function is called currently. This is to
- *		reduce the number of thread locks in place and because once the system has
- *		started its very rare that a node should be registered afterwards on the fly.
- *
- *
- ***************************************************************************************/
+ */
 
-#pragma once
+#ifndef MESSAGEBUS_HPP
+#define MESSAGEBUS_HPP
 
+#include "Message.h"
+#include "Node.hpp"
 #include <atomic>
 #include <fstream>
 #include <iostream>
@@ -24,8 +22,6 @@
 #include <mutex>
 #include <queue>
 #include <vector>
-#include "../MessageBus/Message.h"
-#include "../MessageBus/Node.h"
 
 typedef std::unique_ptr<Message> MessagePtr;
 
@@ -46,7 +42,7 @@ class MessageBus {
     ~MessageBus();
 
     ///----------------------------------------------------------------------------------
-    /// Registers a node onto the message bus allowing it receive direct messages. The
+    /// @brief Registers a node onto the message bus allowing it receive direct messages. The
     /// message bus does not own the node.
     ///
     /// @param node 			Pointer to the node that should be registered.
@@ -54,7 +50,7 @@ class MessageBus {
     bool registerNode(Node& node);
 
     ///----------------------------------------------------------------------------------
-    /// Registers a node onto the message bus allowing it receive direct messages and
+    /// @brief Registers a node onto the message bus allowing it receive direct messages and
     /// also subscribes it for a particular message type.
     ///
     /// @param node 			Pointer to the node that should be registered.
@@ -81,7 +77,7 @@ class MessageBus {
 
    private:
     ///----------------------------------------------------------------------------------
-    /// Stores information about a registered node and the message types it is interested
+    /// @brief Stores information about a registered node and the message types it is interested
     /// in.
     ///----------------------------------------------------------------------------------
     struct RegisteredNode {
@@ -90,7 +86,7 @@ class MessageBus {
         Node& nodeRef;
 
         ///------------------------------------------------------------------------------
-        /// Returns true if a registered node is interested in a message type.
+        /// @brief Returns true if a registered node is interested in a message type.
         ///
         /// @param type 		The message type which is checked for.
         ///------------------------------------------------------------------------------
@@ -104,7 +100,7 @@ class MessageBus {
         }
 
         ///------------------------------------------------------------------------------
-        /// Subscribes the registered node for a particular type of message
+        /// @brief Subscribes the registered node for a particular type of message
         ///
         /// @param type 		The message type to subscribe this registered node to.
         ///------------------------------------------------------------------------------
@@ -120,45 +116,45 @@ class MessageBus {
     };
 
     ///----------------------------------------------------------------------------------
-    /// Looks for existing registered node for a given node pointer and returns a pointer
+    /// @brief Looks for existing registered node for a given node pointer and returns a pointer
     /// to it. If the node has not yet been registered, it is then registered and a
     /// pointer to the new RegisteredNode is returned.
     ///----------------------------------------------------------------------------------
     RegisteredNode* getRegisteredNode(Node& node);
 
     ///----------------------------------------------------------------------------------
-    /// Goes through the back message queue and distributes messages, calling
+    /// @brief Goes through the back message queue and distributes messages, calling
     /// Node::processMessage(Message*) on nodes that are interested in any given message.
     ///----------------------------------------------------------------------------------
     void processMessages();
 
     ///----------------------------------------------------------------------------------
-    /// Creates a log file for the messages.
+    /// @brief Creates a log file for the messages.
     ///----------------------------------------------------------------------------------
     void startMessageLog();
 
     ///----------------------------------------------------------------------------------
-    /// Logs that a message was received.
+    /// @brief Logs that a message was received.
     ///----------------------------------------------------------------------------------
     void logMessageReceived(Message* msg);
 
     ///----------------------------------------------------------------------------------
-    /// Logs a message that is being processed.
+    /// @brief Logs a message that is being processed.
     ///----------------------------------------------------------------------------------
     void logMessage(Message* msg);
 
     ///----------------------------------------------------------------------------------
-    /// Logs that a node consumed the current message being processed.
+    /// @brief Logs that a node consumed the current message being processed.
     ///----------------------------------------------------------------------------------
     void logMessageConsumer(NodeID id);
 
     ///----------------------------------------------------------------------------------
-    /// Logs that the current message being processed has finished being processed.
+    /// @brief Logs that the current message being processed has finished being processed.
     ///----------------------------------------------------------------------------------
     // void logMessageProcessed(Message* msg);
 
     ///----------------------------------------------------------------------------------
-    /// Returns a message time stamp in the format HH:MM:SS:MS, a char buffer of 14
+    /// @brief Returns a message time stamp in the format HH:MM:SS:MS, a char buffer of 14
     /// characters needs to be provided.
     ///----------------------------------------------------------------------------------
     void messageTimeStamp(unsigned long unixTime, char* buffer);
@@ -175,3 +171,5 @@ class MessageBus {
     std::ofstream* m_LogFile;
 #endif
 };
+
+#endif /* MESSAGEBUS_HPP */

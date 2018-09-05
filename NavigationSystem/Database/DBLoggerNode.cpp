@@ -6,7 +6,6 @@
  */
 
 #include "DBLoggerNode.hpp"
-
 #include "../Messages/CompassDataMsg.h"
 #include "../Messages/GPSDataMsg.h"
 #include "../Messages/WindDataMsg.h"

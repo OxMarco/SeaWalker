@@ -12,7 +12,7 @@
 #include <string>
 #include <thread>
 #include "../SystemServices/Timer.hpp"
-#include "../SystemServices/Wrapper.h"
+#include "../Math/Utility.hpp"
 
 std::mutex DBHandler::m_databaseLock;
 
@@ -1024,7 +1024,7 @@ bool DBHandler::getWaypointValues(int& nextId,
     }
 
     // Set values to next waypoint
-    nextId = safe_stoi(results[1]);
+    nextId = Utility::safe_stoi(results[1]);
 
     nextLongitude = atof(retrieveCell("currentMission", results[1], "longitude").c_str());
     nextLatitude = atof(retrieveCell("currentMission", results[1], "latitude").c_str());
@@ -1035,7 +1035,7 @@ bool DBHandler::getWaypointValues(int& nextId,
 
     if (foundPrev)  // Set values to next waypoint if harvested waypoint found
     {
-        prevId = safe_stoi(results2[1]);
+        prevId = Utility::safe_stoi(results2[1]);
 
         prevLongitude = atof(retrieveCell("currentMission", results2[1], "longitude").c_str());
         prevLatitude = atof(retrieveCell("currentMission", results2[1], "latitude").c_str());

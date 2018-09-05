@@ -6,13 +6,13 @@
  *
  */
  
-#include "HTTPSyncNode.hpp"
+#include "HTTPSyncNode.h"
 #include "../Messages/LocalConfigChangeMsg.h"
 #include "../Messages/LocalWaypointChangeMsg.h"
 #include "../Messages/ServerConfigsReceivedMsg.h"
 #include "../Messages/ServerWaypointsReceivedMsg.h"
 #include "../SystemServices/Timer.hpp"
-#include "../SystemServices/Wrapper.h"
+#include "../Math/Utility.hpp"
 
 #include <atomic>
 
@@ -165,7 +165,7 @@ std::string HTTPSyncNode::getData(std::string call) {
 bool HTTPSyncNode::checkIfNewConfigs() {
     std::string result = getData("checkIfNewConfigs");
     if (result.length()) {
-        return safe_stoi(result);
+        return Utility::safe_stoi(result);
     }
     return false;
 }
@@ -173,7 +173,7 @@ bool HTTPSyncNode::checkIfNewConfigs() {
 bool HTTPSyncNode::checkIfNewWaypoints() {
     std::string result = getData("checkIfNewWaypoints");
     if (result.length()) {
-        return safe_stoi(result);
+        return Utility::safe_stoi(result);
     }
     return false;
 }

@@ -23,9 +23,9 @@
 #include "../Hardwares/CAN_Services/CANService.h"
 #include "../Hardwares/CAN_Services/N2kMsg.h"
 #include "../Math/Utility.hpp"
-#include "../MessageBus/ActiveNode.h"
+#include "../MessageBus/ActiveNode.hpp"
 #include "../MessageBus/Message.h"
-#include "../MessageBus/MessageBus.h"
+#include "../MessageBus/MessageBus.hpp"
 #include "../Messages/ASPireActuatorFeedbackMsg.h"
 #include "../SystemServices/Timer.hpp"
 

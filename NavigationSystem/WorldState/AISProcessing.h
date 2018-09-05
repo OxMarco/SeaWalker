@@ -16,7 +16,7 @@
 
 #include "../Database/DBHandler.hpp"
 #include "../Math/CourseMath.hpp"
-#include "../MessageBus/ActiveNode.h"
+#include "../MessageBus/ActiveNode.hpp"
 #include "../MessageBus/Message.h"
 #include "../Messages/AISDataMsg.h"
 #include "../Messages/StateMessage.h"

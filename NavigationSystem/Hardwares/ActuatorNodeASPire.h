@@ -16,7 +16,7 @@
 
 #include "../Hardwares/CAN_Services/CANService.h"
 #include "../Math/Utility.hpp"
-#include "../MessageBus/MessageBus.h"
+#include "../MessageBus/MessageBus.hpp"
 #include "../MessageBus/MessageTypes.h"
 #include "../Messages/RudderCommandMsg.h"
 #include "../Messages/WingSailCommandMsg.h"

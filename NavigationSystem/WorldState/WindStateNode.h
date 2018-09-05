@@ -22,7 +22,7 @@
 
 #include "../Database/DBHandler.hpp"
 #include "../Math/Utility.hpp"
-#include "../MessageBus/MessageBus.h"
+#include "../MessageBus/MessageBus.hpp"
 #include "../MessageBus/MessageTypes.h"
 #include "../Messages/StateMessage.h"
 #include "../Messages/WindDataMsg.h"

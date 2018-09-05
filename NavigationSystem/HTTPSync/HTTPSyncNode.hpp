@@ -10,7 +10,7 @@
 #define HTTPSYNCNODE_HPP
 
 #include "../Database/DBHandler.hpp"
-#include "../MessageBus/ActiveNode.h"
+#include "../MessageBus/ActiveNode.hpp"
 #include "../SystemServices/Logger.hpp"
 
 #include <curl/curl.h>

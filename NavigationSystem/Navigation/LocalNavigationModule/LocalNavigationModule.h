@@ -16,7 +16,7 @@
 
 #include <vector>
 #include "../Database/DBHandler.hpp"
-#include "../MessageBus/ActiveNode.h"
+#include "../MessageBus/ActiveNode.hpp"
 #include "ASRArbiter.h"
 #include "ASRVoter.h"
 #include "BoatState.h"

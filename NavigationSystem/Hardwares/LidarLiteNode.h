@@ -14,7 +14,7 @@
  ***************************************************************************************/
 
 #pragma once
-#include "../MessageBus/ActiveNode.h"
+#include "../MessageBus/ActiveNode.hpp"
 #include "../Messages/LidarMsg.h"
 #include "lidarLite/lidarLite.h"
 

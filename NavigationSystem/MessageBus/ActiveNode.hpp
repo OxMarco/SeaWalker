@@ -1,20 +1,15 @@
-/****************************************************************************************
+/**
+ * @file    ActiveNode.hpp
  *
- * File:
- * 		ActiveNode.h
+ * @brief   An active node is a base(passive) node that has a thread running.
  *
- * Purpose:
- *		A active node is a base(passive) node that has a thread.
- *
- * Developer Notes:
- *
- *
- ***************************************************************************************/
+ */
 
-#pragma once
+#ifndef ACTIVENODE_HPP
+#define ACTIVENODE_HPP
 
+#include "Node.hpp"
 #include <thread>
-#include "Node.h"
 
 class ActiveNode : public Node {
    public:
@@ -34,3 +29,5 @@ class ActiveNode : public Node {
     //std::thread* m_Thread;
     std::unique_ptr<std::thread> m_Thread;
 };
+
+#endif /* ACTIVENODE_HPP */

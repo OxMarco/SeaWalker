@@ -20,7 +20,7 @@
 
 #include "../Hardwares/CAN_Services/CANFrameReceiver.h"
 #include "../Hardwares/CAN_Services/CANService.h"
-#include "../MessageBus/MessageBus.h"
+#include "../MessageBus/MessageBus.hpp"
 
 class CANMarineSensorReceiver : public CANFrameReceiver {
    public:

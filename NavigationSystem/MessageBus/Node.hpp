@@ -1,23 +1,18 @@
-/****************************************************************************************
+/**
+ * @file    Node.hpp
  *
- * File:
- * 		Node.h
+ * @brief   The base passive node
  *
- * Purpose:
- *		The base passive node.
- *
- * Developer Notes:
- *
- *
- ***************************************************************************************/
+ */
 
-#pragma once
+#ifndef NODE_HPP
+#define NODE_HPP
 
 class MessageBus;
 
-#include "../MessageBus/Message.h"
-#include "../MessageBus/MessageBus.h"
-#include "../MessageBus/NodeIDs.h"
+#include "Message.h"
+#include "MessageBus.hpp"
+#include "NodeIDs.h"
 
 class Node {
    public:
@@ -56,3 +51,6 @@ class Node {
    private:
     NodeID m_NodeID;
 };
+
+#endif /* NODE_HPP */
+

@@ -8,6 +8,7 @@
  */
 
 #include "Utility.hpp"
+#include "../SystemServices/Logger.hpp"
 #include <algorithm>
 #include <cmath>
 #include <stdlib.h>
@@ -591,4 +592,17 @@ void Utility::calculateVelocity( const uint16_t course, const double speed, doub
 {
 	vX = speed * cos(course * (M_PI / 180));
 	vY = speed * sin(course * (M_PI / 180));
+}
+
+int Utility::safe_stoi(const std::string& str, std::size_t* pos = 0, int base = 10)
+{
+    int retvalue = 0;
+    try {
+        retvalue = std::stoi(str, pos, base);
+    } catch (std::invalid_argument& e) {
+        Logger::error("%s stoi(): invalid argument (%s)", __PRETTY_FUNCTION__, str.c_str());
+    } catch (std::out_of_range& e) {
+        Logger::error("%s stoi(): value out of range (%s)", __PRETTY_FUNCTION__, str.c_str());
+    }
+    return retvalue;
 }

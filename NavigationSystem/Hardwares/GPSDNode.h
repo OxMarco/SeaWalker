@@ -15,7 +15,7 @@
 
 #include <libgpsmm.h>
 #include "../Database/DBHandler.hpp"
-#include "../MessageBus/ActiveNode.h"
+#include "../MessageBus/ActiveNode.hpp"
 
 class GPSDNode : public ActiveNode {
    public:

@@ -24,8 +24,8 @@
 
 #include "../Database/DBHandler.hpp"
 #include "../Math/Utility.hpp"
-#include "../MessageBus/ActiveNode.h"
-#include "../MessageBus/MessageBus.h"
+#include "../MessageBus/ActiveNode.hpp"
+#include "../MessageBus/MessageBus.hpp"
 #include "../Messages/SailCommandMsg.h"
 #include "../Messages/StateMessage.h"
 #include "../Messages/WindDataMsg.h"

@@ -14,7 +14,7 @@
 #pragma once
 
 #include "../Hardwares/i2ccontroller/I2CController.h"
-#include "../MessageBus/ActiveNode.h"
+#include "../MessageBus/ActiveNode.hpp"
 
 class ArduinoNodeForWindSensor : public ActiveNode {
    public:

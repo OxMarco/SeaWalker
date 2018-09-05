@@ -22,7 +22,7 @@
 #include "../Database/DBHandler.hpp"
 #include "../Hardwares/CAN_Services/CANPGNReceiver.h"
 #include "../Hardwares/CAN_Services/CANService.h"
-#include "../MessageBus/ActiveNode.h"
+#include "../MessageBus/ActiveNode.hpp"
 #include "../Messages/WindDataMsg.h"
 #include "../SystemServices/Timer.hpp"
 

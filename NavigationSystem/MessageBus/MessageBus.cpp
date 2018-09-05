@@ -1,26 +1,24 @@
-/****************************************************************************************
+/**
+ * @file    MessageBus.cpp
  *
- * File:
- * 		MessageBus.cpp
+ * @brief   The message bus manages message distribution to nodes allowing nodes to
+ *          communicate with one another.
  *
- * Purpose:
- *		The message bus manages message distribution to nodes allowing nodes to
- *		communicate with one another.
+ * @details     Nodes can only be added before the run function is called currently. This is to
+ *              reduce the number of thread locks in place and because once the system has
+ *              started its very rare that a node should be registered afterwards on the fly.
  *
- ***************************************************************************************/
+ */
 
-#include "../MessageBus/MessageBus.h"
+#include "MessageBus.hpp"
 #include "../SystemServices/Logger.hpp"
-#include <sys/time.h>
 #include "../SystemServices/SysClock.hpp"
-
-// For std::this_thread
+#include <sys/time.h>
 #include <chrono>
 #include <thread>
 #include <iostream>
 
 #define SLEEP_TIME_MS	50
-
 
 MessageBus::MessageBus()
 	:m_Running(false)
@@ -40,7 +38,6 @@ MessageBus::~MessageBus()
 }
 
 bool MessageBus::registerNode(Node& node)
-
 {
 	if(not m_Running)
 	{
@@ -54,7 +51,6 @@ bool MessageBus::registerNode(Node& node)
 }
 
 bool MessageBus::registerNode(Node& node, MessageType msgType)
-
 {
 	if(not m_Running)
 	{
@@ -113,9 +109,7 @@ void MessageBus::stop()
 	m_Running.store(false);
 }
 
-//TODO - Jordan: What would cause this to return a null pointer?
 MessageBus::RegisteredNode* MessageBus::getRegisteredNode(Node& node)
-
 {
 	for(auto regNode : m_RegisteredNodes)
 	{
@@ -128,6 +122,7 @@ MessageBus::RegisteredNode* MessageBus::getRegisteredNode(Node& node)
 	Logger::info("New node registered");
 	RegisteredNode* newRegNode = new RegisteredNode(node);
 	m_RegisteredNodes.push_back(newRegNode);
+    
 	return newRegNode;
 }
 
@@ -171,7 +166,6 @@ void MessageBus::processMessages()
 
 		// delete msg; Don't need for unique pointers
 	}
-
 }
 
 void MessageBus::startMessageLog()

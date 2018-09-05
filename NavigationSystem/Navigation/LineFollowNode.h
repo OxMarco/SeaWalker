@@ -29,7 +29,7 @@
 #include "../Database/DBHandler.hpp"
 #include "../Math/CourseMath.hpp"
 #include "../Math/Utility.hpp"
-#include "../MessageBus/ActiveNode.h"
+#include "../MessageBus/ActiveNode.hpp"
 #include "../Messages/ExternalControlMsg.h"
 #include "../Messages/LocalNavigationMsg.h"
 #include "../Messages/StateMessage.h"

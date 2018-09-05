@@ -132,6 +132,9 @@ class Utility {
      * http://www.chemiasoft.com/chemd/salinity_calculator
      */
     static float calculateSalinity(const float temperature, const float conductivety);
+    
+    static int safe_stoi(const std::string& str, std::size_t* pos, int base);
+
 };
 
 #endif /* UTILITY_HPP */

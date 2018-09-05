@@ -9,8 +9,8 @@
 #define DBLOGGERNODE_HPP
 
 #include "DBLogger.hpp"
-#include "../MessageBus/ActiveNode.h"
-#include "../MessageBus/MessageBus.h"
+#include "../MessageBus/ActiveNode.hpp"
+#include "../MessageBus/MessageBus.hpp"
 #include "../MessageBus/MessageTypes.h"
 
 #include <iostream>

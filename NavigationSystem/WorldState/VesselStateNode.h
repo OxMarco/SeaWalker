@@ -16,7 +16,7 @@
 
 #include <stdint.h>
 #include "../Database/DBHandler.hpp"
-#include "../MessageBus/ActiveNode.h"
+#include "../MessageBus/ActiveNode.hpp"
 #include "../Messages/ArduinoDataMsg.h"
 #include "../Messages/CompassDataMsg.h"
 #include "../Messages/GPSDataMsg.h"

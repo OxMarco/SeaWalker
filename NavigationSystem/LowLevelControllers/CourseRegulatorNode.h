@@ -22,8 +22,8 @@
 
 #include "../Database/DBHandler.hpp"
 #include "../Math/Utility.hpp"
-#include "../MessageBus/ActiveNode.h"
-#include "../MessageBus/MessageBus.h"
+#include "../MessageBus/ActiveNode.hpp"
+#include "../MessageBus/MessageBus.hpp"
 #include "../Messages/LocalNavigationMsg.h"
 #include "../Messages/RudderCommandMsg.h"
 #include "../Messages/StateMessage.h"

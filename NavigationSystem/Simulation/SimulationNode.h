@@ -32,7 +32,7 @@
 
 #include "../Math/CourseMath.hpp"
 #include "../Math/Utility.hpp"
-#include "../MessageBus/ActiveNode.h"
+#include "../MessageBus/ActiveNode.hpp"
 #include "../Messages/CompassDataMsg.h"
 #include "../Messages/GPSDataMsg.h"
 #include "../Messages/MarineSensorDataMsg.h"

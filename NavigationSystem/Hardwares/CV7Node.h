@@ -15,7 +15,7 @@
 
 #include <map>
 #include "../Database/DBHandler.hpp"
-#include "../MessageBus/ActiveNode.h"
+#include "../MessageBus/ActiveNode.hpp"
 
 class CV7Node : public ActiveNode {
    public:

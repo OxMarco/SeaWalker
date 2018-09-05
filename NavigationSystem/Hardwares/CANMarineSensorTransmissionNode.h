@@ -19,7 +19,7 @@
 #include "../Hardwares/CAN_Services/CANService.h"
 #include "../Hardwares/CAN_Services/N2kMsg.h"
 #include "../MessageBus/Message.h"
-#include "../MessageBus/MessageBus.h"
+#include "../MessageBus/MessageBus.hpp"
 #include "../MessageBus/Node.h"
 
 class CANMarineSensorTransmissionNode : public Node {
