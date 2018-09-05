@@ -40,17 +40,11 @@ public:
     
     ///////////////////// Other Methods /////////////////////
     
-    /// Enable or disable logging
     static void setLoggingStatus(bool flag);
     
-    /// Initialise and stop logger
     static void init();
     static void shutdown();
-    
-    /**
-     *   @brief  A globally accessible function to log messages to that works exactly like old C function "printf"
-     *     @params message The log message
-     */
+
     static void info(std::string message, ...);
     static void error(std::string message, ...);
     static void warning(std::string message, ...);

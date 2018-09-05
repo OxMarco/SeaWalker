@@ -21,7 +21,7 @@
 class Message {
    public:
     ///----------------------------------------------------------------------------------
-    /// Default constructor
+    /// @brief Default constructor
     ///
     /// @param msgType 			The type of message this is.
     /// @param msgSource		Which node posted this message.
@@ -32,7 +32,7 @@ class Message {
         : m_valid(true), m_MessageType(msgType), m_SourceID(msgSource), m_DestinationID(msgDest) {}
 
     ///----------------------------------------------------------------------------------
-    /// A message with no specific destination.
+    /// @brief A message with no specific destination.
     ///
     /// @param msgType 			The type of message this is.
     /// @param msgSource		Which node posted this message.
@@ -44,7 +44,7 @@ class Message {
           m_DestinationID(NodeID::None) {}
 
     ///----------------------------------------------------------------------------------
-    /// A message with no specific destination or source.
+    /// @brief A message with no specific destination or source.
     ///
     /// @param msgType 			The type of message this is.
     ///----------------------------------------------------------------------------------
@@ -61,30 +61,30 @@ class Message {
     virtual ~Message() {}
 
     ///----------------------------------------------------------------------------------
-    /// Returns the type of message this is.
+    /// @brief Returns the type of message this is.
     ///
     ///----------------------------------------------------------------------------------
     MessageType messageType() const { return m_MessageType; }
 
     ///----------------------------------------------------------------------------------
-    /// Returns the node which generated this message.
+    /// @brief Returns the node which generated this message.
     ///
     ///----------------------------------------------------------------------------------
     NodeID sourceID() const { return m_SourceID; }
 
     ///----------------------------------------------------------------------------------
-    /// Returns the message's destination.
+    /// @brief Returns the message's destination.
     ///
     ///----------------------------------------------------------------------------------
     NodeID destinationID() const { return m_DestinationID; }
 
     ///----------------------------------------------------------------------------------
-    /// Indicates that the message was constructed correctly
+    /// @brief Indicates that the message was constructed correctly
     ///----------------------------------------------------------------------------------
     bool isValid() const { return m_valid; }
 
     ///----------------------------------------------------------------------------------
-    /// Serialises the message into a MessageSerialiser
+    /// @brief Serialises the message into a MessageSerialiser
     ///----------------------------------------------------------------------------------
     virtual void Serialise(MessageSerialiser& serialiser) const {
         serialiser.serialise(m_MessageType);
@@ -97,12 +97,12 @@ class Message {
 #endif
 
    protected:
-    bool m_valid;  // Indicates that the message was correctl created
+    bool m_valid;  ///< Indicates that the message was correctl created
 
    private:
-    MessageType m_MessageType;  // The message type
-    NodeID m_SourceID;          // Which node generated the message
-    NodeID m_DestinationID;     // The desintation of the message
+    MessageType m_MessageType;  ///< The message type
+    NodeID m_SourceID;          ///< Which node generated the message
+    NodeID m_DestinationID;     ///< The desintation of the message
 };
 
 #endif /* MESSAGE_HPP */

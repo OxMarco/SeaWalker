@@ -5,8 +5,8 @@
  *
  */
 
-#ifndef MESSAGESERIALISER.HPP
-#define MESSAGESERIALISER.HPP
+#ifndef MESSAGESERIALISER_HPP
+#define MESSAGESERIALISER_HPP
 
 #include "MessageTypes.hpp"
 #include "NodeIDs.hpp"
@@ -48,5 +48,5 @@ class MessageSerialiser {
     uint8_t m_ptr;
 };
 
-#endif /* MESSAGESERIALISER.HPP */
+#endif /* MESSAGESERIALISER_HPP */
 

@@ -62,7 +62,7 @@ enum class NodeImportance {
 //std::map<Node*,std::string> nodeList; // store each node and whether was correctly initialised or not
 
 ///----------------------------------------------------------------------------------
-/// Initialises a node and shutsdown the program if a critical node fails.
+/// @brief Initialises a node and shutsdown the program if a critical node fails.
 ///
 /// @param node 			A pointer to the node to initialise
 /// @param nodeName 		A string name of the node, for logging purposes.

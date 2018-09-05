@@ -5,8 +5,8 @@
  *
  */
 
-#ifndef MESSAGEDESERIALISER.HPP
-#define MESSAGEDESERIALISER.HPP
+#ifndef MESSAGEDESERIALISER_HPP
+#define MESSAGEDESERIALISER_HPP
 
 #include "MessageTypes.hpp"
 #include "NodeIDs.hpp"
@@ -37,4 +37,4 @@ class MessageDeserialiser {
     uint8_t m_size;
 };
 
-#endif /* MESSAGEDESERIALISER.HPP */
+#endif /* MESSAGEDESERIALISER_HPP */

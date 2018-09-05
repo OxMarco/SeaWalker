@@ -83,6 +83,10 @@ bool Logger::getLoggingStatus()
 
 /// Logging types
 
+/**
+ *   @brief  A globally accessible function to log messages to that works exactly like old C function "printf"
+ *   @param message The log message
+ */
 void Logger::info(std::string message, ...)
 {
     if(!m_initialised) { return; }
