@@ -9,7 +9,7 @@
 #include <iostream>
 #include <map>
 
-#include "../Database/DBHandler.hpp"
+#include "Database/DBHandler.hpp"
 #include "../Database/DBLoggerNode.hpp"
 #include "../HTTPSync/HTTPSyncNode.hpp"
 #include "../MessageBus/MessageBus.h"

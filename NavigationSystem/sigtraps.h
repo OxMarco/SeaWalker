@@ -1,13 +1,10 @@
-/****************************************************************************************
+/**
+ * @file        sigtraps.h
+ * @version     1.0.0
+ * @date        September, 2017
+ * @brief       Install signal handlers to handle stack overflow, sigabort and terminal exit correctly.
  *
- * File:
- *         sigtraps.h
- *
- * Purpose:
- *        Install signal handlers to handle stack overflow, sigabort and terminal exit
- *          correctly.
- *
- ***************************************************************************************/
+ */
 
 #ifndef SIGTRAPS_H
 #define SIGTRAPS_H

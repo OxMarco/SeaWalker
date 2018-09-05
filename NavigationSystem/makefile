@@ -69,7 +69,7 @@ LNM_DIR                 	= Navigation/LocalNavigationModule
 # Target Output
 ###############################################################################
 
-export EXECUTABLE           = sr
+export EXECUTABLE           = seawalker
 export UNIT_TEST_EXEC 		= unit-tests.run
 export UNIT_TEST_HW_EXEC 	= unit-tests-hardware.run
 export INTEGRATION_TEST_EXEC_ASPIRE = integration-tests-ASPire.run
