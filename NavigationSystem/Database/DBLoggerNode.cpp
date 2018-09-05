@@ -195,8 +195,8 @@ void DBLoggerNode::updateConfigsFromDB()
     m_loopTime = m_db.retrieveCellAsDouble("config_dblogger","1","loop_time");
 }
 
-void DBLoggerNode::DBLoggerNodeThreadFunc(ActiveNode* nodePtr) {
-
+void DBLoggerNode::DBLoggerNodeThreadFunc(ActiveNode* nodePtr)
+{
     DBLoggerNode* node = dynamic_cast<DBLoggerNode*> (nodePtr);
     std::string timestamp_str;
     Timer timer;
@@ -217,6 +217,5 @@ void DBLoggerNode::DBLoggerNodeThreadFunc(ActiveNode* nodePtr) {
         node->m_lock.unlock();
         timer.sleepUntil(node->m_loopTime);
         timer.reset();
-
     }
 }

@@ -1,61 +1,89 @@
-/**
- * @file   Logger.hpp
- * @version 1.0.0
- * @author Giammarco Rene' Casanova
- * @date   September, 2017
- * @brief  Logger class
+/****************************************************************************************
  *
- * @link https://github.com/gabime/spdlog
+ * File:
+ *         Logger.h
  *
- */
+ * Purpose:
+ *        Provides functions for logging data to file and console. Support for the WRSC2016
+ *        format is also included, see Notes.
+ *
+ * Developer Notes:
+ *        WRSC2016 Logging:
+ *            The WRSC 2016 logging format is as follows:
+ *
+ *                “hhmmssdd    Lat*10^7        Lon*10^7”
+ *
+ *            The GPS coordinates need to be in the format of degress in decimals, e.g:
+ *            60.3456. When WRSC logging is enabled a separate log file is generated
+ *            containing only this data and is located alongside the program.
+ *
+ ***************************************************************************************/
 
-#ifndef LOGGER_HPP
-#define LOGGER_HPP
+
+#pragma once
+
 
 #include <string>
-#include <stdexcept>
-#include "../Libs/spdlog/spdlog.h"
+#include <vector>
+#include <cstdarg>
+#ifndef _WIN32
+#include <mutex>
+#endif
+#include <iostream>
+#include <fstream>
+#include <sys/stat.h>
 
-/**
- *  @class Logger
- *  @brief Logging functionality
- */
-class Logger
-{
-    
+#define DEFAULT_LOG_NAME            "sailing-log.log"
+#define DEFAULT_LOG_NAME_WRSC        "wrsc-log.log"
+#define FILE_PATH                         "../logs/"
+
+
+class Logger {
 public:
+    /////////////////////////////////////////////////////////////////////////////////////
+    /// Initialises the singleton logger system, returns false if it is unable to
+    /// generate a log file.
+    ///
+    /// @params logType             The type of log message, if this paramter is not
+    ///                                provided then a default name is used.
+    ///
+    /////////////////////////////////////////////////////////////////////////////////////
+    static bool init(const char* filename = 0);
     
-    ///////////////////// Constructor & Destructor /////////////////////
+    /// SHOULD ONLY BE USED FOR UNIT TESTS!
+    static void DisableLogging();
     
-    /// Create an empty Logger object
-    Logger();
-    
-    /// Destroy an existing Logger object
-    ~Logger();
-    
-    ///////////////////// Getter Functions /////////////////////
-    
-    /// Get the logger status (enabled or disabled)
-    static bool getLoggingStatus();
-    
-    ///////////////////// Other Methods /////////////////////
-    
-    static void setLoggingStatus(bool flag);
-    
-    static void init();
     static void shutdown();
-
+    
+    /////////////////////////////////////////////////////////////////////////////////////
+    /// A globally accessable function to log messages to that works exactly like printf.
+    ///
+    /// @params message             The log message.
+    /// @params ...                    A variable list, this allows printf like behaviour
+    ///
+    /////////////////////////////////////////////////////////////////////////////////////
     static void info(std::string message, ...);
     static void error(std::string message, ...);
     static void warning(std::string message, ...);
-    static void critical(std::string message, ...);
     
-    ///////////////////// Class Attributes /////////////////////
+    static void logWRSC(double latitude, double longitude);
     
 private:
-    static std::shared_ptr<spdlog::logger> m_logger; ///< logger instance
-    static bool m_initialised; ///< flag to avoid multiple initialisations
+    static void log(std::string message);
     
-}; // end of class Logger
-
-#endif // LOGGER_HPP
+    static bool createLogFiles(const char* filename = 0);
+    
+    static void writeBufferedLogs();
+    
+    static std::string                 m_LogFilePath;
+    static std::ofstream             m_LogFile;
+    static std::vector<std::string> m_LogBuffer;
+#ifndef _WIN32
+    static std::mutex                 m_Mutex;
+#endif
+    static bool                        m_DisableLogging;
+    
+#ifdef ENABLE_WRSC_LOGGING
+    static std::ofstream             m_LogFileWRSC;
+#endif
+};

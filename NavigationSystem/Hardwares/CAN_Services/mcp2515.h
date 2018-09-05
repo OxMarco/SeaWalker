@@ -2,8 +2,10 @@
 #define MCP2515_H
 
 #include <stdint.h>
-//#include <wiringPi.h>
-//#include <wiringPiSPI.h>
+#ifndef __APPLE__
+    #include <wiringPi.h>
+    #include <wiringPiSPI.h>
+#endif
 #include "N2kMsg.h"
 #include "mcp2515_defs.h"
 

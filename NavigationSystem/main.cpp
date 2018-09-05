@@ -6,7 +6,7 @@
  */
 
 #ifdef __APPLE__
-#define SIMULATION 1
+#define SIMULATION 0
 #endif
 
 #include "Database/DBHandler.hpp"
@@ -42,9 +42,9 @@
 #if SIMULATION == 1
   #include "Simulation/SimulationNode.h"
 #else
-  #include "Hardwares/HMC6343Node.h"
+  //#include "Hardwares/HMC6343Node.h"
   #include "Hardwares/GPSDNode.h"
-  #include "Hardwares/CAN_Services/CANService.h"
+  //#include "Hardwares/CAN_Services/CANService.h"
   #include "Hardwares/CANWindsensorNode.h"
   #include "Hardwares/ActuatorNodeASPire.h"
   #include "Hardwares/CANArduinoNode.h"
@@ -141,10 +141,19 @@ int main(int argc, char *argv[])
     // Set exit terminator
     std::atexit(atexit_handler);
     
+    // Print info
+    Logger::info("Run on %s at %s", __DATE__, __TIME__);
+    Logger::info("SeaWalker");
+#if LOCAL_NAVIGATION_MODULE == 1
+    Logger::info( "Using Local Navigation Module" );
+#else
+    Logger::info( "Using Line-follow" );
+#endif
+    
 	/*
      *  Starting main system services
      */
-    std::cout<<"1. Setting up main services........."<<std::endl;
+    std::cout<<std::endl<<std::endl<<"1. Setting up main services........."<<std::endl<<std::endl;
     
     //Database Path
 	std::string db_path;
@@ -162,13 +171,6 @@ int main(int argc, char *argv[])
 	MessageBus messageBus;
 
 	// Logger start
-	Logger::info("Built on %s at %s", __DATE__, __TIME__);
-	Logger::info("SeaWalker");
-  	#if LOCAL_NAVIGATION_MODULE == 1
-		Logger::info( "Using Local Navigation Module" );
-  	#else
-		Logger::info( "Using Line-follow" );
-  	#endif
 	Logger::info("Logger init\t\t[OK]");
 
 	// Initialise DBHandler
@@ -183,18 +185,55 @@ int main(int argc, char *argv[])
 	}
 
 
-	// Declare nodes
-	//-------------------------------------------------------------------------------
+    // Initialise nodes
+    //-------------------------------------------------------------------------------
+    std::cout<<std::endl<<std::endl<<"2. Initialising nodes........."<<std::endl<<std::endl;
+    
+    // Active nodes
+    int dbLoggerQueueSize = 5; // how many messages to log to the database at a time
+    DBLoggerNode dbLoggerNode(messageBus, dbHandler, dbLoggerQueueSize);
+    initialiseNode(dbLoggerNode, "DBLoggerNode", NodeImportance::CRITICAL);
 
-	int dbLoggerQueueSize = 5; // how many messages to log to the database at a time
-	DBLoggerNode dbLoggerNode(messageBus, dbHandler, dbLoggerQueueSize);
+    StateEstimationNode stateEstimationNode(messageBus, dbHandler);
+    initialiseNode(stateEstimationNode,"StateEstimationNode",NodeImportance::CRITICAL);
+
+    WingSailControlNode wingSailControlNode(messageBus, dbHandler);
+    initialiseNode(wingSailControlNode, "WingSailControlNode", NodeImportance::CRITICAL);
+
+    CourseRegulatorNode courseRegulatorNode(messageBus, dbHandler);
+    initialiseNode(courseRegulatorNode, "CourseRegulatorNode", NodeImportance::CRITICAL);
+    
+    // Passive nodes
+    WaypointMgrNode waypointMgr(messageBus, dbHandler);
+    initialiseNode(waypointMgr, "WaypointMgrNode", NodeImportance::CRITICAL);
+
+    WindStateNode windStateNode(messageBus);
+    initialiseNode(windStateNode,"WindStateNode",NodeImportance::CRITICAL);
+    
+    CollidableMgr collidableMgr;
+    collidableMgr.init();
+
+    // Simulator
+#if SIMULATION == 1
+    SimulationNode simulator(messageBus, 1, &collidableMgr);
+    initialiseNode(simulator,"SimulationNode",NodeImportance::CRITICAL);
+#endif
+    
+    // Start active nodes
+    //-------------------------------------------------------------------------------
+    std::cout<<std::endl<<std::endl<<"2. Enabling active nodes........."<<std::endl<<std::endl;
+    
+    dbLoggerNode.start();
+    stateEstimationNode.start();
+    wingSailControlNode.start();
+    courseRegulatorNode.start();
+    
+#if SIMULATION == 1
+    simulator.start();
+#endif
+    
+    /*
 	HTTPSyncNode httpsync(messageBus, &dbHandler);
-	StateEstimationNode stateEstimationNode(messageBus, dbHandler);
-	WindStateNode windStateNode(messageBus);
-	WaypointMgrNode waypoint(messageBus, dbHandler);
-	CollidableMgr collidableMgr;
-	WingSailControlNode wingSailControlNode(messageBus, dbHandler);
-	CourseRegulatorNode courseRegulatorNode(messageBus, dbHandler);
 
   	#if LOCAL_NAVIGATION_MODULE == 1
 		LocalNavigationModule lnm	( messageBus, dbHandler );
@@ -238,13 +277,8 @@ int main(int argc, char *argv[])
 	//-------------------------------------------------------------------------------
     std::cout<<"2. Initialising active nodes........."<<std::endl;
 
+    
 	initialiseNode(httpsync, "Httpsync", NodeImportance::NOT_CRITICAL); // This node is not critical during the developement phase.
-	initialiseNode(dbLoggerNode, "DBLogger", NodeImportance::CRITICAL);
-	initialiseNode(stateEstimationNode,"StateEstimation",NodeImportance::CRITICAL);
-	initialiseNode(windStateNode,"WindState",NodeImportance::CRITICAL);
-	initialiseNode(waypoint, "Waypoint", NodeImportance::CRITICAL);
- 	initialiseNode(wingSailControlNode, "Wing Sail Controller", NodeImportance::CRITICAL);
- 	initialiseNode(courseRegulatorNode, "Course Regulator", NodeImportance::CRITICAL);
 
 	#if LOCAL_NAVIGATION_MODULE == 1
 		initialiseNode( lnm, "Local Navigation Module",	NodeImportance::CRITICAL );
@@ -269,13 +303,6 @@ int main(int argc, char *argv[])
     std::cout<<"2. Enabling active nodes........."<<std::endl;
 
 	httpsync.start();
-	dbLoggerNode.start();
-
-	stateEstimationNode.start();
-	collidableMgr.startGC();
-
-	wingSailControlNode.start();
-	courseRegulatorNode.start();
 
 	#if SIMULATION == 1
 		simulation.start();
@@ -293,10 +320,12 @@ int main(int argc, char *argv[])
 	#else
 		sailingLogic.start();
 	#endif
+     
+     */
 
 	// Begins running the message bus
 	//-------------------------------------------------------------------------------
-    std::cout<<"3. Starting MessageBus........."<<std::endl;
+    std::cout<<std::endl<<std::endl<<"3. Starting MessageBus........."<<std::endl<<std::endl;
     try {
         messageBus.run();
         std::cout<<"OK"<<std::endl;
@@ -308,7 +337,7 @@ int main(int argc, char *argv[])
     
     // All Systems Online
     //-------------------------------------------------------------------------------
-    std::cout<<std::endl<<"...Running..."<<std::endl<<std::endl;
+    std::cout<<std::endl<<std::endl<<"...Running..."<<std::endl<<std::endl;
 
     return 0;
 }

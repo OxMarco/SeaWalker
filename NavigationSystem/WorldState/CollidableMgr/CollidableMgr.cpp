@@ -33,7 +33,8 @@
 
 const unsigned int visualFieldFadeOutStart = 10;   
 const unsigned int visualFieldTimeOut = 30; 
-const int fadeOut = 2;  
+const int fadeOut = 2;
+/** @todo convert in passive node */
 ///----------------------------------------------------------------------------------
 CollidableMgr::CollidableMgr()
     :ownAISLock(false)
@@ -41,14 +42,14 @@ CollidableMgr::CollidableMgr()
 }
 
 ///----------------------------------------------------------------------------------
-void CollidableMgr::startGC()
+void CollidableMgr::init()
 {
     m_Running.store(true);
     m_Thread = new std::thread(ContactGC, this);
 }
 
 ///----------------------------------------------------------------------------------
-void CollidableMgr::stopGC()
+void CollidableMgr::stop()
 {
     m_Running.store(false);
     /** @todo join thread */

@@ -30,11 +30,11 @@ class CollidableMgr {
     ///----------------------------------------------------------------------------------
     /// @brief Starts the garbage collector that cleans up old contacts.
     ///----------------------------------------------------------------------------------
-    void startGC();
+    void init();
     ///----------------------------------------------------------------------------------
     /// @brief Stops the garbage collector worker thread.
     ///----------------------------------------------------------------------------------
-    void stopGC();
+    void stop();
 
     void addAISContact(uint32_t mmsi, double lat, double lon, float speed, float course);
     void addAISContact(uint32_t mmsi, float length, float beam);
