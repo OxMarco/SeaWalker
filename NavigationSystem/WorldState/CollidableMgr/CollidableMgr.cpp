@@ -228,7 +228,7 @@ void CollidableMgr::removeOldAISContacts()
 ///----------------------------------------------------------------------------------
 void CollidableMgr::ContactGC(CollidableMgr* ptr)
 {
-    while(m_Running)
+    while(ptr->m_Running.load() == true)
     {
         std::this_thread::sleep_for(std::chrono::milliseconds(LOOP_TIME));
         ptr->removeOldAISContacts();
