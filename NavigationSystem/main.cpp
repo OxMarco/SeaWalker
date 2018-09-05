@@ -135,7 +135,7 @@ int main(int argc, char *argv[])
     // This is for eclipse development so the output is constantly pumped out.
     setbuf(stdout, NULL);
     // Set exit terminator
-    std::atexit(atexit_handler);
+    //std::atexit(atexit_handler);
     
 	/*
      *  Starting main system services
@@ -152,6 +152,7 @@ int main(int argc, char *argv[])
 	{
 		db_path = std::string(argv[1]);
 	}
+    std::cout<<"1. Setting up main services.........";
 
 	// Declare DBHandler and MessageBus
 	DBHandler dbHandler(db_path);
