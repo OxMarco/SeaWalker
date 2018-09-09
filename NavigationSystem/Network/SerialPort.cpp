@@ -52,8 +52,9 @@
 //   Includes
 // ------------------------------------------------------------------------------
 
+#include "../SystemServices/Logger.hpp"
 #include "SerialPort.hpp"
-
+#include <stdexcept>
 
 // ----------------------------------------------------------------------------------
 //   Serial Port Manager Class
@@ -99,8 +100,8 @@ initialize_defaults()
     int result = pthread_mutex_init(&lock, NULL);
     if ( result != 0 )
     {
-        printf("\n mutex init failed\n");
-        throw 1;
+        Logger::error("mutex init failed");
+        throw std::runtime_error{ "mutex init failed" };
     }
 }
 
@@ -135,17 +136,13 @@ read_message(mavlink_message_t &message)
         // check for dropped packets
         if ( (lastStatus.packet_rx_drop_count != status.packet_rx_drop_count) && debug )
         {
-            printf("ERROR: DROPPED %d PACKETS\n", status.packet_rx_drop_count);
-            unsigned char v=cp;
-            fprintf(stderr,"%02x ", v);
+            Logger::error("Dropped %d packets", status.packet_rx_drop_count);
         }
         lastStatus = status;
     }
-    
-    // Couldn't read from port
     else
     {
-        fprintf(stderr, "ERROR: Could not read from fd %d\n", fd);
+        Logger::error("Could not read from fd %d\n", fd);
     }
     
     // --------------------------------------------------------------------------
@@ -154,9 +151,9 @@ read_message(mavlink_message_t &message)
     if(msgReceived && debug)
     {
         // Report info
-        printf("Received message from serial with ID #%d (sys:%d|comp:%d):\n", message.msgid, message.sysid, message.compid);
+        Logger::info("Received message from serial with ID #%d (sys:%d|comp:%d):\n", message.msgid, message.sysid, message.compid);
         
-        fprintf(stderr,"Received serial data: ");
+        Logger::info("Received serial data: ");
         unsigned int i;
         uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
         
@@ -166,7 +163,7 @@ read_message(mavlink_message_t &message)
         // message length error
         if (messageLength > MAVLINK_MAX_PACKET_LEN)
         {
-            fprintf(stderr, "\nFATAL ERROR: MESSAGE LENGTH IS LARGER THAN BUFFER SIZE\n");
+            Logger::error("MESSAGE LENGTH IS LARGER THAN BUFFER SIZE");
         }
         
         // print out the buffer
@@ -218,15 +215,13 @@ open_serial()
     // --------------------------------------------------------------------------
     //   OPEN PORT
     // --------------------------------------------------------------------------
-    printf("OPEN PORT\n");
-    
     fd = _open_port(uart_name);
     
     // Check success
     if (fd == -1)
     {
-        printf("failure, could not open port.\n");
-        throw EXIT_FAILURE;
+        Logger::error("Could not configure serial port");
+        throw std::runtime_error{ "SERIAL_PORT_ERR" };
     }
     
     // --------------------------------------------------------------------------
@@ -239,27 +234,25 @@ open_serial()
     // --------------------------------------------------------------------------
     if (!success)
     {
-        printf("failure, could not configure port.\n");
-        throw EXIT_FAILURE;
+        Logger::error("Could not setup serial port");
+        throw std::runtime_error{ "SERIAL_PORT_ERR" };
     }
     if (fd <= 0)
     {
-        printf("Connection attempt to port %s with %d baud, 8N1 failed, exiting.\n", uart_name, baudrate);
-        throw EXIT_FAILURE;
+        Logger::error("Connection attempt to port %s with %d baud, 8N1 failed", uart_name, baudrate);
+        throw std::runtime_error{ "SERIAL_PORT_ERR" };
     }
     
     // --------------------------------------------------------------------------
     //   CONNECTED!
     // --------------------------------------------------------------------------
-    printf("Connected to %s with %d baud, 8 data bits, no parity, 1 stop bit (8N1)\n", uart_name, baudrate);
+    Logger::info("Serial Port opened");
+    Logger::info("Connected to %s with %d baud, 8 data bits, no parity, 1 stop bit (8N1)", uart_name, baudrate);
     lastStatus.packet_rx_drop_count = 0;
     
     status = true;
     
-    printf("\n");
-    
     return;
-    
 }
 
 
@@ -270,19 +263,15 @@ void
 Serial_Port::
 close_serial()
 {
-    printf("CLOSE PORT\n");
-    
     int result = close(fd);
     
     if ( result )
     {
-        fprintf(stderr,"WARNING: Error on port close (%i)\n", result );
+        Logger::error("Error on port close (%i)", result );
     }
     
+    Logger::info("Closed serial port");
     status = false;
-    
-    printf("\n");
-    
 }
 
 
@@ -315,7 +304,7 @@ handle_quit( int sig )
         stop();
     }
     catch (int error) {
-        fprintf(stderr,"Warning, could not stop serial port\n");
+        fprintf(stderr,"Warning, could not stop serial port");
     }
 }
 
@@ -361,7 +350,7 @@ _setup_port(int baud, int data_bits, int stop_bits, bool parity, bool hardware_c
     // Check file descriptor
     if(!isatty(fd))
     {
-        fprintf(stderr, "\nERROR: file descriptor %d is NOT a serial port\n", fd);
+        Logger::error("File descriptor %d is NOT a serial port", fd);
         return false;
     }
     
@@ -369,7 +358,7 @@ _setup_port(int baud, int data_bits, int stop_bits, bool parity, bool hardware_c
     struct termios  config;
     if(tcgetattr(fd, &config) < 0)
     {
-        fprintf(stderr, "\nERROR: could not read configuration of fd %d\n", fd);
+        Logger::error("Could not read configuration of fd %d", fd);
         return false;
     }
     
@@ -423,7 +412,7 @@ _setup_port(int baud, int data_bits, int stop_bits, bool parity, bool hardware_c
         case 1200:
             if (cfsetispeed(&config, B1200) < 0 || cfsetospeed(&config, B1200) < 0)
             {
-                fprintf(stderr, "\nERROR: Could not set desired baud rate of %d Baud\n", baud);
+                Logger::error("Could not set desired baud rate of %d Baud", baud);
                 return false;
             }
             break;
@@ -442,21 +431,21 @@ _setup_port(int baud, int data_bits, int stop_bits, bool parity, bool hardware_c
         case 38400:
             if (cfsetispeed(&config, B38400) < 0 || cfsetospeed(&config, B38400) < 0)
             {
-                fprintf(stderr, "\nERROR: Could not set desired baud rate of %d Baud\n", baud);
+                Logger::error("Could not set desired baud rate of %d Baud", baud);
                 return false;
             }
             break;
         case 57600:
             if (cfsetispeed(&config, B57600) < 0 || cfsetospeed(&config, B57600) < 0)
             {
-                fprintf(stderr, "\nERROR: Could not set desired baud rate of %d Baud\n", baud);
+                Logger::error("Could not set desired baud rate of %d Baud", baud);
                 return false;
             }
             break;
         case 115200:
             if (cfsetispeed(&config, B115200) < 0 || cfsetospeed(&config, B115200) < 0)
             {
-                fprintf(stderr, "\nERROR: Could not set desired baud rate of %d Baud\n", baud);
+                Logger::error("Could not set desired baud rate of %d Baud", baud);
                 return false;
             }
             break;
@@ -466,19 +455,19 @@ _setup_port(int baud, int data_bits, int stop_bits, bool parity, bool hardware_c
         case 460800:
             if (cfsetispeed(&config, B460800) < 0 || cfsetospeed(&config, B460800) < 0)
             {
-                fprintf(stderr, "\nERROR: Could not set desired baud rate of %d Baud\n", baud);
+                Logger::error("Could not set desired baud rate of %d Baud", baud);
                 return false;
             }
             break;
         case 921600:
             if (cfsetispeed(&config, B921600) < 0 || cfsetospeed(&config, B921600) < 0)
             {
-                fprintf(stderr, "\nERROR: Could not set desired baud rate of %d Baud\n", baud);
+                Logger::error("Could not set desired baud rate of %d Baud", baud);
                 return false;
             }
             break;
         default:
-            fprintf(stderr, "ERROR: Desired baud rate %d could not be set, aborting.\n", baud);
+            Logger::error("Could not set desired baud rate of %d Baud", baud);
             return false;
             
             break;
@@ -487,7 +476,7 @@ _setup_port(int baud, int data_bits, int stop_bits, bool parity, bool hardware_c
     // Finally, apply the configuration
     if(tcsetattr(fd, TCSAFLUSH, &config) < 0)
     {
-        fprintf(stderr, "\nERROR: could not set configuration of fd %d\n", fd);
+        Logger::error("Could not set configuration of fd %d", fd);
         return false;
     }
     

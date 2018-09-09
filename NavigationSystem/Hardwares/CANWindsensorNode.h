@@ -23,7 +23,7 @@
 #include "../Hardwares/CAN_Services/CANPGNReceiver.h"
 #include "../Hardwares/CAN_Services/CANService.h"
 #include "../MessageBus/ActiveNode.hpp"
-#include "../Messages/WindDataMsg.h"
+#include "../Messages/WindDataMsg.hpp"
 #include "../SystemServices/Timer.hpp"
 
 class CANWindsensorNode : public CANPGNReceiver, public ActiveNode {

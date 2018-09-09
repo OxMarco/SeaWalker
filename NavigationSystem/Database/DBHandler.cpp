@@ -5,9 +5,9 @@
  *
  */
 
+#include "DBHandler.hpp"
 #include "../SystemServices/Timer.hpp"
 #include "../Math/Utility.hpp"
-#include "DBHandler.hpp"
 #include <cstdio>
 #include <cstdlib>
 #include <iomanip>
@@ -184,14 +184,14 @@ void DBHandler::insertDataLogs(std::vector<LogItem>& logs) {
         
         actuatorFeedbackValues << std::setprecision(10) << log.m_rudderPosition << ", "
         << log.m_wingsailPosition << ", " << log.m_radioControllerOn << ", "
-        << log.m_windVaneAngle << ",'" << log.m_timestamp_str.c_str();
+        << log.m_timestamp_str.c_str();
         
         ss << "INSERT INTO "
         << "dataLogs_actuator_feedback"
         << " VALUES(NULL, " << actuatorFeedbackValues.str() << "'); \n";
         
-        compassModelValues << std::setprecision(10) << log.m_compassHeading << ", "
-        << log.m_compassPitch << ", " << log.m_compassRoll << ",'"
+        compassModelValues << std::setprecision(10) << log.m_heading << ", "
+        << log.m_pitch << ", " << log.m_roll << ",'"
         << log.m_timestamp_str.c_str();
         
         ss << "INSERT INTO "
@@ -209,9 +209,8 @@ void DBHandler::insertDataLogs(std::vector<LogItem>& logs) {
         
         
         
-        marineSensorsValues << std::setprecision(10) << log.m_temperature << ", "
-        << log.m_conductivity << ", " << log.m_ph << ", " << log.m_salinity
-        << ",'" << log.m_timestamp_str.c_str();
+        marineSensorsValues << std::setprecision(10) << log.m_waterTemperature << ", "
+        << log.m_timestamp_str.c_str();
         
         ss << "INSERT INTO "
         << "dataLogs_marine_sensors"

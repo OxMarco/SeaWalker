@@ -15,6 +15,21 @@
 
 #pragma once
 
+#include "../Math/CourseMath.hpp"
+#include "../Math/Utility.hpp"
+#include "../MessageBus/ActiveNode.hpp"
+#include "../Messages/CompassDataMsg.h"
+#include "../Messages/GPSDataMsg.hpp"
+#include "../Messages/MarineSensorDataMsg.h"
+#include "../Messages/RudderCommandMsg.h"
+#include "../Messages/SailCommandMsg.h"
+#include "../Messages/WaypointDataMsg.hpp"
+#include "../Messages/WindDataMsg.hpp"
+#include "../Messages/WingSailCommandMsg.hpp"
+#include "../Network/TCPServer.h"
+#include "../SystemServices/Logger.hpp"
+#include "../SystemServices/SysClock.hpp"
+#include "../WorldState/CollidableMgr/CollidableMgr.h"
 #include <arpa/inet.h>
 #include <fcntl.h>
 #include <netdb.h>
@@ -28,23 +43,8 @@
 #include <cmath>
 #include <cstring>
 #include <memory>
+#include <atomic>
 #include <thread>
-
-#include "../Math/CourseMath.hpp"
-#include "../Math/Utility.hpp"
-#include "../MessageBus/ActiveNode.hpp"
-#include "../Messages/CompassDataMsg.h"
-#include "../Messages/GPSDataMsg.h"
-#include "../Messages/MarineSensorDataMsg.h"
-#include "../Messages/RudderCommandMsg.h"
-#include "../Messages/SailCommandMsg.h"
-#include "../Messages/WaypointDataMsg.h"
-#include "../Messages/WindDataMsg.h"
-#include "../Messages/WingSailCommandMsg.hpp"
-#include "../Network/TCPServer.h"
-#include "../SystemServices/Logger.hpp"
-#include "../SystemServices/SysClock.hpp"
-#include "../WorldState/CollidableMgr/CollidableMgr.h"
 
 enum SimulatorPacket : unsigned char {
     SailBoatData = 0,
@@ -142,6 +142,7 @@ class SimulationNode : public ActiveNode {
     /// Starts the SimulationNode's thread that create all sensors messages
     ///----------------------------------------------------------------------------------
     void start();
+    void stop();
 
     void processMessage(const Message* msg);
 
@@ -246,4 +247,5 @@ class SimulationNode : public ActiveNode {
     MarineSensorDataPacket_t marineSensorData;
 
     std::mutex m_lock;
+    std::atomic<bool> m_Running;
 };

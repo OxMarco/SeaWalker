@@ -14,10 +14,10 @@
 #include "../SystemServices/Logger.hpp"
 #include "../SystemServices/Timer.hpp"
 #include "../MessageBus/Node.hpp"
-#include "../Messages/CourseDataMsg.h"
-#include "../Messages/ServerWaypointsReceivedMsg.h"
+#include "../Messages/CourseDataMsg.hpp"
+#include "../Messages/ServerWaypointsReceivedMsg.hpp"
 #include "../Messages/StateMessage.h"
-#include "../Messages/WaypointDataMsg.h"
+#include "../Messages/WaypointDataMsg.hpp"
 #include <string>
 #include <vector>
 
@@ -35,14 +35,13 @@ class WaypointMgrNode : public Node {
     bool waypointReached();
 
     ///----------------------------------------------------------------------------------
-    /// Sends message with data about the next waypoint
+    /// @brief Sends message with data about the next waypoint
     ///----------------------------------------------------------------------------------
     void sendMessage();
     bool harvestWaypoint();
     void sendNavigationInformation();
 
     DBHandler& m_db;
-    bool writeTime;
 
     int m_nextId;
     double m_nextLongitude;  // units : North(+) or South(-) [0-90]

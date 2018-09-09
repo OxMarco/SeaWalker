@@ -6,7 +6,6 @@
  * @brief  Keep track of time passing
  */
 
-
 #ifndef TIMER_HPP
 #define TIMER_HPP
 

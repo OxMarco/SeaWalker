@@ -21,12 +21,13 @@
 #include "../MessageBus/MessageBus.hpp"
 #include "../Messages/LocalNavigationMsg.h"
 #include "../Messages/StateMessage.h"
-#include "../Messages/WindStateMsg.h"
+#include "../Messages/WindStateMsg.hpp"
 #include "../Messages/WingSailCommandMsg.hpp"
 #include <math.h>
 #include <stdint.h>
 #include <chrono>
 #include <mutex>
+#include <atomic>
 #include <thread>
 #include <vector>
 
@@ -37,6 +38,7 @@ class WingSailControlNode : public ActiveNode {
 
     bool init();
     void start();
+    void stop();
     void processMessage(const Message* message);
 
    private:
@@ -80,6 +82,7 @@ class WingSailControlNode : public ActiveNode {
 
     DBHandler& m_db;
     std::mutex m_lock;
+    std::atomic<bool> m_Running;
 
     double m_LoopTime;         // seconds
     double m_MaxCommandAngle;  // degrees

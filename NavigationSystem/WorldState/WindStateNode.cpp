@@ -13,8 +13,7 @@
 
 #include "WindStateNode.hpp"
 
-#define DATA_OUT_OF_RANGE -2000
-
+///----------------------------------------------------------------------------------
 WindStateNode::WindStateNode(MessageBus& msgBus)
 : Node(NodeID::WindStateNode, msgBus)
 {
@@ -22,14 +21,16 @@ WindStateNode::WindStateNode(MessageBus& msgBus)
     msgBus.registerNode(*this, MessageType::WindData);
 }
 
+///----------------------------------------------------------------------------------
 WindStateNode::~WindStateNode(){}
 
-
+///----------------------------------------------------------------------------------
 bool WindStateNode::init()
 {
     return true;
 }
 
+///----------------------------------------------------------------------------------
 void WindStateNode::processMessage(const Message* message)
 {
     MessageType type = message->messageType();
@@ -46,6 +47,7 @@ void WindStateNode::processMessage(const Message* message)
     }
 }
 
+///----------------------------------------------------------------------------------
 void WindStateNode::processVesselStateMessage(const StateMessage* msg)
 {
     m_vesselHeading = msg->heading();
@@ -53,12 +55,14 @@ void WindStateNode::processVesselStateMessage(const StateMessage* msg)
     m_vesselCourse  = msg->course();
 }
 
+///----------------------------------------------------------------------------------
 void WindStateNode::processWindMessage(const WindDataMsg* msg)
 {
     m_apparentWindSpeed     = msg->windSpeed();
     m_apparentWindDirection = msg->windDirection();
 }
 
+///----------------------------------------------------------------------------------
 void WindStateNode::sendMessage()
 {
     MessagePtr windState = std::make_unique<WindStateMsg>(m_trueWindSpeed, m_trueWindDirection,
@@ -66,6 +70,7 @@ void WindStateNode::sendMessage()
     m_MsgBus.sendMessage(std::move(windState));
 }
 
+///----------------------------------------------------------------------------------
 void WindStateNode::calculateTrueWind()
 {
     std::vector<double> v1(2), v2(2), v3(2);

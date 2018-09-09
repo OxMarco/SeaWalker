@@ -21,6 +21,9 @@ enum class NodeID {
     None = 0,
     MessageLogger,
     WindSensor,
+    ArduPilotRead,
+    CameraProcessingUtility,
+    PowerTrack,
     Compass,
     GPS,
     HTTPSync,
@@ -109,8 +112,8 @@ inline std::string nodeToString(NodeID id) {
             return "SailSpeedRegulatorNode";
         case NodeID::WingSailControlNode:
             return "WingSailControlNode";
-        case NodeID::CANArduino:
-            return "CANArduino";
+        case NodeID::ArduPilotRead:
+            return "ArduPilotRead";
         case NodeID::CANSolarTracker:
             return "CanSolarTracker";
         case NodeID::CANAIS:
@@ -121,6 +124,12 @@ inline std::string nodeToString(NodeID id) {
             return "MarineSensorCANTransmission";
         case NodeID::CANCurrentSensor:
             return "CANCurrentSensor";
+        case NodeID::CameraProcessingUtility:
+            return "CameraProcessingUtility";
+            break;
+        case NodeID::CANArduino:
+            return "CANArduino";
+            break;
     }
     return "";
 }

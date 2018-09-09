@@ -8,13 +8,13 @@
 #ifndef DBLOGGER_HPP
 #define DBLOGGER_HPP
 
+#include "DBHandler.hpp"
 #include <atomic>
 #include <condition_variable>
 #include <iostream>
 #include <mutex>
 #include <thread>
 #include <vector>
-#include "DBHandler.hpp"
 
 class DBLogger {
    public:

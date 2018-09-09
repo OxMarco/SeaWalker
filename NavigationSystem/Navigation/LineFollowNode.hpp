@@ -17,22 +17,21 @@
 #ifndef LINEFOLLOWNODE_HPP
 #define LINEFOLLOWNODE_HPP
 
+#include "../Database/DBHandler.hpp"
+#include "../Math/CourseMath.hpp"
+#include "../Math/Utility.hpp"
+#include "../MessageBus/ActiveNode.hpp"
+#include "../Messages/ExternalControlMsg.hpp"
+#include "../Messages/LocalNavigationMsg.h"
+#include "../Messages/StateMessage.h"
+#include "../Messages/WaypointDataMsg.hpp"
+#include "../Messages/WindStateMsg.hpp"
+#include "../SystemServices/Timer.hpp"
 #include <math.h>
 #include <algorithm>
 #include <atomic>
 #include <chrono>
 #include <cmath>
-
-#include "../Database/DBHandler.hpp"
-#include "../Math/CourseMath.hpp"
-#include "../Math/Utility.hpp"
-#include "../MessageBus/ActiveNode.hpp"
-#include "../Messages/ExternalControlMsg.h"
-#include "../Messages/LocalNavigationMsg.h"
-#include "../Messages/StateMessage.h"
-#include "../Messages/WaypointDataMsg.h"
-#include "../Messages/WindStateMsg.h"
-#include "../SystemServices/Timer.hpp"
 
 class LineFollowNode : public ActiveNode {
    public:
@@ -46,49 +45,49 @@ class LineFollowNode : public ActiveNode {
 
    private:
     ///----------------------------------------------------------------------------------
-    /// Updates the values of the parameters from the database.
+    /// @brief Updates the values of the parameters from the database.
     ///----------------------------------------------------------------------------------
     void updateConfigsFromDB();
 
     ///----------------------------------------------------------------------------------
-    /// Stores vessel position datas from a StateMessage.
+    /// @brief Stores vessel position datas from a StateMessage.
     ///----------------------------------------------------------------------------------
     void processStateMessage(const StateMessage* stateMsg);
 
     ///----------------------------------------------------------------------------------
-    /// Stores Wind state datas from a WindStateMsg.
+    /// @brief Stores Wind state datas from a WindStateMsg.
     ///----------------------------------------------------------------------------------
     void processWindStateMessage(const WindStateMsg* windStateMsg);
 
     ///----------------------------------------------------------------------------------
-    /// Stores the waypoint positions and radius from a WaypointDataMsg.
+    /// @brief Stores the waypoint positions and radius from a WaypointDataMsg.
     ///----------------------------------------------------------------------------------
     void processWaypointMessage(WaypointDataMsg* waypMsg);
 
     ///----------------------------------------------------------------------------------
-    /// Calculates the angle of the line to be followed. in north east down reference frame.
+    /// @brief Calculates the angle of the line to be followed. in north east down reference frame.
     ///----------------------------------------------------------------------------------
     double calculateAngleOfDesiredTrajectory();
 
     ///----------------------------------------------------------------------------------
-    /// Calculates the course to steer by using the line follow algorithm described in the papers.
+    /// @brief Calculates the course to steer by using the line follow algorithm described in the papers.
     ///----------------------------------------------------------------------------------
     double calculateTargetCourse();
 
     ///----------------------------------------------------------------------------------
-    /// Returns true if the desired tack of the vessel is starboard (wind blowing from the right
-    /// side )
+    /// @brief Returns true if the desired tack of the vessel is starboard (wind blowing from the right
+    ///         side )
     ///----------------------------------------------------------------------------------
     bool getTargetTackStarboard(double targetCourse);
 
     ///----------------------------------------------------------------------------------
-    /// If boat passed waypoint or enters it, set new line from boat to next waypoint.
-    /// Used if boat has to stay within waypoint for a set amount of time (Station Keeping).
+    /// @brief If boat passed waypoint or enters it, set new line from boat to next waypoint.
+    ///         Used if boat has to stay within waypoint for a set amount of time (Station Keeping).
     ///----------------------------------------------------------------------------------
     void ifBoatPassedOrEnteredWP_setPrevWPToBoatPos();
 
     ///----------------------------------------------------------------------------------
-    /// Starts the LineFollowNode's thread that pumps out LocalNavigationMsg.
+    /// @brief Starts the LineFollowNode's thread that pumps out LocalNavigationMsg.
     ///----------------------------------------------------------------------------------
     static void LineFollowNodeThreadFunc(ActiveNode* nodePtr);
 

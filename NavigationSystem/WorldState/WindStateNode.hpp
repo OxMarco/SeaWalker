@@ -19,8 +19,8 @@
 #include "../MessageBus/MessageBus.hpp"
 #include "../MessageBus/MessageTypes.hpp"
 #include "../Messages/StateMessage.h"
-#include "../Messages/WindDataMsg.h"
-#include "../Messages/WindStateMsg.h"
+#include "../Messages/WindDataMsg.hpp"
+#include "../Messages/WindStateMsg.hpp"
 #include <mutex>
 #include <vector>
 
@@ -58,8 +58,8 @@ class WindStateNode : public Node {
     float m_vesselCourse;           ///< course in degrees [0, 360) in  North-East reference frame (clockwise)
     float m_apparentWindSpeed;      ///< apparent wind speed in m/s
     float m_apparentWindDirection;  ///< apparent wind direction in degrees [0, 360) in vessel reference frame (clockwise)
-    float m_trueWindSpeed;      ///< true wind speed in m/s
-    float m_trueWindDirection;  ///< true wind direction in degrees [0, 360) in North-East reference frame (clockwise)
+    float m_trueWindSpeed;          ///< true wind speed in m/s
+    float m_trueWindDirection;      ///< true wind direction in degrees [0, 360) in North-East reference frame (clockwise)
 };
 
 #endif /* WINDSTATENODE_HPP */

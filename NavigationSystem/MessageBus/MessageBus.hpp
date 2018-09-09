@@ -30,20 +30,20 @@ class Node;
 class MessageBus {
    public:
     ///----------------------------------------------------------------------------------
-    /// Default constructor
-    ///
+    /// @brief Default constructor
     ///----------------------------------------------------------------------------------
     MessageBus();
 
     ///----------------------------------------------------------------------------------
-    /// We really don't need to do memory cleanup here as this class will only be
-    /// cleaned up when the program ends
+    /// @brief Default destructor
+    /// @details We really don't need to do memory cleanup here as this class will only be
+    ///           cleaned up when the program ends
     ///----------------------------------------------------------------------------------
     ~MessageBus();
 
     ///----------------------------------------------------------------------------------
     /// @brief Registers a node onto the message bus allowing it receive direct messages. The
-    /// message bus does not own the node.
+    ///         message bus does not own the node.
     ///
     /// @param node 			Pointer to the node that should be registered.
     ///----------------------------------------------------------------------------------
@@ -51,7 +51,7 @@ class MessageBus {
 
     ///----------------------------------------------------------------------------------
     /// @brief Registers a node onto the message bus allowing it receive direct messages and
-    /// also subscribes it for a particular message type.
+    ///         also subscribes it for a particular message type.
     ///
     /// @param node 			Pointer to the node that should be registered.
     /// @param msgType 			The type of message to register for
@@ -59,8 +59,8 @@ class MessageBus {
     bool registerNode(Node& node, MessageType msgType);
 
     ///----------------------------------------------------------------------------------
-    /// Enqueues a message onto the message queue for distribution through the message
-    /// bus.
+    /// @brief Enqueues a message onto the message queue for distribution through the message
+    ///         bus.
     ///
     /// @param msg 				Pointer to the message that should be enqeued, this
     ///							passes ownership to the MessageBus.
@@ -68,8 +68,8 @@ class MessageBus {
     void sendMessage(MessagePtr msg);
 
     ///----------------------------------------------------------------------------------
-    /// Begins running the message bus and distributing messages to nodes that have been
-    /// registered. This function won't ever return.
+    /// @brief Begins running the message bus and distributing messages to nodes that have been
+    ///         registered. This function won't ever return.
     ///----------------------------------------------------------------------------------
     void run();
 
@@ -78,7 +78,7 @@ class MessageBus {
    private:
     ///----------------------------------------------------------------------------------
     /// @brief Stores information about a registered node and the message types it is interested
-    /// in.
+    ///         in.
     ///----------------------------------------------------------------------------------
     struct RegisteredNode {
         RegisteredNode(Node& node) : nodeRef(node) {}
@@ -117,14 +117,14 @@ class MessageBus {
 
     ///----------------------------------------------------------------------------------
     /// @brief Looks for existing registered node for a given node pointer and returns a pointer
-    /// to it. If the node has not yet been registered, it is then registered and a
-    /// pointer to the new RegisteredNode is returned.
+    ///         to it. If the node has not yet been registered, it is then registered and a
+    ///         pointer to the new RegisteredNode is returned.
     ///----------------------------------------------------------------------------------
     RegisteredNode* getRegisteredNode(Node& node);
 
     ///----------------------------------------------------------------------------------
     /// @brief Goes through the back message queue and distributes messages, calling
-    /// Node::processMessage(Message*) on nodes that are interested in any given message.
+    ///         Node::processMessage(Message*) on nodes that are interested in any given message.
     ///----------------------------------------------------------------------------------
     void processMessages();
 
@@ -155,17 +155,15 @@ class MessageBus {
 
     ///----------------------------------------------------------------------------------
     /// @brief Returns a message time stamp in the format HH:MM:SS:MS, a char buffer of 14
-    /// characters needs to be provided.
+    ///         characters needs to be provided.
     ///----------------------------------------------------------------------------------
     void messageTimeStamp(unsigned long unixTime, char* buffer);
 
-    std::vector<RegisteredNode*> m_RegisteredNodes;
-    std::queue<MessagePtr>* m_FrontMessages;  // The forward facing message queue
-                                              // which messages are append to.
-    std::queue<MessagePtr>* m_BackMessages;   // The backend message queue which
-                                              // contains messages to distribute.
-    std::mutex m_FrontQueueMutex;             // Guards the front message queue.
-    std::atomic<bool> m_Running;
+    std::vector<RegisteredNode*> m_RegisteredNodes; ///< A list with the subscribed nodes.
+    std::queue<MessagePtr>* m_FrontMessages;    ///< The forward facing message queue which messages are append to.
+    std::queue<MessagePtr>* m_BackMessages; ///< The backend message queue which contains messages to distribute.
+    std::mutex m_FrontQueueMutex;   ///< Guards the front message queue.
+    std::atomic<bool> m_Running;    ///< Active flag
 
 #ifdef LOG_MESSAGES
     std::ofstream* m_LogFile;

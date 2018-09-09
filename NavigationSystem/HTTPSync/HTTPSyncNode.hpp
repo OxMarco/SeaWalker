@@ -13,7 +13,6 @@
 #include "../MessageBus/ActiveNode.hpp"
 #include "../SystemServices/Logger.hpp"
 
-#include <curl/curl.h>
 #include <atomic>
 #include <chrono>
 #include <string>
@@ -21,7 +20,7 @@
 
 class HTTPSyncNode : public ActiveNode {
    public:
-    HTTPSyncNode(MessageBus& msgBus, DBHandler* dbhandler);
+    HTTPSyncNode(MessageBus& msgBus, DBHandler& dbhandler);
 
     virtual ~HTTPSyncNode() {}
 
@@ -79,9 +78,8 @@ class HTTPSyncNode : public ActiveNode {
     std::string m_shipID;
     std::string m_shipPWD;
     std::string m_serverURL;
+    std::string m_endpoint;
 
-    CURL* curl;
-    CURLcode m_res;
     bool m_reportedConnectError;
 
     ///----------------------------------------------------------------------------------
@@ -92,7 +90,7 @@ class HTTPSyncNode : public ActiveNode {
     int m_pushOnlyLatestLogs;
 
     std::atomic<bool> m_Running;
-    DBHandler* m_dbHandler;
+    DBHandler& m_dbHandler;
 };
 
 #endif /* HTTPSYNCNODE_HPP */

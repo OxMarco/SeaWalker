@@ -13,14 +13,16 @@
 #include "Database/DBLoggerNode.hpp"
 
 #include "HTTPSync/HTTPSyncNode.hpp"
+#include "HTTPSync/LocalWebServerNode.hpp"
 
 #include "MessageBus/MessageBus.hpp"
-#include "Messages/DataRequestMsg.h"
 
 #include "SystemServices/Logger.hpp"
 
-#include "WorldState/StateEstimationNode.h"
+#include "WorldState/StateEstimationNode.hpp"
 #include "WorldState/WindStateNode.hpp"
+#include "WorldState/AISProcessing.hpp"
+#include "WorldState/CameraProcessingUtility.hpp"
 #include "WorldState/CollidableMgr/CollidableMgr.h"
 
 #include "LowLevelControllers/WingSailControlNode.hpp"
@@ -55,18 +57,21 @@
 
 #endif
 
+#include "Hardwares/ArduPilotReadNode.hpp"
+#include "Libs/termcolor/termcolor.hpp"
 #include "sigtraps.h"
 
 #include <string>
-#include <iostream>
 #include <map>
+
 
 enum class NodeImportance {
 	CRITICAL,
 	NOT_CRITICAL
 };
 
-//std::map<Node*,std::string> nodeList; // store each node and whether was correctly initialised or not
+MessageBus messageBus;
+std::vector<ActiveNode*> nodeList; // store each node and whether was correctly initialised or not
 
 ///----------------------------------------------------------------------------------
 /// @brief Initialises a node and shutsdown the program if a critical node fails.
@@ -82,17 +87,18 @@ void initialiseNode(Node& node, const char* nodeName, NodeImportance importance)
 {
 	if(node.init())
 	{
-		Logger::info("Node: %s - init\t[OK]", nodeName);
-        //nodeList.insert(std::pair<Node*,std::string>(node, nodeName));
+		Logger::success("Node: %s - init\t[OK]", nodeName);
+        if(node.isActiveNode())
+            nodeList.push_back(&dynamic_cast<ActiveNode&>(node));
 	}
 	else
 	{
-		Logger::error("Node: %s - init\t\t[FAILED]", nodeName);
+		Logger::warning("Node: %s - init\t\t[FAILED]", nodeName);
 
 		if(importance == NodeImportance::CRITICAL)
 		{
 			Logger::error("Critical node failed to initialise, shutting down");
-			exit(1);
+			exit(EXIT_FAILURE);
 		}
 	}
 }
@@ -101,21 +107,23 @@ void atexit_handler()
 {
     // Shutdown
     //-------------------------------------------------------------------------------
-    std::cout<<"...Exiting..."<<std::endl;
-    
-    /*for (std::map<Node*,std::string>::iterator it=nodeList.begin(); it!=nodeList.end(); ++it)
-     {
-     it->first.stopThread();
-     Logger::info("Node: %s - stopped\t[OK]", it->second);
-     }*/
+    std::cout<<rang::style::bold<<rang::fg::blue<<std::endl<<std::endl<<"...Exiting..."<<std::endl<<std::endl<<rang::style::reset;
+
+    for (std::vector<ActiveNode*>::iterator it=nodeList.begin(); it!=nodeList.end(); ++it)
+    {
+        (*it)->stop();
+        Logger::success("Node: %s - stopped\t[OK]", (*it)->nodeName().c_str());
+    }
+    Logger::info("Disabling messageBus");
+    messageBus.stop();
 }
 
 ///----------------------------------------------------------------------------------
-/// Entry point, can accept one argument containing a relative path to the database.
-///
+/// @brief Entry point, can accept one argument containing a relative path to the database.
 ///----------------------------------------------------------------------------------
 int main(int argc, char *argv[])
 {
+    std::cout<<rang::bg::black<<rang::fg::blue;
     std::cout<<"._______________________________________________________________________."<<std::endl;
     std::cout<<"|                                                                       |"<<std::endl;
     std::cout<<"|     #####                #     #                                      |"<<std::endl;
@@ -128,16 +136,14 @@ int main(int argc, char *argv[])
     std::cout<<"|                                                                       |"<<std::endl;
     std::cout<<"|                            -- V2.0 --                                 |"<<std::endl;
     std::cout<<"|_______________________________________________________________________|"<<std::endl;
+    std::cout<<rang::style::reset;
 
-    /*
-     *  Initialisation of the components
-     */
-    std::cout<<std::endl<<std::endl<<"...Initialising..."<<std::endl<<std::endl;
+    // Initialisation of the components
+    //-------------------------------------------------------------------------------
+    std::cout<<rang::style::bold<<rang::fg::blue<<std::endl<<std::endl<<"...Initialising..."<<std::endl<<std::endl<<rang::style::reset;
     
     // Install custom signal handlers
     install_sig_traps();
-    // This is for eclipse development so the output is constantly pumped out.
-    setbuf(stdout, NULL);
     // Set exit terminator
     std::atexit(atexit_handler);
     
@@ -150,10 +156,9 @@ int main(int argc, char *argv[])
     Logger::info( "Using Line-follow" );
 #endif
     
-	/*
-     *  Starting main system services
-     */
-    std::cout<<std::endl<<std::endl<<"1. Setting up main services........."<<std::endl<<std::endl;
+    // Starting main system services
+    //-------------------------------------------------------------------------------
+    std::cout<<rang::style::bold<<rang::fg::blue<<std::endl<<std::endl<<"1. Setting up main services........."<<std::endl<<std::endl<<rang::style::reset;
     
     //Database Path
 	std::string db_path;
@@ -166,34 +171,59 @@ int main(int argc, char *argv[])
 		db_path = std::string(argv[1]);
 	}
 
-	// Declare DBHandler and MessageBus
+	// Declare DBHandler
 	DBHandler dbHandler(db_path);
-	MessageBus messageBus;
 
 	// Logger start
-	Logger::info("Logger init\t\t[OK]");
+	Logger::success("Logger init\t\t[OK]");
 
 	// Initialise DBHandler
 	if(dbHandler.initialise())
 	{
-		Logger::info("Database Handler init\t\t[OK]");
+		Logger::success("Database Handler init\t\t[OK]");
 	}
 	else
 	{
 		Logger::error("Database Handler init\t\t[FAILED]");
-		exit(-1);
+		exit(EXIT_FAILURE);
 	}
 
 
-    // Initialise nodes
+    // Initialise active nodes
     //-------------------------------------------------------------------------------
-    std::cout<<std::endl<<std::endl<<"2. Initialising nodes........."<<std::endl<<std::endl;
+    std::cout<<rang::style::bold<<rang::fg::blue<<std::endl<<std::endl<<"2. Initialising active nodes........."<<std::endl<<std::endl<<rang::style::reset;
+   
+    /* Hardware interface
+    ArduPilotReadNode autopilot(messageBus, dbHandler);
+
+    try{
+        initialiseNode(autopilot, "ArduPilotReadNode", NodeImportance::CRITICAL);
+    } catch(std::runtime_error) {
+        Logger::error("Autopilot connection\t\t[FAILED]");
+        exit(EXIT_FAILURE);
+    }
     
+    autopilot.start();*/
+    
+    // Passive nodes
+    WindStateNode windStateNode(messageBus);
+    initialiseNode(windStateNode,"WindStateNode",NodeImportance::CRITICAL);
+    
+    WaypointMgrNode waypointMgr(messageBus, dbHandler);
+    initialiseNode(waypointMgr, "WaypointMgrNode", NodeImportance::CRITICAL);
+    
+    // Collidable Mgr
+    CollidableMgr collidableMgr;
+    collidableMgr.startGC();
+
     // Active nodes
     int dbLoggerQueueSize = 5; // how many messages to log to the database at a time
     DBLoggerNode dbLoggerNode(messageBus, dbHandler, dbLoggerQueueSize);
     initialiseNode(dbLoggerNode, "DBLoggerNode", NodeImportance::CRITICAL);
 
+    LineFollowNode sailingLogic(messageBus, dbHandler);
+    initialiseNode(sailingLogic, "LineFollowNode", NodeImportance::CRITICAL);
+    
     StateEstimationNode stateEstimationNode(messageBus, dbHandler);
     initialiseNode(stateEstimationNode,"StateEstimationNode",NodeImportance::CRITICAL);
 
@@ -203,16 +233,15 @@ int main(int argc, char *argv[])
     CourseRegulatorNode courseRegulatorNode(messageBus, dbHandler);
     initialiseNode(courseRegulatorNode, "CourseRegulatorNode", NodeImportance::CRITICAL);
     
-    // Passive nodes
-    WaypointMgrNode waypointMgr(messageBus, dbHandler);
-    initialiseNode(waypointMgr, "WaypointMgrNode", NodeImportance::CRITICAL);
+    HTTPSyncNode httpsync(messageBus, dbHandler);
+    initialiseNode(httpsync, "HTTPSyncNode", NodeImportance::NOT_CRITICAL); // This node is not critical during the developement phase.
 
-    WindStateNode windStateNode(messageBus);
-    initialiseNode(windStateNode,"WindStateNode",NodeImportance::CRITICAL);
+    AISProcessing aisProcessing(messageBus, dbHandler, &collidableMgr);
+    initialiseNode(aisProcessing, "AISProcessing", NodeImportance::CRITICAL);
     
-    CollidableMgr collidableMgr;
-    collidableMgr.init();
-
+    //CameraProcessingUtility cameraProcessing(messageBus, dbHandler, &collidableMgr);
+    //initialiseNode(cameraProcessing, "CameraProcessingUtility", NodeImportance::NOT_CRITICAL);
+    
     // Simulator
 #if SIMULATION == 1
     SimulationNode simulator(messageBus, 1, &collidableMgr);
@@ -221,19 +250,22 @@ int main(int argc, char *argv[])
     
     // Start active nodes
     //-------------------------------------------------------------------------------
-    std::cout<<std::endl<<std::endl<<"2. Enabling active nodes........."<<std::endl<<std::endl;
-    
+    std::cout<<rang::style::bold<<rang::fg::blue<<std::endl<<std::endl<<"3. Enabling active nodes........."<<std::endl<<std::endl<<rang::style::reset;
+
     dbLoggerNode.start();
+    sailingLogic.start();
     stateEstimationNode.start();
     wingSailControlNode.start();
     courseRegulatorNode.start();
+    //httpsync.start();
+    aisProcessing.start();
+    //cameraProcessing.start();
     
 #if SIMULATION == 1
     simulator.start();
 #endif
     
     /*
-	HTTPSyncNode httpsync(messageBus, &dbHandler);
 
   	#if LOCAL_NAVIGATION_MODULE == 1
 		LocalNavigationModule lnm	( messageBus, dbHandler );
@@ -278,7 +310,6 @@ int main(int argc, char *argv[])
     std::cout<<"2. Initialising active nodes........."<<std::endl;
 
     
-	initialiseNode(httpsync, "Httpsync", NodeImportance::NOT_CRITICAL); // This node is not critical during the developement phase.
 
 	#if LOCAL_NAVIGATION_MODULE == 1
 		initialiseNode( lnm, "Local Navigation Module",	NodeImportance::CRITICAL );
@@ -302,7 +333,6 @@ int main(int argc, char *argv[])
 	//-------------------------------------------------------------------------------
     std::cout<<"2. Enabling active nodes........."<<std::endl;
 
-	httpsync.start();
 
 	#if SIMULATION == 1
 		simulation.start();
@@ -323,9 +353,12 @@ int main(int argc, char *argv[])
      
      */
 
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+
 	// Begins running the message bus
 	//-------------------------------------------------------------------------------
-    std::cout<<std::endl<<std::endl<<"3. Starting MessageBus........."<<std::endl<<std::endl;
+    std::cout<<rang::style::bold<<rang::fg::blue<<std::endl<<std::endl<<"4. Starting MessageBus........."<<std::endl<<std::endl<<rang::style::reset;
+
     try {
         messageBus.run();
         std::cout<<"OK"<<std::endl;
@@ -334,10 +367,6 @@ int main(int argc, char *argv[])
         std::cout<<"NO"<<std::endl;
         std::cout<<"Detail: "<<e.what()<<std::endl;
     }
-    
-    // All Systems Online
-    //-------------------------------------------------------------------------------
-    std::cout<<std::endl<<std::endl<<"...Running..."<<std::endl<<std::endl;
 
     return 0;
 }

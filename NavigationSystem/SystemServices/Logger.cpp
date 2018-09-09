@@ -22,9 +22,9 @@
 
 
 #include "Logger.hpp"
-#include <iostream>
 #include "SysClock.hpp"
-
+#include "../Libs/termcolor/termcolor.hpp"
+#include <iostream>
 
 #define MAX_LOG_SIZE    256*2
 #define MAX_MSG_BUFFER 100
@@ -132,7 +132,7 @@ void Logger::info(std::string message, ...)
     else
         snprintf(buff, 256, "[%s:%d] <info>\t %s\n", SysClock::timeStampStr().c_str(),millis, logBuffer);
     
-    printf("%s", buff);
+    std::cout<<buff;
     log(buff);
 }
 
@@ -152,7 +152,7 @@ void Logger::error(std::string message, ...)
     
     snprintf(buff, 256, "[%s:%d] <error>\t %s\n", SysClock::timeStampStr().c_str(), SysClock::millis(), logBuffer);
     
-    printf("%s", buff);
+    std::cout<<rang::fg::red<<buff<<rang::style::reset;
     log(buff);
 }
 
@@ -172,7 +172,27 @@ void Logger::warning(std::string message, ...)
     
     snprintf(buff, 256, "[%s:%d] <warning>\t %s\n", SysClock::timeStampStr().c_str(), SysClock::millis(), logBuffer);
     
-    printf("%s", buff);
+    std::cout<<rang::fg::yellow<<buff<<rang::style::reset;
+    log(buff);
+}
+
+void Logger::success(std::string message, ...)
+{
+    va_list args;
+    
+    if(m_DisableLogging) { return; }
+    
+    char logBuffer[MAX_LOG_SIZE];
+    // Put together the formatted string
+    va_start(args, message);
+    vsnprintf(logBuffer, MAX_LOG_SIZE, message.c_str(), args);
+    va_end(args);
+    
+    char buff[256];
+    
+    snprintf(buff, 256, "[%s:%d] <success>\t %s\n", SysClock::timeStampStr().c_str(), SysClock::millis(), logBuffer);
+    
+    std::cout<<rang::fg::green<<buff<<rang::style::reset;
     log(buff);
 }
 

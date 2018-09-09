@@ -23,7 +23,7 @@
 #include "../MessageBus/ActiveNode.hpp"
 #include "../MessageBus/Message.hpp"
 #include "../MessageBus/MessageBus.hpp"
-#include "../Messages/CurrentSensorDataMsg.h"
+#include "../Messages/CurrentSensorDataMsg.hpp"
 #include "../SystemServices/Timer.hpp"
 
 class CANCurrentSensorNode : public ActiveNode, public CANFrameReceiver {

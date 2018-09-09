@@ -44,7 +44,7 @@ public:
     /// Initialises the singleton logger system, returns false if it is unable to
     /// generate a log file.
     ///
-    /// @params logType             The type of log message, if this paramter is not
+    /// @param filename             The type of log message, if this paramter is not
     ///                                provided then a default name is used.
     ///
     /////////////////////////////////////////////////////////////////////////////////////
@@ -65,7 +65,8 @@ public:
     static void info(std::string message, ...);
     static void error(std::string message, ...);
     static void warning(std::string message, ...);
-    
+    static void success(std::string message, ...);
+
     static void logWRSC(double latitude, double longitude);
     
 private:

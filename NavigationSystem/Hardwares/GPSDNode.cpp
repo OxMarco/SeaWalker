@@ -13,7 +13,7 @@
 
 #include "GPSDNode.h"
 #include "../SystemServices/Logger.hpp"
-#include "../Messages/GPSDataMsg.h"
+#include "../Messages/GPSDataMsg.hpp"
 #include "../SystemServices/Timer.hpp"
 
 /*

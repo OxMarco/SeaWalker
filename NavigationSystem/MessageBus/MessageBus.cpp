@@ -13,6 +13,7 @@
 #include "MessageBus.hpp"
 #include "../SystemServices/Logger.hpp"
 #include "../SystemServices/SysClock.hpp"
+#include "../Libs/termcolor/termcolor.hpp"
 #include <sys/time.h>
 #include <chrono>
 #include <thread>
@@ -81,7 +82,11 @@ void MessageBus::run()
 	m_Running.store(true);
 	startMessageLog();
 
-	while(m_Running.load() == true)
+    // All Systems Online
+    //-------------------------------------------------------------------------------
+    std::cout<<rang::style::bold<<rang::fg::blue<<std::endl<<std::endl<<"...Running..."<<std::endl<<std::endl<<rang::style::reset;
+
+    while(m_Running.load() == true)
 	{
 		// TODO - Jordan: Wake up only when messages have been pushed into the queue.
 
@@ -119,7 +124,8 @@ MessageBus::RegisteredNode* MessageBus::getRegisteredNode(Node& node)
 		}
 	}
 
-	Logger::info("New node registered");
+    Logger::info("New node registered: %s", node.nodeName().c_str());
+                 
 	RegisteredNode* newRegNode = new RegisteredNode(node);
 	m_RegisteredNodes.push_back(newRegNode);
     

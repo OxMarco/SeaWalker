@@ -13,13 +13,21 @@
 
 class ActiveNode : public Node {
    public:
-    ActiveNode(NodeID id, MessageBus& msgBus) : Node(id, msgBus) {}
+    ActiveNode(NodeID id, MessageBus& msgBus) : Node(id, msgBus), m_Thread(nullptr) {}
 
     ///----------------------------------------------------------------------------------
     /// @brief This function should be used to start the active nodes thread.
-    ///
     ///----------------------------------------------------------------------------------
     virtual void start() = 0;
+    ///----------------------------------------------------------------------------------
+    /// @brief This function should be used to stop the active nodes thread.
+    ///----------------------------------------------------------------------------------
+    virtual void stop() = 0;
+    ///----------------------------------------------------------------------------------
+    /// @brief This function returns whether the node is active (with a running thread)
+    ///         or passive.
+    ///----------------------------------------------------------------------------------
+    bool isActiveNode() { return true; }
 
    protected:
     void runThread(void (*func)(ActiveNode*));

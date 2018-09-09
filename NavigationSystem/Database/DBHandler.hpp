@@ -8,8 +8,8 @@
 #ifndef DBHANDLER_HPP
 #define DBHANDLER_HPP
 
-#include "../Messages/CurrentSensorDataMsg.h"
-#include "../Messages/WindStateMsg.h"
+#include "../Messages/CurrentSensorDataMsg.hpp"
+#include "../Messages/WindStateMsg.hpp"
 #include "../SystemServices/Logger.hpp"
 #include "../Libs/json/include/nlohmann/json.hpp"
 #include <sqlite3.h>
@@ -20,15 +20,14 @@
 
 using Json = nlohmann::json;
 
-// REFACTOR
 struct LogItem {
     double m_rudderPosition;  // dataLogs_actuator_feedback
     double m_wingsailPosition;
+    double m_engineThrottle;
     bool m_radioControllerOn;
-    double m_windVaneAngle;
-    double m_compassHeading;  // dataLogs_compass
-    double m_compassPitch;
-    double m_compassRoll;
+    double m_heading;  // dataLogs_attitude
+    double m_pitch;
+    double m_roll;
     double m_distanceToWaypoint;  // dataLogs_course_calculation
     double m_bearingToWaypoint;
     double m_courseToSteer;
@@ -43,10 +42,11 @@ struct LogItem {
     double m_gpsCourse;
     int m_gpsSatellite;
     bool m_routeStarted;
-    float m_temperature;  // dataLogs_marine_sensors
-    float m_conductivity;
-    float m_ph;
-    float m_salinity;
+    float m_waterTemperature;  // dataLogs_marine_sensors
+    float m_outerTemperature;
+    float m_ambientLight;
+    float m_pressure;
+    float m_depth;
     double m_vesselHeading;  // dataLogs_vessel_state
     double m_vesselLat;
     double m_vesselLon;
@@ -59,7 +59,15 @@ struct LogItem {
     float m_windDir;  // dataLogs_windsensor
     float m_windSpeed;
     float m_windTemp;
-    float m_current;  // dataLogs_current_sensors
+    float m_inHullTemp;  // dataLogs_hull
+    float m_inHullPressure;
+    float m_inHullHumidity;
+    bool m_leaksDetected;
+    int m_batteryRemaining; // dataLogs_battery
+    float m_currentConsumed;
+    float m_batteryTemperature;
+    float m_batteryCurrent;
+    float m_current; // dataLogs_current_sensors
     float m_voltage;
     SensedElement m_element;
     std::string m_element_str;
@@ -183,11 +191,6 @@ class DBHandler {
                            bool& foundPrev);
 
     bool insert(std::string table, std::string fields, std::string values);
-
-    // inserts area scanning measurements into db
-    // TODO - remove here as well yeyeye
-    // void insertScan(std::string waypoint_id, PositionModel position, float temperature,
-    // std::string timestamp);
 
     bool changeOneValue(std::string table,
                         std::string id,

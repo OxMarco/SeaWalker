@@ -20,7 +20,7 @@ class MessageSerialiser {
     MessageSerialiser() : m_ptr(0) {}
 
     ///----------------------------------------------------------------------------------
-    /// Serialises the data into a byte buffer.
+    /// @brief Serialises the data into a byte buffer.
     ///----------------------------------------------------------------------------------
     void serialise(uint8_t data);
     void serialise(uint16_t data);
@@ -34,12 +34,12 @@ class MessageSerialiser {
     void serialise(uint8_t* data, uint8_t size);
 
     ///----------------------------------------------------------------------------------
-    /// Returns a pointer to the data.
+    /// @brief Returns a pointer to the data.
     ///----------------------------------------------------------------------------------
     uint8_t* data() { return m_data; }
 
     ///----------------------------------------------------------------------------------
-    /// Returns the number of bytes the data takes up.
+    /// @brief Returns the number of bytes the data takes up.
     ///----------------------------------------------------------------------------------
     uint8_t size() { return m_ptr; }
 

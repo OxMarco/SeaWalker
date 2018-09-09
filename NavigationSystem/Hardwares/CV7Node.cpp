@@ -14,7 +14,7 @@
 #include "CV7Node.h"
 #include "../SystemServices/Logger.hpp"
 #include "../Database/DBHandler.hpp"
-#include "../Messages/WindDataMsg.h"
+#include "../Messages/WindDataMsg.hpp"
 #include "../Math/Utility.hpp"
 #include <cstring>
 

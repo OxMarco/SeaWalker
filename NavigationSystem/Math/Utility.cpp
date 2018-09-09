@@ -592,9 +592,13 @@ void Utility::calculateVelocity( const uint16_t course, const double speed, doub
 	vY = speed * sin(course * (M_PI / 180));
 }
 
-int Utility::safe_stoi(const std::string& str)
+int Utility::safe_stoi(std::string& str)
 {
     int retvalue = 0;
+    
+    if(str == "ok\n")
+        return 0;
+    
     try {
         retvalue = std::stoi(str);
     } catch (std::invalid_argument& e) {

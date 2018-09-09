@@ -14,7 +14,6 @@ WaypointMgrNode::WaypointMgrNode(MessageBus& msgBus, DBHandler& db)
     m_nextLatitude(0),
     m_nextDeclination(0),
     m_nextRadius(0),
-
     m_prevId(0),
     m_prevLongitude(0),
     m_prevLatitude(0),
@@ -59,7 +58,6 @@ void WaypointMgrNode::processVesselStateMessage(StateMessage* msg)
 {
     m_vesselLongitude = msg->longitude();
     m_vesselLatitude = msg->latitude();
-    // std::cout << "processVesselStateMessage long: " << m_vesselLongitude << "lat: " << m_vesselLatitude << std::endl;
 }
 
 bool WaypointMgrNode::waypointReached()
@@ -121,18 +119,9 @@ void WaypointMgrNode::sendMessage()
     }
     else
     {
-        Logger::warning("%s No waypoint found, boat is using old waypoint data. No message sent.", __func__);
+        Logger::error("No waypoints found!");
         m_routeTime.stop();
-
-        m_totalTime += m_routeTime.timePassed();
-
-        int seconds = m_totalTime;
-        int minutes = seconds / 60;
-        int hours = minutes / 60;
-        minutes = minutes % 60;
-        seconds = seconds % 60;
-
-        Logger::info("Completed route in %d:%d:%d", hours, minutes, seconds);
+        exit(EXIT_FAILURE);
     }
 
     m_db.forceUnlock();
@@ -153,16 +142,10 @@ bool WaypointMgrNode::harvestWaypoint()
     if(m_nextStayTime > 0) //if next waypoint has a time to stay inside its radius, start the timer
     {
         m_waypointTimer.start(); //NOTE : Marc : writeTime has never been initialized
-        if(not writeTime)
-        {
-            Logger::info("Started waypoint timer. Stay at waypoint for: %d seconds", m_nextStayTime);
-            writeTime = true;
-        }
 
         if(m_waypointTimer.timeReached(m_nextStayTime)) //Check if boat has stayed the designated amount of time
         {
             Logger::info("Waypoint timer passed");
-            writeTime = false;
             return true;
         }
 

@@ -7,23 +7,23 @@
 
 #include "DBLoggerNode.hpp"
 #include "../Messages/CompassDataMsg.h"
-#include "../Messages/GPSDataMsg.h"
-#include "../Messages/WindDataMsg.h"
-#include "../Messages/WindStateMsg.h"
-#include "../Messages/CourseDataMsg.h"
+#include "../Messages/GPSDataMsg.hpp"
+#include "../Messages/WindDataMsg.hpp"
+#include "../Messages/WindStateMsg.hpp"
+#include "../Messages/CourseDataMsg.hpp"
 #include "../Messages/LocalNavigationMsg.h"
-#include "../Messages/WaypointDataMsg.h"
+#include "../Messages/WaypointDataMsg.hpp"
 #include "../Messages/StateMessage.h"
 #include "../Messages/ASPireActuatorFeedbackMsg.h"
 #include "../Messages/MarineSensorDataMsg.h"
-#include "../Messages/CourseDataMsg.h"
-#include "../Messages/CurrentSensorDataMsg.h"
+#include "../Messages/CurrentSensorDataMsg.hpp"
 #include "../SystemServices/Timer.hpp"
 #include "../SystemServices/SysClock.hpp"
 
 #define STATE_INITIAL_SLEEP 100
 
 // REFACTOR
+///----------------------------------------------------------------------------------
 DBLoggerNode::DBLoggerNode(MessageBus& msgBus, DBHandler& db,int queueSize)
 :   ActiveNode(NodeID::DBLoggerNode, msgBus),
     m_db(db),
@@ -52,6 +52,7 @@ DBLoggerNode::DBLoggerNode(MessageBus& msgBus, DBHandler& db,int queueSize)
 
 }
 
+///----------------------------------------------------------------------------------
 void DBLoggerNode::processMessage(const Message* msg) {
 
     std::lock_guard<std::mutex> lock(m_lock);
@@ -60,7 +61,6 @@ void DBLoggerNode::processMessage(const Message* msg) {
 
     //Logger::info("DBLoggerNode Processing Message: %s", msgToString(type).c_str());
 
-
     switch(type)
     {
         case MessageType::ASPireActuatorFeedback:
@@ -68,7 +68,6 @@ void DBLoggerNode::processMessage(const Message* msg) {
             const ASPireActuatorFeedbackMsg* aspMsg = static_cast<const ASPireActuatorFeedbackMsg*>(msg);
             item.m_rudderPosition = aspMsg->rudderFeedback();
             item.m_wingsailPosition = aspMsg->wingsailFeedback();
-            item.m_windVaneAngle = aspMsg->windvaneSelfSteeringAngle();
             item.m_radioControllerOn = aspMsg->radioControllerOn();
         }
         break;
@@ -76,9 +75,9 @@ void DBLoggerNode::processMessage(const Message* msg) {
         case MessageType::CompassData:
         {
             const CompassDataMsg* compassDataMsg = static_cast<const CompassDataMsg*>(msg);
-            item.m_compassHeading = compassDataMsg->heading();
-            item.m_compassPitch = compassDataMsg->pitch();
-            item.m_compassRoll = compassDataMsg->roll();
+            item.m_heading = compassDataMsg->heading();
+            item.m_pitch = compassDataMsg->pitch();
+            item.m_roll = compassDataMsg->roll();
         }
         break;
 
@@ -108,10 +107,7 @@ void DBLoggerNode::processMessage(const Message* msg) {
         case MessageType::MarineSensorData:
         {
             const MarineSensorDataMsg* marineSensorMsg = static_cast<const MarineSensorDataMsg*>(msg);
-            item.m_temperature = marineSensorMsg->temperature();
-            item.m_conductivity = marineSensorMsg->conductivity();
-            item.m_ph = marineSensorMsg->ph();
-            item.m_salinity = marineSensorMsg->salinity();
+            item.m_waterTemperature = marineSensorMsg->temperature();
         }
         break;
 
@@ -174,35 +170,39 @@ void DBLoggerNode::processMessage(const Message* msg) {
     }
 }
 
+///----------------------------------------------------------------------------------
 void DBLoggerNode::start() {
     m_Running.store(true);
     runThread(DBLoggerNodeThreadFunc);
 }
 
+///----------------------------------------------------------------------------------
 void DBLoggerNode::stop() {
     m_Running.store(false);
     stopThread(this);
 }
 
-
+///----------------------------------------------------------------------------------
 bool DBLoggerNode::init() {
     updateConfigsFromDB();
     return true;
 }
 
+///----------------------------------------------------------------------------------
 void DBLoggerNode::updateConfigsFromDB()
 {
     m_loopTime = m_db.retrieveCellAsDouble("config_dblogger","1","loop_time");
 }
 
+///----------------------------------------------------------------------------------
 void DBLoggerNode::DBLoggerNodeThreadFunc(ActiveNode* nodePtr)
 {
+    Logger::info("DBLoggerNode thread has started");
     DBLoggerNode* node = dynamic_cast<DBLoggerNode*> (nodePtr);
+    
     std::string timestamp_str;
     Timer timer;
-    Timer timer2;
     timer.start();
-    timer2.start();
     node->m_dbLogger.startWorkerThread();
 
     while(node->m_Running.load() == true) {
@@ -215,6 +215,7 @@ void DBLoggerNode::DBLoggerNodeThreadFunc(ActiveNode* nodePtr)
         node->m_lock.lock();
         node->m_dbLogger.log(node->item);
         node->m_lock.unlock();
+        
         timer.sleepUntil(node->m_loopTime);
         timer.reset();
     }

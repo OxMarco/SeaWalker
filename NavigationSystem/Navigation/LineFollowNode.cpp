@@ -16,10 +16,7 @@
 
 #include "LineFollowNode.hpp"
 
-#define DATA_OUT_OF_RANGE -2000
-const int INITIAL_SLEEP = 2000;  // milliseconds
-const float NO_COMMAND = -1000;
-
+///----------------------------------------------------------------------------------
 LineFollowNode::LineFollowNode(MessageBus& msgBus, DBHandler& dbhandler): ActiveNode(NodeID::SailingLogic, msgBus),
 m_db(dbhandler), m_LoopTime(0.5), m_externalControlActive(false),
 m_VesselLat(DATA_OUT_OF_RANGE), m_VesselLon(DATA_OUT_OF_RANGE), 
@@ -42,26 +39,31 @@ m_TackDirection(1), m_BeatingMode(false)
     m_TackingDistance = 15;
 }
 
+///----------------------------------------------------------------------------------
 LineFollowNode::~LineFollowNode() {}
 
+///----------------------------------------------------------------------------------
 bool LineFollowNode::init()
 {
     updateConfigsFromDB();
     return true;
 }
 
+///----------------------------------------------------------------------------------
 void LineFollowNode::start()
 {
     m_Running.store(true);
     runThread(LineFollowNodeThreadFunc);
 }
 
+///----------------------------------------------------------------------------------
 void LineFollowNode::stop()
 {
     m_Running.store(false);
     stopThread(this);
 }
 
+///----------------------------------------------------------------------------------
 void LineFollowNode::updateConfigsFromDB()
 {
     m_LoopTime = m_db.retrieveCellAsDouble("config_line_follow","1","loop_time");
@@ -70,6 +72,7 @@ void LineFollowNode::updateConfigsFromDB()
     m_TackingDistance = m_db.retrieveCellAsDouble("config_line_follow","1","tacking_distance");
 }
 
+///----------------------------------------------------------------------------------
 void LineFollowNode::processMessage(const Message* msg)
 {
   MessageType type = msg->messageType();
@@ -95,6 +98,7 @@ void LineFollowNode::processMessage(const Message* msg)
     }
 }
 
+///----------------------------------------------------------------------------------
 void LineFollowNode::processStateMessage(const StateMessage* vesselStateMsg )
 {
     std::lock_guard<std::mutex> lock_guard(m_lock);
@@ -103,6 +107,7 @@ void LineFollowNode::processStateMessage(const StateMessage* vesselStateMsg )
     m_VesselLon = vesselStateMsg->longitude();
 }
 
+///----------------------------------------------------------------------------------
 void LineFollowNode::processWindStateMessage(const WindStateMsg* windStateMsg )
 {
     std::lock_guard<std::mutex> lock_guard(m_lock);
@@ -114,6 +119,7 @@ void LineFollowNode::processWindStateMessage(const WindStateMsg* windStateMsg )
     Utility::addValueToBuffer(m_trueWindDir, m_TwdBuffer, twdBufferMaxSize);
 }
 
+///----------------------------------------------------------------------------------
 void LineFollowNode::processWaypointMessage(WaypointDataMsg* waypMsg )
 {
     std::lock_guard<std::mutex> lock_guard(m_lock);
@@ -136,6 +142,7 @@ void LineFollowNode::processWaypointMessage(WaypointDataMsg* waypMsg )
     }
 }
 
+///----------------------------------------------------------------------------------
 double LineFollowNode::calculateAngleOfDesiredTrajectory()
 {
     const int earthRadius = 6371000; //meters
@@ -166,6 +173,7 @@ double LineFollowNode::calculateAngleOfDesiredTrajectory()
     return phi;  // in north east down reference frame.
 }
 
+///----------------------------------------------------------------------------------
 double LineFollowNode::calculateTargetCourse()
 {
     // In the articles the reference frame is East-North-Up. Here the reference frame is North-East-Down.
@@ -236,6 +244,7 @@ double LineFollowNode::calculateTargetCourse()
     }
 }
 
+///----------------------------------------------------------------------------------
 bool LineFollowNode::getTargetTackStarboard(double targetCourse)
 {
     std::lock_guard<std::mutex> lock_guard(m_lock);
@@ -248,6 +257,7 @@ bool LineFollowNode::getTargetTackStarboard(double targetCourse)
     }
 }
 
+///----------------------------------------------------------------------------------
 void LineFollowNode::ifBoatPassedOrEnteredWP_setPrevWPToBoatPos()
 {
     double distanceAfterWaypoint = Utility::calculateWaypointsOrthogonalLine(m_nextWaypointLon, m_nextWaypointLat, m_prevWaypointLon,
@@ -262,15 +272,15 @@ void LineFollowNode::ifBoatPassedOrEnteredWP_setPrevWPToBoatPos()
     }
 }
 
+///----------------------------------------------------------------------------------
 void LineFollowNode::LineFollowNodeThreadFunc(ActiveNode* nodePtr)
 {
+    Logger::info("LineFollowNode thread has started");
     LineFollowNode* node = dynamic_cast<LineFollowNode*> (nodePtr);
-
     std::this_thread::sleep_for(std::chrono::milliseconds( INITIAL_SLEEP ));
 
     Timer timer;
     timer.start();
-
 
     while(node->m_Running.load() == true)
     {

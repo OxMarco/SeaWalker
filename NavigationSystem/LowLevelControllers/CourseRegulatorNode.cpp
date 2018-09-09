@@ -8,10 +8,6 @@
 
 #include "CourseRegulatorNode.hpp"
 
-#define DATA_OUT_OF_RANGE -2000
-const int INITIAL_SLEEP = 2000; // milliseconds
-const float NO_COMMAND = -1000;
-
 ///----------------------------------------------------------------------------------
 CourseRegulatorNode::CourseRegulatorNode( MessageBus& msgBus,  DBHandler& dbhandler)
 :ActiveNode(NodeID::CourseRegulatorNode,msgBus), m_db(dbhandler), m_Running(0),
@@ -121,10 +117,8 @@ float CourseRegulatorNode::calculateRudderAngle()
 ///----------------------------------------------------------------------------------
 void CourseRegulatorNode::CourseRegulatorNodeThreadFunc(ActiveNode* nodePtr)
 {
+    Logger::info("CourseRegulatorNode thread has started");
     CourseRegulatorNode* node = dynamic_cast<CourseRegulatorNode*> (nodePtr);
-
-    // An initial sleep, its purpose is to ensure that most if not all the sensor data arrives
-    // at the start before we send out the state message.
     std::this_thread::sleep_for(std::chrono::milliseconds(INITIAL_SLEEP));
 
     Timer timer;

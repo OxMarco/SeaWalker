@@ -16,8 +16,8 @@
 #include "LocalNavigationModule.h"
 #include "../Messages/LocalNavigationMsg.h"
 #include "../Messages/StateMessage.h"
-#include "../Messages/WindStateMsg.h"
-#include "../Messages/WaypointDataMsg.h"
+#include "../Messages/WindStateMsg.hpp"
+#include "../Messages/WaypointDataMsg.hpp"
 #include "../Messages/RequestCourseMsg.h"
 #include "../SystemServices/Logger.hpp"
 #include "../SystemServices/Timer.hpp"
@@ -30,11 +30,6 @@
 // For std::this_thread
 #include <chrono>
 #include <thread>
-
-#define DATA_OUT_OF_RANGE -2000
-#define WAKEUP_INTIAL_SLEEP     2000
-const float NO_COMMAND = -1000;
-
 
 ///----------------------------------------------------------------------------------
 LocalNavigationModule::LocalNavigationModule( MessageBus& msgBus,DBHandler& dbhandler)
@@ -70,7 +65,14 @@ bool LocalNavigationModule::init()
 ///----------------------------------------------------------------------------------
 void LocalNavigationModule::start()
 {
+    m_Running.store(true);
     runThread(WakeupThreadFunc);
+}
+
+void LocalNavigationModule::stop()
+{
+    m_Running.store(false);
+    stopThread(this);
 }
 
 ///----------------------------------------------------------------------------------
@@ -197,16 +199,18 @@ bool LocalNavigationModule::getTargetTackStarboard(double targetCourse)
 ///----------------------------------------------------------------------------------
 void LocalNavigationModule::WakeupThreadFunc( ActiveNode* nodePtr )
 {
+    Logger::info("LocalNavigationModule thread has started");
+
     LocalNavigationModule* node = dynamic_cast<LocalNavigationModule*> (nodePtr);
 
 	// An initial sleep, its purpose is to ensure that most if not all the sensor data arrives
 	// at the start before we send out the vessel state message.
-	std::this_thread::sleep_for( std::chrono::milliseconds( WAKEUP_INTIAL_SLEEP ) );
+	std::this_thread::sleep_for( std::chrono::milliseconds( INTIAL_SLEEP ) );
 
     Timer timer;
     timer.start();
 
-	while(true)
+    while(node->m_Running.load() == true)
 	{
         MessagePtr courseRequest = std::make_unique<RequestCourseMsg>();
 		node->m_MsgBus.sendMessage( std::move( courseRequest ) );

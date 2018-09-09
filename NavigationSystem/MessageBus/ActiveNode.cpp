@@ -10,8 +10,11 @@
 
 void ActiveNode::runThread(void(*func)(ActiveNode*))
 {
-    m_Thread.reset(new std::thread(func, this));
-    
+    if(m_Thread == nullptr)
+        m_Thread.reset(new std::thread(func, this));
+    else
+        throw std::runtime_error("node thread already running");
+
     if(m_Thread == nullptr)
         throw std::runtime_error("impossible to start the node thread");
 }

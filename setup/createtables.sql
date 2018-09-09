@@ -24,15 +24,15 @@ CREATE TABLE dataLogs_actuator_feedback (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   rudder_position 	DOUBLE,
   wingsail_position DOUBLE,
+  m_engineThrottle 	DOUBLE,
   rc_on 			BOOLEAN,
-  wind_vane_angle 	DOUBLE,
   t_timestamp		TIMESTAMP
 );
 
 -- -----------------------------------------------------
--- Table dataLogs_compass
+-- Table dataLogs_attitude
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS "dataLogs_compass";
+DROP TABLE IF EXISTS "dataLogs_attitude";
 CREATE TABLE dataLogs_compass (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   heading 		DOUBLE,
@@ -61,11 +61,24 @@ CREATE TABLE dataLogs_course_calculation (
 DROP TABLE IF EXISTS "dataLogs_current_sensors";
 CREATE TABLE dataLogs_current_sensors (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  current   	FLOAT,
-  voltage       FLOAT,
-  element 	    INTEGER,
-  element_str   VARCHAR(50),
-  t_timestamp	TIMESTAMP
+  current   	        FLOAT,
+  voltage               FLOAT,
+  element 	            INTEGER,
+  element_str           VARCHAR(50),
+  t_timestamp	        TIMESTAMP
+);
+
+-- -----------------------------------------------------
+-- Table dataLogs_battery
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS "dataLogs_battery";
+CREATE TABLE dataLogs_battery (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  battery_remaining INTEGER,
+  current_consumed  FLOAT,
+  temperature       FLOAT,
+  current           FLOAT,
+  t_timestamp       TIMESTAMP
 );
 
 -- -----------------------------------------------------
@@ -87,16 +100,17 @@ CREATE TABLE dataLogs_gps (
 );
 
 -- -----------------------------------------------------
--- Table marine_sensors_datalogs
+-- Table dataLogs_marine_sensors
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS "dataLogs_marine_sensors";
 CREATE TABLE dataLogs_marine_sensors (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  temperature 	 DOUBLE,
-  conductivity	 DOUBLE,
-  ph						 DOUBLE,
-  salinity		 	 DOUBLE,
-  t_timestamp	 TIMESTAMP
+  water_temperature FLOAT,
+  outer_temperature FLOAT,
+  ambient_light     FLOAT,
+  pressure          FLOAT,
+  depth             FLOAT,
+  t_timestamp	    TIMESTAMP
 );
 
 -- -----------------------------------------------------
@@ -138,8 +152,6 @@ CREATE TABLE dataLogs_windsensor (
   t_timestamp  TIMESTAMP
 );
 
-
-
 -- -----------------------------------------------------
 -- Table dataLogs_system
 -- -----------------------------------------------------
@@ -147,9 +159,10 @@ DROP TABLE IF EXISTS "dataLogs_system";
 CREATE TABLE dataLogs_system (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   actuator_feedback_id 	INTEGER,
-  compass_id 			INTEGER,
+  attitude_id 			INTEGER,
   course_calculation_id INTEGER,
   current_sensors_id 	INTEGER,
+  battery_id            INTEGER,
   gps_id 				INTEGER,
   marine_sensors_id 	INTEGER,
   vessel_state_id	 	INTEGER,
@@ -159,15 +172,18 @@ CREATE TABLE dataLogs_system (
   CONSTRAINT actuator_feedback_id
   	FOREIGN KEY (actuator_feedback_id)
   	REFERENCES dataLogs_actuator_feedback (id),
-  CONSTRAINT compass_id
-    FOREIGN KEY (compass_id)
-    REFERENCES dataLogs_compass (id),
+  CONSTRAINT attitude_id
+    FOREIGN KEY (attitude_id)
+    REFERENCES dataLogs_attitude (id),
   CONSTRAINT course_calculation_id
     FOREIGN KEY (course_calculation_id)
     REFERENCES dataLogs_course_calculation (id),
   CONSTRAINT current_sensors_id
   	FOREIGN KEY (current_sensors_id)
   	REFERENCES dataLogs_current_sensors (id),
+  CONSTRAINT battery_id
+  	FOREIGN KEY (battery_id)
+  	REFERENCES dataLogs_battery (id),    
   CONSTRAINT gps_id
     FOREIGN KEY (gps_id)
     REFERENCES dataLogs_gps (id),
@@ -190,9 +206,10 @@ CREATE TRIGGER remove_logs AFTER DELETE ON "dataLogs_system"
 BEGIN
 
 DELETE FROM "dataLogs_actuator_feedback" WHERE ID = OLD.actuator_feedback_id;
-DELETE FROM "dataLogs_compass" WHERE ID = OLD.compass_id;
+DELETE FROM "dataLogs_attitude" WHERE ID = OLD.attitude_id;
 DELETE FROM "dataLogs_course_calculation" WHERE ID = OLD.course_calculation_id;
 DELETE FROM "dataLogs_current_sensors" WHERE ID = OLD.current_sensors_id;
+DELETE FROM "dataLogs_battery" WHERE ID = OLD.battery_id;
 DELETE FROM "dataLogs_gps" WHERE ID = OLD.gps_id;
 DELETE FROM "dataLogs_marine_sensors" WHERE ID = OLD.marine_sensors_id;
 DELETE FROM "dataLogs_vessel_state" WHERE ID = OLD.vessel_state_id;
@@ -202,7 +219,7 @@ DELETE FROM "dataLogs_windsensor" WHERE ID = OLD.windsensor_id;
 END;
 
 -- -----------------------------------------------------
--- Table communication CAN AIS config
+-- Table communication AIS received config
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS "config_ais";
 CREATE TABLE config_ais (id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -362,19 +379,6 @@ CREATE TABLE config_wingsail_control (
 );
 
 -- -----------------------------------------------------
--- Table config_xbee
--- -----------------------------------------------------
-DROP TABLE IF EXISTS "config_xbee";
-CREATE TABLE config_xbee (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  loop_time 			DOUBLE,
-  send 					INTEGER,
-  receive 				INTEGER,
-  send_logs 			INTEGER,
-  push_only_latest_logs BOOLEAN
-);
-
--- -----------------------------------------------------
 -- Table sailing zone
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS "sailing_zone";
@@ -395,7 +399,6 @@ INSERT INTO "config_vessel_state" VALUES(1, 0.5, 0.5, 1);
 INSERT INTO "config_voter_system" VALUES(1,0.5,25,1,1,1,1,2);
 INSERT INTO "config_wind_sensor" VALUES(1,0.5);
 INSERT INTO "config_wingsail_control" VALUES(1,0.5,15);
-INSERT INTO "config_xbee" VALUES(1,1,1,0,0.1,1);
 
 DELETE FROM sqlite_sequence;
 INSERT INTO "sqlite_sequence" VALUES('configs',1);

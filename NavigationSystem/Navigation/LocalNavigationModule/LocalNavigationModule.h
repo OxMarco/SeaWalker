@@ -14,12 +14,13 @@
 
 #pragma once
 
-#include <vector>
 #include "../Database/DBHandler.hpp"
 #include "../MessageBus/ActiveNode.hpp"
 #include "ASRArbiter.h"
 #include "ASRVoter.h"
 #include "BoatState.h"
+#include <vector>
+#include <atomic>
 
 class LocalNavigationModule : public ActiveNode {
    public:
@@ -37,7 +38,8 @@ class LocalNavigationModule : public ActiveNode {
     /// Starts the quick hack wakeup thread
     ///----------------------------------------------------------------------------------
     void start();
-
+    void stop();
+    
     ///----------------------------------------------------------------------------------
     /// Processes the following messages:
     ///     * GPS Data Messages
@@ -76,10 +78,12 @@ class LocalNavigationModule : public ActiveNode {
     ///----------------------------------------------------------------------------------
     static void WakeupThreadFunc(ActiveNode* nodePtr);
 
+    double m_LoopTime;
+    DBHandler& m_db;
+    std::atomic<bool> m_Running;
+    
     std::vector<ASRVoter*> voters;
     BoatState_t boatState;
     ASRArbiter arbiter;
-    double m_LoopTime;
-    DBHandler& m_db;
     double m_trueWindDir;
 };

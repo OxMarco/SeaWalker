@@ -13,7 +13,7 @@
 ***************************************************************************************/
 
 #include "ArduinoNodeForWindSensor.h"
-#include "../Messages/WindDataMsg.h"
+#include "../Messages/WindDataMsg.hpp"
 #include "../SystemServices/Logger.hpp"
 #include "../SystemServices/Timer.hpp"
 

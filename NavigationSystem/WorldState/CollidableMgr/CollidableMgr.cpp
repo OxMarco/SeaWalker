@@ -42,17 +42,21 @@ CollidableMgr::CollidableMgr()
 }
 
 ///----------------------------------------------------------------------------------
-void CollidableMgr::init()
+void CollidableMgr::startGC()
 {
     m_Running.store(true);
-    m_Thread = new std::thread(ContactGC, this);
+    m_Thread.reset(new std::thread(ContactGC, this));
+    
+    if(m_Thread == nullptr)
+        throw std::runtime_error("impossible to start the node thread");
 }
 
 ///----------------------------------------------------------------------------------
-void CollidableMgr::stop()
+void CollidableMgr::stopGC()
 {
     m_Running.store(false);
-    /** @todo join thread */
+    if( m_Thread != nullptr && m_Thread->joinable() )
+        m_Thread->join();
 }
 
 ///----------------------------------------------------------------------------------

@@ -18,6 +18,9 @@
     #include "../SystemServices/SysClock.hpp"
 #endif
 
+const int DATA_OUT_OF_RANGE = -2000;
+const float NO_COMMAND = -1000;
+
 class Message {
    public:
     ///----------------------------------------------------------------------------------

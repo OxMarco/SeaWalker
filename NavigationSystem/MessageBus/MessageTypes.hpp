@@ -20,6 +20,7 @@ enum class MessageType {
     WindData,
     CompassData,
     GPSData,
+    PowerTrackMsg,
     ServerConfigsReceived,
     ServerWaypointsReceived,
     LocalConfigChange,
@@ -43,11 +44,14 @@ enum class MessageType {
     SailCommand,
     DataCollectionStart,
     DataCollectionStop,
-    CurrentSensorData
+    CurrentSensorData,
+    PowerOffCommand
 };
 
 inline std::string msgToString(MessageType msgType) {
     switch (msgType) {
+        case MessageType::PowerOffCommand:
+            return "PowerOffCommand";
         case MessageType::DataRequest:
             return "DataRequest";
         case MessageType::WindData:

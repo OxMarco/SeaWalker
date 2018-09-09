@@ -63,8 +63,16 @@ SimulationNode::SimulationNode(MessageBus& msgBus, bool boatType, CollidableMgr*
     msgBus.registerNode(*this, MessageType::ServerConfigsReceived);
 }
 
-void SimulationNode::start() {
+void SimulationNode::start()
+{
+    m_Running.store(true);
     runThread(SimulationThreadFunc);
+}
+
+void SimulationNode::stop()
+{
+    m_Running.store(false);
+    stopThread(this);
 }
 
 bool SimulationNode::init() {
@@ -306,13 +314,17 @@ void SimulationNode::sendMarineSensor(int socketFD) {
 }
 
 ///--------------------------------------------------------------------------------------
-void SimulationNode::SimulationThreadFunc(ActiveNode* nodePtr) {
+void SimulationNode::SimulationThreadFunc(ActiveNode* nodePtr)
+{
+    Logger::info("SimulationNode thread has started");
+
     SimulationNode* node = dynamic_cast<SimulationNode*>(nodePtr);
 
     TCPPacket_t packet;
     int simulatorFD = 0;
 
-    while (true) {
+    while(node->m_Running.load() == true)
+    {
         // Don't timeout on a packet read
         node->server.readPacket(packet, 0);
 
