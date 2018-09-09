@@ -26,15 +26,13 @@
 #include "../../Math/Utility.hpp"
 #include <chrono>
 
-
 #define AIS_CONTACT_TIME_OUT        600        // 10 Minutes
 #define NOT_AVAILABLE               -2000
-#define LOOP_TIME                   1000
 
 const unsigned int visualFieldFadeOutStart = 10;   
 const unsigned int visualFieldTimeOut = 30; 
 const int fadeOut = 2;
-/** @todo convert in passive node */
+
 ///----------------------------------------------------------------------------------
 CollidableMgr::CollidableMgr()
     :ownAISLock(false)
@@ -176,7 +174,9 @@ VisualField_t CollidableMgr::getVisualField()
     return m_visualField;
 }
 
-void CollidableMgr::removeOldVisualField(){
+///----------------------------------------------------------------------------------
+void CollidableMgr::removeOldVisualField()
+{
     std::lock_guard<std::mutex> guard(m_visualMutex);
     if (m_visualField.bearingToRelativeObstacleDistance.empty()){
         return;
@@ -204,7 +204,6 @@ void CollidableMgr::removeOldVisualField(){
 ///----------------------------------------------------------------------------------
 void CollidableMgr::removeOldAISContacts()
 {
- 
     if( !this->ownAISLock )
     {
         this->aisListMutex.lock();
@@ -212,7 +211,6 @@ void CollidableMgr::removeOldAISContacts()
     }
 
     auto timeNow = SysClock::unixTime();
-
 
     for (auto it = this->aisContacts.cbegin(); it != this->aisContacts.cend();)
     {
@@ -235,7 +233,7 @@ void CollidableMgr::ContactGC(CollidableMgr* ptr)
 {
     while(ptr->m_Running.load() == true)
     {
-        std::this_thread::sleep_for(std::chrono::milliseconds(LOOP_TIME));
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
         ptr->removeOldAISContacts();
         ptr->removeOldVisualField();
     }

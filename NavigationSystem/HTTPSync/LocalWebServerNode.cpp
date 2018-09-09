@@ -66,7 +66,7 @@ void LocalWebServerNode::LocalWebServerNodeThreadFunc(ActiveNode* nodePtr)
 {
     Logger::info("LocalWebServerNode thread has started");
 
-    LocalWebServerNode* node = dynamic_cast<LocalWebServerNode*>(nodePtr);
+    //LocalWebServerNode* node = dynamic_cast<LocalWebServerNode*>(nodePtr);
     
     /*
     httplib::Server svr;

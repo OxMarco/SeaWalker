@@ -34,7 +34,6 @@ using namespace cv;
 #define NUMBER_OF_SEGMENTS 24 // make it close to an approximation of 1 degree
 // per cols as the camera has a range from -12 to 12
 
-
 // Next values have to be selected by failings and retry, in comments are the values that should
 // work for : regular webcam(output format should be documented) |
 // registered frame from the thermal camera | thermal camera video input
@@ -84,14 +83,17 @@ Mat dilateReconstruction(Mat imgReference, Mat imgMarker, Mat kernel)
     return imgResult;
 }
 
+///----------------------------------------------------------------------------------
 CameraProcessingUtility::CameraProcessingUtility(MessageBus& msgBus, DBHandler& dbhandler, CollidableMgr* collidableMgr)
 : ActiveNode(NodeID::CameraProcessingUtility, msgBus), m_cameraDeviceID(CAMERA_DEVICE_ID),
 m_detectorLoopTime(DETECTOR_LOOP_TIME), m_maxCompassFrameTimeframe(MAX_COMPASS_FRAME_TIMEFRAME),
 collidableMgr(collidableMgr), m_db(dbhandler), m_Running(false)
 {}
 
+///----------------------------------------------------------------------------------
 CameraProcessingUtility::~CameraProcessingUtility() {}
 
+///----------------------------------------------------------------------------------
 bool CameraProcessingUtility::init() {
     VideoCapture capture(m_cameraDeviceID); // Opens the camera handle
     this->m_capture = capture;
@@ -105,11 +107,13 @@ bool CameraProcessingUtility::init() {
     return true;
 }
 
+///----------------------------------------------------------------------------------
 void CameraProcessingUtility::start() {
     m_Running.store(true);
     runThread(CameraProcessingUtilityThreadFunc);
 }
 
+///----------------------------------------------------------------------------------
 void CameraProcessingUtility::stop() {
     m_Running.store(false);
     m_capture.release();
@@ -120,6 +124,7 @@ void CameraProcessingUtility::stop() {
     stopThread(this);
 }
 
+///----------------------------------------------------------------------------------
 void CameraProcessingUtility::CameraProcessingUtilityThreadFunc(ActiveNode* nodePtr)
 {
     Logger::info("CameraProcessingUtility thread has started");
@@ -158,22 +163,26 @@ void CameraProcessingUtility::CameraProcessingUtilityThreadFunc(ActiveNode* node
     }
 }
 
-void CameraProcessingUtility::addCameraDataToCollidableMgr() {
-    // float bearing = col*webcamAngleApertureXPerPixel m_compass_data.heading;
+///----------------------------------------------------------------------------------
+void CameraProcessingUtility::addCameraDataToCollidableMgr()
+{
     int16_t bearing = 0; // Need to include compass in the process
     bearing = (int16_t)m_compass_data.heading;
     collidableMgr->addVisualField(m_relBearingToRelObstacleDistance, bearing);
     //Logger::info("Camera data added to CollidableMgr");
 }
 
+///----------------------------------------------------------------------------------
 Mat CameraProcessingUtility::getRoi() {
     return m_freeSpaceFrame;
 }
 
+///----------------------------------------------------------------------------------
 map<int16_t, uint16_t> CameraProcessingUtility::getRelDistances() {
     return m_relBearingToRelObstacleDistance;
 }
 
+///----------------------------------------------------------------------------------
 void CameraProcessingUtility::freeSpaceProcessing() {
     
     this->m_capture >> m_imgFullSize;
@@ -254,28 +263,6 @@ void CameraProcessingUtility::freeSpaceProcessing() {
     
     /*
      * -----------------------------------------------------------------
-     * Find green circle indicating camera recalibration
-     *-----------------------------------------------------------------
-     */
-    // Find green pixels
-    inRange(hsvImg, Scalar(45, 100, 100), Scalar(75, 255, 255), hsvImg);
-    
-    // Avoid false positives with a general blur
-    GaussianBlur(hsvImg, hsvImg, Size(9, 9), 2, 2);
-    
-    // Find circles
-    HoughCircles(hsvImg, circles, CV_HOUGH_GRADIENT, 1, hsvImg.rows/8, 85, 15, 0, 0);
-    
-    if(circles.size() != 0)
-    {
-        // A green circle has been detected, he thermal camera is recalibrating and frames may be unreliable and corrupted, sleep thread
-        Logger::info("Camera is recalibrating, thread will sleep for 3 seconds");
-        std::this_thread::sleep_for(3s);
-        //continue;
-    }
-    
-    /*
-     * -----------------------------------------------------------------
      * Find the horizon and set up the ROI (region of interest)
      * to the image surface beneath
      *-----------------------------------------------------------------
@@ -342,7 +329,6 @@ void CameraProcessingUtility::freeSpaceProcessing() {
     {
         imshow( "Display roi", cdst );
     }
-    //imshow( "Display roi", cdst );
     
     /*
      * -----------------------------------------------------------------
@@ -367,14 +353,12 @@ void CameraProcessingUtility::freeSpaceProcessing() {
     // This image is what we want
     m_freeSpaceFrame = roi.clone();
     this->m_freeSpaceFrame = m_freeSpaceFrame;
-    //cout << to_string(this->m_freeSpaceFrame.type) << endl;
     
     if (WITH_GUI)
     {
         imshow( "Display distance", m_freeSpaceFrame );
         
-        c=0;//
-        //waitKey(200); // pause of 20ms
+        c = waitKey(200); // pause of 20ms
         // Press ESC tor restart the thread, or Q to kill it.
         if(c==27) //ESC=27
         {
@@ -390,7 +374,7 @@ void CameraProcessingUtility::freeSpaceProcessing() {
         }
         else
         {
-            //waitKey(1); // process is kind of heavy depending on the current frame
+            waitKey(1); // process is kind of heavy depending on the current frame
             // might need to increase the pause to smooth it a little
         }
     }
@@ -401,6 +385,7 @@ void CameraProcessingUtility::freeSpaceProcessing() {
     
 }
 
+///----------------------------------------------------------------------------------
 int CameraProcessingUtility::computeRelDistances() {
     int16_t n_cols = this->m_freeSpaceFrame.cols;
     int16_t n_rows = this->m_freeSpaceFrame.rows;
@@ -436,6 +421,7 @@ int CameraProcessingUtility::computeRelDistances() {
     return EXIT_SUCCESS;
 }
 
+///----------------------------------------------------------------------------------
 void CameraProcessingUtility::processMessage(const Message* msg)
 {
     MessageType type = msg->messageType();
@@ -449,6 +435,7 @@ void CameraProcessingUtility::processMessage(const Message* msg)
     }
 }
 
+///----------------------------------------------------------------------------------
 void CameraProcessingUtility::processCompassMessage(const CompassDataMsg* msg)
 {
     std::lock_guard<std::mutex> lock_guard(m_lock);

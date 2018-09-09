@@ -11,23 +11,16 @@
 
 #include "Database/DBHandler.hpp"
 #include "Database/DBLoggerNode.hpp"
-
 #include "HTTPSync/HTTPSyncNode.hpp"
-#include "HTTPSync/LocalWebServerNode.hpp"
-
 #include "MessageBus/MessageBus.hpp"
-
 #include "SystemServices/Logger.hpp"
-
 #include "WorldState/StateEstimationNode.hpp"
 #include "WorldState/WindStateNode.hpp"
 #include "WorldState/AISProcessing.hpp"
 #include "WorldState/CameraProcessingUtility.hpp"
 #include "WorldState/CollidableMgr/CollidableMgr.h"
-
 #include "LowLevelControllers/WingSailControlNode.hpp"
 #include "LowLevelControllers/CourseRegulatorNode.hpp"
-
 #include "Navigation/WaypointMgrNode.hpp"
 
 #if LOCAL_NAVIGATION_MODULE == 1
@@ -57,7 +50,9 @@
 
 #endif
 
-#include "Hardwares/ArduPilotReadNode.hpp"
+#include "Hardwares/AutopilotReadNode.hpp"
+#include "Hardwares/AutopilotWriteNode.hpp"
+
 #include "Libs/termcolor/termcolor.hpp"
 #include "sigtraps.h"
 
@@ -188,22 +183,25 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 	}
 
+    // Autopilot interface
+    AutopilotInterface autopilot;
+    autopilot.open();
 
+    // Collidable Mgr
+    CollidableMgr collidableMgr;
+    collidableMgr.startGC();
+    
     // Initialise active nodes
     //-------------------------------------------------------------------------------
     std::cout<<rang::style::bold<<rang::fg::blue<<std::endl<<std::endl<<"2. Initialising active nodes........."<<std::endl<<std::endl<<rang::style::reset;
    
-    /* Hardware interface
-    ArduPilotReadNode autopilot(messageBus, dbHandler);
-
-    try{
-        initialiseNode(autopilot, "ArduPilotReadNode", NodeImportance::CRITICAL);
-    } catch(std::runtime_error) {
-        Logger::error("Autopilot connection\t\t[FAILED]");
-        exit(EXIT_FAILURE);
-    }
+    // Hardware interfaces
+    AutopilotReadNode autopilotRead(messageBus, dbHandler, autopilot);
+    initialiseNode(autopilotRead, "AutopilotReadNode", NodeImportance::CRITICAL);
+    autopilotRead.start();
     
-    autopilot.start();*/
+    AutopilotWriteNode autopilotWrite(messageBus, autopilot);
+    initialiseNode(autopilotWrite, "AutopilotWriteNode", NodeImportance::CRITICAL);
     
     // Passive nodes
     WindStateNode windStateNode(messageBus);
@@ -211,10 +209,6 @@ int main(int argc, char *argv[])
     
     WaypointMgrNode waypointMgr(messageBus, dbHandler);
     initialiseNode(waypointMgr, "WaypointMgrNode", NodeImportance::CRITICAL);
-    
-    // Collidable Mgr
-    CollidableMgr collidableMgr;
-    collidableMgr.startGC();
 
     // Active nodes
     int dbLoggerQueueSize = 5; // how many messages to log to the database at a time

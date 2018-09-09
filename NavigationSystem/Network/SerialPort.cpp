@@ -220,7 +220,6 @@ open_serial()
     // Check success
     if (fd == -1)
     {
-        Logger::error("Could not configure serial port");
         throw std::runtime_error{ "SERIAL_PORT_ERR" };
     }
     
@@ -234,7 +233,6 @@ open_serial()
     // --------------------------------------------------------------------------
     if (!success)
     {
-        Logger::error("Could not setup serial port");
         throw std::runtime_error{ "SERIAL_PORT_ERR" };
     }
     if (fd <= 0)

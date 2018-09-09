@@ -15,7 +15,7 @@
 #include "../MessageBus/ActiveNode.hpp"
 #include "../MessageBus/MessageBus.hpp"
 #include "../Messages/LocalNavigationMsg.h"
-#include "../Messages/RudderCommandMsg.h"
+#include "../Messages/RudderCommandMsg.hpp"
 #include "../Messages/StateMessage.h"
 #include <math.h>
 #include <stdint.h>

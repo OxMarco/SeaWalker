@@ -27,8 +27,8 @@ class ActiveNode : public Node {
     /// @brief This function returns whether the node is active (with a running thread)
     ///         or passive.
     ///----------------------------------------------------------------------------------
-    bool isActiveNode() { return true; }
-
+    bool isActiveNoe() { return true; }
+    
    protected:
     void runThread(void (*func)(ActiveNode*));
     void stopThread(ActiveNode* node);

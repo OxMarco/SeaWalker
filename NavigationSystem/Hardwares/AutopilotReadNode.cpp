@@ -1,26 +1,18 @@
 /**
- * @file    ArduPilotReadNode.cpp
+ * @file    AutopilotReadNode.cpp
  *
- * @brief   Read messages from the Ardupilot
+ * @brief   Read messages from the Autopilot
  *
  */
 
-#include "ArduPilotReadNode.hpp"
+#include "AutopilotReadNode.hpp"
 #include "../Libs/mavlink/common/mavlink.h"
 #include "../MessageBus/MessageTypes.hpp"
 #include "../Messages/GPSDataMsg.hpp"
 #include "../SystemServices/SysClock.hpp"
 
-#ifdef __APPLE__
-char *uart_name = (char*)"/dev/tty.usbmodem1";
-#else
-char *uart_name = (char*)"/dev/ttyUSB0";
-#endif
-
-const int baudrate = 57600;
-
-ArduPilotReadNode::ArduPilotReadNode(MessageBus& messageBus, DBHandler& dbhandler) :
-ActiveNode(NodeID::ArduPilotRead, messageBus), m_LoopTime (0.01), m_db(dbhandler)
+AutopilotReadNode::AutopilotReadNode(MessageBus& messageBus, DBHandler& dbhandler, AutopilotInterface& autopilot) :
+ActiveNode(NodeID::AutopilotRead, messageBus), m_LoopTime (0.01), m_db(dbhandler), m_autopilot(autopilot)
 {
     m_RudderFeedback  = DATA_OUT_OF_RANGE;
     m_WingsailFeedback = DATA_OUT_OF_RANGE;
@@ -29,116 +21,55 @@ ActiveNode(NodeID::ArduPilotRead, messageBus), m_LoopTime (0.01), m_db(dbhandler
     m_autopilot_id = 0;
     m_companion_id = 0;
     messageBus.registerNode(*this, MessageType::ServerConfigsReceived);
-    
 }
 
-ArduPilotReadNode::~ArduPilotReadNode(){
-    if(m_serial_port->status)
-        m_serial_port->close_serial();
+AutopilotReadNode::~AutopilotReadNode()
+{
 }
 
-bool ArduPilotReadNode::init() {
+bool AutopilotReadNode::init()
+{
     updateConfigsFromDB();
-    
     m_currentDay = SysClock::day();
 
-    Serial_Port serial_port(uart_name, baudrate);
-    serial_port.start();
-    if ( serial_port.status != 1 ) // SERIAL_PORT_OPEN
-    {
-        Logger::error("Serial port not open");
-        return false;
-    }
-    
-    mavlink_message_t message;
-    bool success = false;
-    
-    // ----------------------------------------------------------------------
-    //   HANDLE MESSAGE
-    // ----------------------------------------------------------------------
-    while ( !success )
-    {
-        // ----------------------------------------------------------------------
-        //   READ MESSAGE
-        // ----------------------------------------------------------------------
-        mavlink_message_t message;
-        success = serial_port.read_message(message);
-        
-        // ----------------------------------------------------------------------
-        //   HANDLE MESSAGE
-        // ----------------------------------------------------------------------
-        
-        // Store message sysid and compid.
-        m_system_id  = message.sysid;
-        m_companion_id = message.compid;
-        
-        // Handle Message ID
-        if (message.msgid == MAVLINK_MSG_ID_HEARTBEAT)
-        {
-            Logger::info("Autopilot connection\t\t[OK]");
-            success = true;
-        }
-        usleep(100000);
-    }
-    serial_port.close_serial();
-    
     return true;
 }
 
-void ArduPilotReadNode::updateConfigsFromDB()
+void AutopilotReadNode::updateConfigsFromDB()
 {
     m_LoopTime = m_db.retrieveCellAsDouble("config_can_arduino","1","loop_time");
 }
 
-void ArduPilotReadNode::processMessage (const Message* message){
+void AutopilotReadNode::processMessage (const Message* message)
+{
     if(message->messageType() == MessageType::ServerConfigsReceived)
     {
         updateConfigsFromDB();
     }
 }
 
-void ArduPilotReadNode::toggleOffboardControl(bool flag)
-{
-    // Prepare command for off-board mode
-    mavlink_command_long_t com = { 0 };
-    com.target_system    = m_system_id;
-    com.target_component = m_autopilot_id;
-    com.command          = MAV_CMD_NAV_GUIDED_ENABLE;
-    com.confirmation     = true;
-    com.param1           = (float) flag; // flag >0.5 => start, <0.5 => stop
-    
-    // Encode
-    mavlink_message_t message;
-    mavlink_msg_command_long_encode(m_system_id, m_companion_id, &message, &com);
-    
-    // Send the message
-    m_serial_port->write_message(message);
-}
-
-void ArduPilotReadNode::start()
+void AutopilotReadNode::start()
 {
     m_Running.store(true);
-    runThread(ArduPilotReadNodeThreadFunc);
+    runThread(AutopilotReadNodeThreadFunc);
 }
 
-void ArduPilotReadNode::stop()
+void AutopilotReadNode::stop()
 {
     m_Running.store(false);
     stopThread(this);
 }
 
-void ArduPilotReadNode::ArduPilotReadNodeThreadFunc(ActiveNode* nodePtr)
+void AutopilotReadNode::AutopilotReadNodeThreadFunc(ActiveNode* nodePtr)
 {
-    Logger::info("ArduPilotNode thread has started");
+    Logger::info("AutopilotReadNode thread has started");
+    AutopilotReadNode* node = dynamic_cast<AutopilotReadNode*> (nodePtr);
     
-    ArduPilotReadNode* node = dynamic_cast<ArduPilotReadNode*> (nodePtr);
-    
-    bool valid, received_all;
+    bool valid;
     mavlink_message_t message;
+    
     Timer timer;
     timer.start();
-    Serial_Port serial_port(uart_name, baudrate);
-    serial_port.start();
     
     while(node->m_Running.load() == true)
     {
@@ -146,8 +77,7 @@ void ArduPilotReadNode::ArduPilotReadNodeThreadFunc(ActiveNode* nodePtr)
         //   READ MESSAGE
         // ----------------------------------------------------------------------
         node->m_lock.lock();
-        //valid = node->m_serial_port->read_message(message);
-        valid = serial_port.read_message(message);
+        valid = node->m_autopilot.read_message(message);
         node->m_lock.unlock();
 
         // ----------------------------------------------------------------------
@@ -229,7 +159,7 @@ void ArduPilotReadNode::ArduPilotReadNodeThreadFunc(ActiveNode* nodePtr)
                 }
             }
         }
-        
+     
         timer.sleepUntil(node->m_LoopTime);
         timer.reset();
     }

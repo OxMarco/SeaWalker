@@ -12,6 +12,7 @@
 
 #include "StateEstimationNode.hpp"
 
+///----------------------------------------------------------------------------------
 StateEstimationNode::StateEstimationNode(MessageBus& msgBus, DBHandler& dbhandler):
 ActiveNode(NodeID::StateEstimation, msgBus), m_dbHandler(dbhandler), m_Running(false),
 m_LoopTime(0.5), m_CompassHeading(DATA_OUT_OF_RANGE), m_GpsOnline(false),
@@ -26,26 +27,31 @@ m_VesselCourse(DATA_OUT_OF_RANGE)
     msgBus.registerNode(*this, MessageType::ServerConfigsReceived);
 }
 
+///----------------------------------------------------------------------------------
 StateEstimationNode::~StateEstimationNode() {}
 
+///----------------------------------------------------------------------------------
 bool StateEstimationNode::init()
 {
     updateConfigsFromDB();
     return true;
 }
 
+///----------------------------------------------------------------------------------
 void StateEstimationNode::start()
 {
     m_Running.store(true);
     runThread(StateEstimationNodeThreadFunc);
 }
 
+///----------------------------------------------------------------------------------
 void StateEstimationNode::stop()
 {
     m_Running.store(false);
     stopThread(this);
 }
 
+///----------------------------------------------------------------------------------
 void StateEstimationNode::updateConfigsFromDB()
 {
     m_LoopTime = m_dbHandler.retrieveCellAsDouble("config_vessel_state","1","loop_time");
@@ -53,6 +59,7 @@ void StateEstimationNode::updateConfigsFromDB()
     m_speed_2 = m_dbHandler.retrieveCellAsDouble("config_vessel_state","1","course_config_speed_2");
 }
 
+///----------------------------------------------------------------------------------
 void StateEstimationNode::processMessage(const Message* msg)
 {
     MessageType type = msg->messageType();
@@ -75,12 +82,14 @@ void StateEstimationNode::processMessage(const Message* msg)
     }
 }
 
+///----------------------------------------------------------------------------------
 void StateEstimationNode::processCompassMessage(const CompassDataMsg* msg)
 {
     std::lock_guard<std::mutex> lock_guard(m_lock);
     m_CompassHeading = msg->heading();
 }
 
+///----------------------------------------------------------------------------------
 void StateEstimationNode::processGPSMessage(const GPSDataMsg* msg)
 {
     std::lock_guard<std::mutex> lock_guard(m_lock);
@@ -91,12 +100,14 @@ void StateEstimationNode::processGPSMessage(const GPSDataMsg* msg)
     m_GPSCourse = msg->course();
 }
 
+///----------------------------------------------------------------------------------
 void StateEstimationNode::processWaypointMessage( const WaypointDataMsg* msg )
 {
     std::lock_guard<std::mutex> lock_guard(m_lock);
     m_WaypointDeclination = msg->nextDeclination();
 }
 
+///----------------------------------------------------------------------------------
 bool StateEstimationNode::estimateVesselState()
 {
     std::lock_guard<std::mutex> lock_guard(m_lock);
@@ -116,6 +127,7 @@ bool StateEstimationNode::estimateVesselState()
     }
 }
 
+///----------------------------------------------------------------------------------
 float StateEstimationNode::estimateVesselCourse()
 {
     if (m_speed_1 > m_speed_2) // Error. Need to be m_speed_1 <= m_speed_2.
@@ -145,6 +157,7 @@ float StateEstimationNode::estimateVesselCourse()
     }
 }
 
+///----------------------------------------------------------------------------------
 void StateEstimationNode::StateEstimationNodeThreadFunc(ActiveNode* nodePtr)
 {
     Logger::info("StateEstimationNode thread has started");

@@ -21,7 +21,7 @@
 #include "../Messages/CompassDataMsg.h"
 #include "../Messages/GPSDataMsg.hpp"
 #include "../Messages/MarineSensorDataMsg.h"
-#include "../Messages/RudderCommandMsg.h"
+#include "../Messages/RudderCommandMsg.hpp"
 #include "../Messages/SailCommandMsg.h"
 #include "../Messages/WaypointDataMsg.hpp"
 #include "../Messages/WindDataMsg.hpp"

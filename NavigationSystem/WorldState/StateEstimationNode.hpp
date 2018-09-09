@@ -40,32 +40,32 @@ class StateEstimationNode : public ActiveNode {
 
    private:
     ///----------------------------------------------------------------------------------
-    /// Updates the values of the parameters from the database.
+    /// @brief Updates the values of the parameters from the database.
     ///----------------------------------------------------------------------------------
     void updateConfigsFromDB();
 
     ///----------------------------------------------------------------------------------
-    /// Stores compass data from a CompassDataMsg.
+    /// @brief Stores compass data from a CompassDataMsg.
     ///----------------------------------------------------------------------------------
     void processCompassMessage(const CompassDataMsg* msg);
 
     ///----------------------------------------------------------------------------------
-    /// Stores the GPS data from a GPSDataMsg.
+    /// @brief Stores the GPS data from a GPSDataMsg.
     ///----------------------------------------------------------------------------------
     void processGPSMessage(const GPSDataMsg* msg);
 
     ///----------------------------------------------------------------------------------
-    /// Stores the next declination from a WaypointDataMsg.
+    /// @brief Stores the next declination from a WaypointDataMsg.
     ///----------------------------------------------------------------------------------
     void processWaypointMessage(const WaypointDataMsg* msg);
 
     ///----------------------------------------------------------------------------------
-    /// Estimates the vessel state from the sensor datas.
+    /// @brief Estimates the vessel state from the sensor datas.
     ///----------------------------------------------------------------------------------
     bool estimateVesselState();
 
     ///----------------------------------------------------------------------------------
-    /// Returns an estimation of the vessel course (angle of the velocity vector).
+    /// @brief Returns an estimation of the vessel course (angle of the velocity vector).
     /// When the vessel speed is sufficient (higher than m_speed_2), use the course over
     /// ground given by the GPS.
     /// When the vessel speed is not sufficient for the GPS to return good values (lower
@@ -76,7 +76,7 @@ class StateEstimationNode : public ActiveNode {
     float estimateVesselCourse();
 
     ///----------------------------------------------------------------------------------
-    /// Starts the StateEstimationNode's thread that pumps out VesselStateMsg corresponding
+    /// @brief Starts the StateEstimationNode's thread that pumps out VesselStateMsg corresponding
     /// at the estimated state of the vessel.
     ///----------------------------------------------------------------------------------
     static void StateEstimationNodeThreadFunc(ActiveNode* nodePtr);
@@ -106,4 +106,3 @@ class StateEstimationNode : public ActiveNode {
 };
 
 #endif /* STATEESTIMATIONNODE_HPP */
-

@@ -108,6 +108,9 @@ inline std::string msgToString(MessageType msgType) {
             return "DataCollectionStop";
         case MessageType::CurrentSensorData:
             return "CurrentSensorData";
+        case MessageType::PowerTrackMsg:
+            return "PowerTrackMsg";
+            break;
     }
     return "";
 }

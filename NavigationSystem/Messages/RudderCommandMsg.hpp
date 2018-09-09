@@ -1,4 +1,13 @@
-#pragma once
+/**
+ * @file   RudderCommandMsg.hpp
+ *
+ * @brief  Set rudder position
+ *
+ *
+ */
+
+#ifndef RUDDERCOMMANDMSG_HPP
+#define RUDDERCOMMANDMSG_HPP
 
 #include "../MessageBus/Message.hpp"
 
@@ -29,3 +38,5 @@ class RudderCommandMsg : public Message {
    private:
     float m_RudderAngle;  // degree [-30, +30[ in vessel reference frame (clockwise from top view)
 };
+
+#endif /* RUDDERCOMMANDMSG_HPP */

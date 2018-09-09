@@ -1,19 +1,19 @@
 /**
- * @file    ArduPilotReadNode.hpp
+ * @file    AutopilotReadNode.hpp
  *
- * @brief   Read messages from the Ardupilot
+ * @brief   Read messages from the Autopilot
  *
  */
 
-#ifndef ARDUPILOTREADNODE_HPP
-#define ARDUPILOTREADNODE_HPP
+#ifndef AUTOPILOTREADNODE_HPP
+#define AUTOPILOTREADNODE_HPP
 
 #include "../Database/DBHandler.hpp"
 #include "../MessageBus/ActiveNode.hpp"
 #include "../MessageBus/Message.hpp"
 #include "../MessageBus/MessageBus.hpp"
 #include "../SystemServices/Timer.hpp"
-#include "../Network/SerialPort.hpp"
+#include "Autopilot/AutopilotInterface.hpp"
 #include <chrono>
 #include <iostream>
 #include <mutex>
@@ -21,18 +21,17 @@
 #include <thread>
 #include <vector>
 
-class ArduPilotReadNode : public ActiveNode {
+class AutopilotReadNode : public ActiveNode {
 public:
-    ArduPilotReadNode(MessageBus& messageBus, DBHandler& dbhandler);
-    ~ArduPilotReadNode();
+    AutopilotReadNode(MessageBus& messageBus, DBHandler& dbhandler, AutopilotInterface& autopilot);
+    ~AutopilotReadNode();
     bool init();
     void processMessage(const Message* message);
     void start();
     void stop();
     
 private:
-    static void ArduPilotReadNodeThreadFunc(ActiveNode* nodePtr);
-    void toggleOffboardControl(bool flag);
+    static void AutopilotReadNodeThreadFunc(ActiveNode* nodePtr);
     
     ///----------------------------------------------------------------------------------
     /// Update values from the database as the loop time of the thread and others parameters
@@ -48,12 +47,11 @@ private:
     std::mutex m_lock;
     std::atomic<bool> m_Running;
 
-    Serial_Port *m_serial_port;
+    AutopilotInterface &m_autopilot;
     int m_system_id;
     int m_autopilot_id;
     int m_companion_id;
     int m_currentDay;
 };
 
-#endif /* ARDUPILOTREADNODE_HPP */
-
+#endif /* AUTOPILOTREADNODE_HPP */
