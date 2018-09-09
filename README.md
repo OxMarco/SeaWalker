@@ -48,5 +48,16 @@ Coverity scan result
        src="https://scan.coverity.com/projects/16664/badge.svg"/>
 </a>
 
+### Dependencies
+The code uses the following libraries
+- MAVlink
+- cpp-httplib
+- json (nlohmann)
+- rang
+- wiringPi
+
+### License
+[![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+
 ### Foot note ###
 Fun fact: this design should be COLREG compliant due to the several anti-collision features and some small details such as the navigation light or the manoeuvre normaliser (to make the boat steer in a human-understandable way).
